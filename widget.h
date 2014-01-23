@@ -53,7 +53,7 @@ private slots:
     void slotNextButton();
 
     void updateVolume(int volume);
-    void setRowColor(int row, QColor color);
+    void setRowColor(int row, QColor textcolor, QColor backcolor);
 
 signals:
     void signalPlayerMusic(int id);

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>434</width>
-    <height>328</height>
+    <width>530</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,18 +16,30 @@
   <widget class="QTableWidget" name="tablemusiclist">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>130</y>
-     <width>411</width>
-     <height>181</height>
+     <x>30</x>
+     <y>170</y>
+     <width>471</width>
+     <height>261</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>微软雅黑</family>
-     <pointsize>10</pointsize>
+     <pointsize>9</pointsize>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QScrollBar::vertical { width:8px; background:#fff; padding:9px 0; } </string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOn</enum>
+   </property>
+   <attribute name="horizontalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
    <column>
     <property name="text">
      <string>music</string>
@@ -42,11 +54,30 @@
   <widget class="QSlider" name="musicSlider">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>40</y>
-     <width>160</width>
+     <x>90</x>
+     <y>120</y>
+     <width>341</width>
      <height>22</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QSlider::groove:horizontal {
+height: 2px;
+background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #fff, stop:1 #eee);
+}
+QSlider::handle:horizontal {
+background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #fff, stop:1 #ccc);
+width: 8px;
+margin: -4px 0;
+border-radius: 4px;
+}
+
+QSlider::add-page:horizontal {
+background: #000;
+}
+QSlider::sub-page:horizontal {
+background: #81C300;
+}</string>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -55,37 +86,58 @@
   <widget class="QLabel" name="labelName">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>10</y>
-     <width>351</width>
+     <x>130</x>
+     <y>40</y>
+     <width>361</width>
      <height>16</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #fff;</string>
+   </property>
    <property name="text">
-    <string>TextLabel</string>
+    <string>SongTeste Player ...</string>
    </property>
   </widget>
-  <widget class="QLabel" name="labelTime">
+  <widget class="QLabel" name="labelTotalTime">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>40</y>
-     <width>101</width>
-     <height>16</height>
+     <x>450</x>
+     <y>120</y>
+     <width>41</width>
+     <height>21</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #fff;</string>
+   </property>
    <property name="text">
-    <string>TextLabel</string>
+    <string>00:00</string>
    </property>
   </widget>
   <widget class="QGraphicsView" name="graphicsImage">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>40</x>
      <y>40</y>
      <width>60</width>
      <height>60</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
    <property name="frameShape">
     <enum>QFrame::NoFrame</enum>
@@ -94,11 +146,19 @@
   <widget class="QPushButton" name="buttonPlay">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>70</y>
+     <x>200</x>
+     <y>74</y>
      <width>30</width>
      <height>30</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{border-image: url(:/image/button_play.png);}
+QPushButton:hover {border-image: url(:/image/button_play.png);}
+QPushButton:pressed {border-image: url(:/image/button_play.png);}</string>
    </property>
    <property name="text">
     <string/>
@@ -107,11 +167,19 @@
   <widget class="QPushButton" name="buttonPre">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>70</y>
-     <width>30</width>
-     <height>30</height>
+     <x>150</x>
+     <y>80</y>
+     <width>18</width>
+     <height>20</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{border-image: url(:/image/button_pre.png);}
+QPushButton:hover {border-image: url(:/image/button_pre.png);}
+QPushButton:pressed {border-image: url(:/image/button_pre.png);}</string>
    </property>
    <property name="text">
     <string/>
@@ -120,11 +188,22 @@
   <widget class="QPushButton" name="buttonNext">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>70</y>
-     <width>30</width>
-     <height>30</height>
+     <x>260</x>
+     <y>80</y>
+     <width>18</width>
+     <height>20</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{border-image: url(:/image/button_next.png);}
+QPushButton:hover {border-image: url(:/image/button_next.png);}
+QPushButton:pressed {border-image: url(:/image/button_next.png);}
+
+
+</string>
    </property>
    <property name="text">
     <string/>
@@ -133,16 +212,118 @@
   <widget class="QSlider" name="sliderVolume">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>70</y>
+     <x>370</x>
+     <y>80</y>
      <width>81</width>
      <height>22</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QSlider::groove:horizontal {
+height: 1px;
+background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #fff, stop:1 #eee);
+}
+QSlider::handle:horizontal {
+background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #fff, stop:1 #eee);
+width: 6px;
+margin: -3px 0;
+border-radius: 3px;
+}
+
+QSlider::add-page:horizontal {
+background: #000;
+}
+QSlider::sub-page:horizontal {
+background: #81C300;
+}</string>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
+  <widget class="QLabel" name="labelBg">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>530</width>
+     <height>450</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-image: url(:/image/ui.png);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelCurrentTime">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>120</y>
+     <width>41</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #fff;</string>
+   </property>
+   <property name="text">
+    <string>00:00</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelVolumeSmall">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>80</y>
+     <width>17</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: url(:/image/volume_small.png);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelVolumeLarge">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>80</y>
+     <width>22</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: url(:/image/volume_large.png);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <zorder>labelBg</zorder>
+  <zorder>tablemusiclist</zorder>
+  <zorder>musicSlider</zorder>
+  <zorder>labelName</zorder>
+  <zorder>labelTotalTime</zorder>
+  <zorder>graphicsImage</zorder>
+  <zorder>buttonPlay</zorder>
+  <zorder>buttonPre</zorder>
+  <zorder>buttonNext</zorder>
+  <zorder>sliderVolume</zorder>
+  <zorder>labelCurrentTime</zorder>
+  <zorder>labelVolumeSmall</zorder>
+  <zorder>labelVolumeLarge</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

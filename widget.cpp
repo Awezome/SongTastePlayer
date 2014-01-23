@@ -8,16 +8,17 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     ui->setupUi(this);
     this->songteste =new STPage();
 
-    //this->setWindowOpacity(1);
+    this->setWindowOpacity(1);
     this->setWindowFlags(Qt::FramelessWindowHint);
     //setWindowFlags(Qt::WindowMinimizeButtonHint);
-    //this->setAttribute(Qt::WA_TranslucentBackground);
-    this->setFixedSize(430,320);
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setFixedSize(530,450);
 
     palyNumber=0;
     buttonModel=false;//是否为点击了下一个或上一个，做为标记，会影响正常下的顺序播放。暂时的。
     scene=new QGraphicsScene();
 
+    //table
     this->loadListView();
     this->loadListData();
     connect(ui->tablemusiclist,SIGNAL(cellDoubleClicked(int,int)),this, SLOT( getTableItem(int,int)) );
@@ -33,9 +34,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(&player, SIGNAL(durationChanged(qint64)), this, SLOT(durationChanged(qint64)));
 
     //按钮
-    ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-    ui->buttonPre->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
-    ui->buttonNext->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
+    //ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     connect(ui->buttonPlay, SIGNAL(clicked()),this, SLOT(slotPlayButton()));
     connect(ui->buttonPre, SIGNAL(clicked()),this, SLOT(slotPreButton()));
     connect(ui->buttonNext, SIGNAL(clicked()),this, SLOT(slotNextButton()));
@@ -44,7 +43,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     player.setVolume(50);
     ui->sliderVolume->setRange(0,100);
     ui->sliderVolume->setValue(50);
-    connect(ui->sliderVolume, SIGNAL(sliderMoved(int)),this, SLOT(updateVolume(int)));
+    connect(ui->sliderVolume, SIGNAL(valueChanged(int)),this, SLOT(updateVolume(int)));
 }
 
 Widget::~Widget(){
@@ -55,13 +54,15 @@ void Widget::loadListView(){
     ui->tablemusiclist->setSelectionBehavior(QAbstractItemView::SelectRows); //整行选中的方式
     ui->tablemusiclist->setEditTriggers(QAbstractItemView::NoEditTriggers);//禁止编辑
     ui->tablemusiclist->setSelectionMode(QAbstractItemView::SingleSelection); //设置为可以选中多个目标
-    //ui->tablemusiclist->verticalHeader()->setVisible(false); //隐藏行号
+    ui->tablemusiclist->verticalHeader()->setVisible(false); //隐藏行号
     ui->tablemusiclist->horizontalHeader()->setVisible(false); //隐藏行表头
-    ui->tablemusiclist->setColumnWidth(0,250);
-    ui->tablemusiclist->setColumnWidth(1,100);
-    //ui->tablemusiclist->setRowHeight(3,60);
-    //tableWidget->setMouseTracking(true);    //开启捕获鼠标功能
-    //tableWidget->setStyleSheet("selection-background-color:pink");  //设置选中行颜色
+    ui->tablemusiclist->setColumnWidth(0,360);
+    ui->tablemusiclist->setColumnWidth(1,90);
+    ui->tablemusiclist->setShowGrid(false);
+    ui->tablemusiclist->setFocusPolicy(Qt::NoFocus);
+    ui->tablemusiclist->setStyleSheet("selection-background-color:#D8FAA5");  //设置选中行颜色
+
+
 }
 
 void Widget::loadListData(){
@@ -72,6 +73,7 @@ void Widget::loadListData(){
         STModel song=this->musicLists.at(i);
         this->ui->tablemusiclist->setItem(i,0,new QTableWidgetItem(song.name));
         this->ui->tablemusiclist->setItem(i,1,new QTableWidgetItem(song.author));
+        this->ui->tablemusiclist->setRowHeight(i,22);
     }
 }
 
@@ -90,13 +92,12 @@ void Widget::positionChanged(qint64 position){
 
 void Widget::durationChanged(qint64 duration){
     ui->musicSlider->setRange(0, duration);
-    this->totalTime=qint64ToTime(duration);
+    ui->labelTotalTime->setText(qint64ToTime(duration).toString("mm:ss"));
 }
 
 void Widget::updateTime(qint64 currentTimeNumber){
-    QTime currentTime=qint64ToTime(currentTimeNumber);
-    QString str = currentTime.toString("mm:ss") + "/" + this->totalTime.toString("mm:ss");
-    ui->labelTime->setText(str);
+    QString str = qint64ToTime(currentTimeNumber).toString("mm:ss");
+    ui->labelCurrentTime->setText(str);
 }
 
 QTime Widget::qint64ToTime(qint64 time){
@@ -109,12 +110,13 @@ void Widget::updateVolume(int volume){
     player.setVolume(volume);
 }
 
-void Widget::setRowColor(int row, QColor color){
+void Widget::setRowColor(int row, QColor textcolor,QColor backcolor){
     int size=2;//ui->tablemusiclist->columnCount();
     QTableWidgetItem *item;
     for (int col=0; col<size; col++){
         item = ui->tablemusiclist->item(row, col);
-        item->setBackgroundColor(color);
+        item->setBackgroundColor(backcolor);
+        item->setTextColor(textcolor);
     }
 }
 
@@ -136,9 +138,9 @@ void Widget::slotPlayMusic(int id){
     ui->labelName->setText(song.name);
 
     //播放时改变列表中的行颜色
-    setRowColor(palyNumber,QColor("#fff"));
+    setRowColor(palyNumber,QColor("#000"),QColor("#fff"));
     this->palyNumber=id;
-    setRowColor(id,QColor("#666"));
+    setRowColor(id,QColor("#fff"),QColor("#81C300"));
 
     //设置头像
     pixmap.loadFromData(songteste->userImage(song.image));
@@ -149,10 +151,12 @@ void Widget::slotPlayMusic(int id){
 void Widget::playerStateChanged(QMediaPlayer::State state){
     switch(state) {
     case QMediaPlayer::PlayingState:
-        ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+        ui->buttonPlay->setStyleSheet("QPushButton{border-image: url(:/image/button_pause.png);}");
+        //ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
         break;
     case QMediaPlayer::PausedState:
-        ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+        ui->buttonPlay->setStyleSheet("QPushButton{border-image: url(:/image/button_play.png);}");
+        //ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
         break;
     default:
         if(!buttonModel){

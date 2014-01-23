@@ -24,3 +24,6 @@ HEADERS  += widget.h \
     http.h
 
 FORMS    += widget.ui
+
+RESOURCES += \
+    image.qrc
