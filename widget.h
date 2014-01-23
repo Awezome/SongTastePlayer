@@ -29,7 +29,7 @@ private:
     void loadListView();
     void loadListData();
 
-    QMediaPlayer *player;
+    QMediaPlayer player;
 
     void updateTime(qint64 currentTimeNumber);
     QTime qint64ToTime(qint64 time);

@@ -17,15 +17,14 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(ui->tablemusiclist,SIGNAL(cellDoubleClicked(int,int)),this, SLOT( getTableItem(int,int)) );
 
     //播放音乐
-    this->player = new QMediaPlayer();
     connect(this,SIGNAL(signalPlayerMusic(int)),this,SLOT(slotPlayMusic(int)));
-    connect(player,SIGNAL(stateChanged(QMediaPlayer::State)),this, SLOT(playerStateChanged(QMediaPlayer::State)));
+    connect(&player,SIGNAL(stateChanged(QMediaPlayer::State)),this, SLOT(playerStateChanged(QMediaPlayer::State)));
 
     //进度条
     ui->musicSlider->setRange(0, 0);
     connect(ui->musicSlider, SIGNAL(sliderMoved(int)),this, SLOT(setPosition(int)));
-    connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
-    connect(player, SIGNAL(durationChanged(qint64)), this, SLOT(durationChanged(qint64)));
+    connect(&player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
+    connect(&player, SIGNAL(durationChanged(qint64)), this, SLOT(durationChanged(qint64)));
 
     //按钮
     ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
@@ -36,7 +35,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(ui->buttonNext, SIGNAL(clicked()),this, SLOT(slotNextButton()));
 
     //音量
-    player->setVolume(50);
+    player.setVolume(50);
     ui->sliderVolume->setRange(0,100);
     ui->sliderVolume->setValue(50);
     connect(ui->sliderVolume, SIGNAL(sliderMoved(int)),this, SLOT(updateVolume(int)));
@@ -75,7 +74,7 @@ void Widget::getTableItem(int row, int column){
 }
 
 void Widget::setPosition(int position){
-    player->setPosition(position);
+    player.setPosition(position);
 }
 
 void Widget::positionChanged(qint64 position){
@@ -101,7 +100,7 @@ QTime Widget::qint64ToTime(qint64 time){
 }
 
 void Widget::updateVolume(int volume){
-    player->setVolume(volume);
+    player.setVolume(volume);
 }
 
 void Widget::setRowColor(int row, QColor color){
@@ -121,8 +120,8 @@ void Widget::slotPlayMusic(int id){
     STModel song=this->musicLists.at(id);
     QString songurl=this->songteste->songUrl(song.id);
 
-    player->setMedia(QUrl(songurl));
-    player->play();
+    player.setMedia(QUrl(songurl));
+    player.play();
 
     //
     buttonModel=false;
@@ -158,16 +157,16 @@ void Widget::playerStateChanged(QMediaPlayer::State state){
 }
 
 void Widget::slotPlayButton(){
-    switch(player->state()){
+    switch(player.state()){
         case QMediaPlayer::PlayingState:
-            player->pause();
+            player.pause();
             break;
         case QMediaPlayer::StoppedState:
             if(palyNumber==0){
                 emit this->signalPlayerMusic(0);
             }
         default:
-            player->play();
+            player.play();
             break;
     }
 }
