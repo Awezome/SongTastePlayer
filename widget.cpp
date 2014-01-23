@@ -8,6 +8,12 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     ui->setupUi(this);
     this->songteste =new STPage();
 
+    //this->setWindowOpacity(1);
+    this->setWindowFlags(Qt::FramelessWindowHint);
+    //setWindowFlags(Qt::WindowMinimizeButtonHint);
+    //this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setFixedSize(430,320);
+
     palyNumber=0;
     buttonModel=false;//是否为点击了下一个或上一个，做为标记，会影响正常下的顺序播放。暂时的。
     scene=new QGraphicsScene();

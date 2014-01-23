@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>381</height>
+    <width>434</width>
+    <height>328</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="QTableWidget" name="tablemusiclist">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>120</y>
+     <x>10</x>
+     <y>130</y>
      <width>411</width>
-     <height>241</height>
+     <height>181</height>
     </rect>
    </property>
    <property name="font">
@@ -42,8 +42,8 @@
   <widget class="QSlider" name="musicSlider">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>70</y>
+     <x>100</x>
+     <y>40</y>
      <width>160</width>
      <height>22</height>
     </rect>
@@ -55,8 +55,8 @@
   <widget class="QLabel" name="labelName">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>40</y>
+     <x>30</x>
+     <y>10</y>
      <width>351</width>
      <height>16</height>
     </rect>
@@ -68,8 +68,8 @@
   <widget class="QLabel" name="labelTime">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>70</y>
+     <x>290</x>
+     <y>40</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -78,24 +78,11 @@
     <string>TextLabel</string>
    </property>
   </widget>
-  <widget class="QSlider" name="sliderVolume">
-   <property name="geometry">
-    <rect>
-     <x>420</x>
-     <y>20</y>
-     <width>22</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-  </widget>
   <widget class="QGraphicsView" name="graphicsImage">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>30</y>
+     <x>20</x>
+     <y>40</y>
      <width>60</width>
      <height>60</height>
     </rect>
@@ -107,10 +94,10 @@
   <widget class="QPushButton" name="buttonPlay">
    <property name="geometry">
     <rect>
-     <x>500</x>
-     <y>90</y>
-     <width>51</width>
-     <height>41</height>
+     <x>150</x>
+     <y>70</y>
+     <width>30</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="text">
@@ -120,10 +107,10 @@
   <widget class="QPushButton" name="buttonPre">
    <property name="geometry">
     <rect>
-     <x>450</x>
-     <y>90</y>
-     <width>51</width>
-     <height>41</height>
+     <x>100</x>
+     <y>70</y>
+     <width>30</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="text">
@@ -133,14 +120,27 @@
   <widget class="QPushButton" name="buttonNext">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>90</y>
-     <width>51</width>
-     <height>41</height>
+     <x>200</x>
+     <y>70</y>
+     <width>30</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QSlider" name="sliderVolume">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>70</y>
+     <width>81</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
    </property>
   </widget>
  </widget>
