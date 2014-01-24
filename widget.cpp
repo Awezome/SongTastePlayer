@@ -20,8 +20,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
 
     //table
     this->loadListView();
-    this->loadListData();
+    //this->loadListData();
     connect(ui->tablemusiclist,SIGNAL(cellDoubleClicked(int,int)),this, SLOT( getTableItem(int,int)) );
+    connect(this,SIGNAL(signalLoadList()),this, SLOT( slotLoadList()) );
 
     //播放音乐
     connect(this,SIGNAL(signalPlayerMusic(int)),this,SLOT(slotPlayMusic(int)));
@@ -44,6 +45,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     ui->sliderVolume->setRange(0,100);
     ui->sliderVolume->setValue(50);
     connect(ui->sliderVolume, SIGNAL(valueChanged(int)),this, SLOT(updateVolume(int)));
+
+    //
+    emit signalLoadList();
 }
 
 Widget::~Widget(){
@@ -65,7 +69,7 @@ void Widget::loadListView(){
 
 }
 
-void Widget::loadListData(){
+void Widget::slotLoadList(){
     this->musicLists=this->songteste->musicLists();
     int listsize=this->musicLists.size();
     ui->tablemusiclist->setRowCount(listsize);
@@ -172,7 +176,7 @@ void Widget::slotPlayButton(){
             player.pause();
             break;
         case QMediaPlayer::StoppedState:
-            if(palyNumber==0){
+            if(palyNumber==0&&musicLists.size()>0){
                 emit this->signalPlayerMusic(0);
             }
         default:
@@ -181,13 +185,17 @@ void Widget::slotPlayButton(){
     }
 }
 
-void Widget::slotPreButton(){
-    buttonModel=true;
-    emit this->signalPlayerMusic(palyNumber-1);
+void Widget::slotPreButton(){    
+    if(musicLists.size()>0){
+        buttonModel=true;
+        emit this->signalPlayerMusic(palyNumber-1);
+    }
 }
 
-void Widget::slotNextButton(){
-    buttonModel=true;
-    emit this->signalPlayerMusic(palyNumber+1);
+void Widget::slotNextButton(){    
+    if(musicLists.size()>0){
+        buttonModel=true;
+        emit this->signalPlayerMusic(palyNumber+1);
+    }
 }
 

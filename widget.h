@@ -27,7 +27,7 @@ private:
     QTime totalTime;
 
     void loadListView();
-    void loadListData();
+
 
     QMediaPlayer player;
 
@@ -55,8 +55,10 @@ private slots:
     void updateVolume(int volume);
     void setRowColor(int row, QColor textcolor, QColor backcolor);
 
+    void slotLoadList();
 signals:
-    void signalPlayerMusic(int id);
+    void signalPlayerMusic(int);
+    void signalLoadList();
 
 };
 
