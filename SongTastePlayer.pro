@@ -27,5 +27,7 @@ HEADERS  += widget.h \
 
 FORMS    += widget.ui
 
+RC_FILE = icon.rc
+
 RESOURCES += \
     image.qrc
