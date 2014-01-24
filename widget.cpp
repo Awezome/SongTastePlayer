@@ -152,8 +152,7 @@ void Widget::slotPlayMusic(int id){
 
     //设置头像
     pixmap.loadFromData(songteste->userImage(song.image));
-    scene->addPixmap(pixmap);
-    ui->graphicsImage->setScene(scene);
+    ui->labelImage->setPixmap(pixmap);
 }
 
 void Widget::playerStateChanged(QMediaPlayer::State state){

@@ -127,33 +127,6 @@ background: #81C300;
     <string>00:00</string>
    </property>
   </widget>
-  <widget class="QGraphicsView" name="graphicsImage">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>40</y>
-     <width>86</width>
-     <height>60</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-image: url(:/image/back.png);</string>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::NoFrame</enum>
-   </property>
-   <property name="sceneRect">
-    <rectf>
-     <x>0.000000000000000</x>
-     <y>0.000000000000000</y>
-     <width>0.000000000000000</width>
-     <height>0.000000000000000</height>
-    </rectf>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-   </property>
-  </widget>
   <widget class="QPushButton" name="buttonPlay">
    <property name="geometry">
     <rect>
@@ -322,12 +295,27 @@ background: #81C300;
     <string/>
    </property>
   </widget>
+  <widget class="QLabel" name="labelImage">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>40</y>
+     <width>86</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: url(:/image/back.png);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <zorder>labelBg</zorder>
   <zorder>tablemusiclist</zorder>
   <zorder>musicSlider</zorder>
   <zorder>labelName</zorder>
   <zorder>labelTotalTime</zorder>
-  <zorder>graphicsImage</zorder>
   <zorder>buttonPlay</zorder>
   <zorder>buttonPre</zorder>
   <zorder>buttonNext</zorder>
@@ -335,6 +323,7 @@ background: #81C300;
   <zorder>labelCurrentTime</zorder>
   <zorder>labelVolumeSmall</zorder>
   <zorder>labelVolumeLarge</zorder>
+  <zorder>labelImage</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
