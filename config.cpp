@@ -1,8 +1,10 @@
 #include "config.h"
 
-QString Config::title="SongTeste Player";
-QString Config::homepage="http://kuaitong.lofter.com/";
-QString Config::changelog="http://kuaitong.lofter.com/post/17220b_42eabb";
+QString Config::title="SongTaste Player";
+QString Config::homepage="http://songtasteplayer.lofter.com/";
+QString Config::changelog="http://songtasteplayer.lofter.com/post/2fc8fe_cfb6f6";
+QString Config::version="1.0.20140124";
+
 
 QString Config::stindex="http://www.songtaste.com/music/";
 QString Config::stmusicaddress="http://www.songtaste.com/playmusic.php?song_id=";

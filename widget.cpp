@@ -231,9 +231,13 @@ void Widget::contentMenu(){
     QAction *Tray_changelog = new QAction("更新日志", this);
     connect(Tray_changelog, SIGNAL(triggered(bool)), this, SLOT(slotChangelog()));
 
+    QAction *Tray_version = new QAction(Config::version, this);
+
     trayMenu = new QMenu(this);//创建菜单
     trayMenu->addAction(Tray_homepage);
     trayMenu->addAction(Tray_changelog);
+    trayMenu->addSeparator();
+    trayMenu->addAction(Tray_version);
     trayMenu->addSeparator();
     trayMenu->addAction(Tray_quit);
 }
