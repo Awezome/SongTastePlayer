@@ -6,6 +6,7 @@
 #include "stpage.h"
 #include <QTime>
 #include <QGraphicsScene>
+#include <QMenu>
 
 namespace Ui {
 class Widget;
@@ -18,6 +19,8 @@ class Widget : public QWidget
 public:
     explicit Widget(QWidget *parent = 0);
     ~Widget();
+
+    void contextMenuEvent(QContextMenuEvent *);
     
 private:
     Ui::Widget *ui;
@@ -40,6 +43,9 @@ private:
     QGraphicsScene *scene;
 
     QPoint dragPosition;
+
+    QMenu *trayMenu;
+    void contentMenu();
 private slots:
     void slotPlayMusic(int id);
 
@@ -58,6 +64,10 @@ private slots:
     void setRowColor(int row, QColor textcolor, QColor backcolor);
 
     void slotLoadList();
+
+    void slotChangelog();
+    void slotHomepage();
+    void slotQuit();
 signals:
     void signalPlayerMusic(int);
     void signalLoadList();

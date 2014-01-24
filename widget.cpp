@@ -2,6 +2,8 @@
 #include "ui_widget.h"
 #include <QDebug>
 #include <QMouseEvent>
+#include <QDesktopServices>
+#include "config.h"
 
 
 Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
@@ -12,7 +14,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->setWindowOpacity(1);
     this->setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
-    this->setWindowTitle("SongTeste Player by Awesomez");
+    this->setWindowTitle(Config::title);
     this->setFixedSize(530,450);
 
     palyNumber=0;
@@ -47,7 +49,10 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     ui->sliderVolume->setValue(50);
     connect(ui->sliderVolume, SIGNAL(valueChanged(int)),this, SLOT(updateVolume(int)));
 
-    //
+    //contentmenu
+    this->contentMenu();
+
+    //load music list
     emit signalLoadList();
 }
 
@@ -214,3 +219,39 @@ void Widget::mouseMoveEvent(QMouseEvent * event){
     }
 }
 
+void Widget::contentMenu(){
+    QAction *Tray_quit = new QAction("退出", this);
+    //Tray_quit->setIcon(QIcon(":/image/image/delete.png"));
+    connect(Tray_quit, SIGNAL(triggered(bool)), this, SLOT(slotQuit()));
+
+    QAction *Tray_homepage = new QAction("官方主页", this);
+    //Tray_flux_day->setIcon(QIcon(":/image/image/checkmark.png"));
+    connect(Tray_homepage, SIGNAL(triggered(bool)), this, SLOT(slotHomepage()));
+
+    QAction *Tray_changelog = new QAction("更新日志", this);
+    connect(Tray_changelog, SIGNAL(triggered(bool)), this, SLOT(slotChangelog()));
+
+    trayMenu = new QMenu(this);//创建菜单
+    trayMenu->addAction(Tray_homepage);
+    trayMenu->addAction(Tray_changelog);
+    trayMenu->addSeparator();
+    trayMenu->addAction(Tray_quit);
+}
+
+void Widget::contextMenuEvent(QContextMenuEvent *){
+    QCursor cur=this->cursor();
+    trayMenu->exec(cur.pos()); //关联到光标
+}
+
+void Widget::slotQuit(){
+    this->close();
+    QApplication::quit();
+}
+
+void Widget::slotHomepage(){
+    QDesktopServices::openUrl(QUrl(Config::homepage));
+}
+
+void Widget::slotChangelog(){
+    QDesktopServices::openUrl(QUrl(Config::changelog));
+}

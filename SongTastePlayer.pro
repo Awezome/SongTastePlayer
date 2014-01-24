@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         widget.cpp \
     stpage.cpp \
     stmodel.cpp \
-    http.cpp
+    http.cpp \
+    config.cpp
 
 HEADERS  += widget.h \
     stpage.h \
     stmodel.h \
-    http.h
+    http.h \
+    config.h
 
 FORMS    += widget.ui
 
