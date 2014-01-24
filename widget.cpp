@@ -1,6 +1,7 @@
 #include "widget.h"
 #include "ui_widget.h"
 #include <QDebug>
+#include <QMouseEvent>
 
 
 Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
@@ -9,9 +10,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->songteste =new STPage();
 
     this->setWindowOpacity(1);
-    this->setWindowFlags(Qt::FramelessWindowHint);
-    //setWindowFlags(Qt::WindowMinimizeButtonHint);
+    this->setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setWindowTitle("SongTeste Player by Awesomez");
     this->setFixedSize(530,450);
 
     palyNumber=0;
@@ -65,8 +66,6 @@ void Widget::loadListView(){
     ui->tablemusiclist->setShowGrid(false);
     ui->tablemusiclist->setFocusPolicy(Qt::NoFocus);
     ui->tablemusiclist->setStyleSheet("selection-background-color:#D8FAA5");  //设置选中行颜色
-
-
 }
 
 void Widget::slotLoadList(){
@@ -196,6 +195,22 @@ void Widget::slotNextButton(){
     if(musicLists.size()>0){
         buttonModel=true;
         emit this->signalPlayerMusic(palyNumber+1);
+    }
+}
+
+//
+void Widget::mousePressEvent(QMouseEvent * event){
+    if (event->button() == Qt::LeftButton){
+         dragPosition = event->globalPos() - frameGeometry().topLeft();
+         //globalPos()获取根窗口的相对路径，frameGeometry().topLeft()获取主窗口左上角的位置
+         event->accept();   //鼠标事件被系统接收
+    }
+}
+
+void Widget::mouseMoveEvent(QMouseEvent * event){
+    if (event->buttons() == Qt::LeftButton){
+         move(event->globalPos()-dragPosition);//移动窗口
+         event->accept();
     }
 }
 

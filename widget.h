@@ -38,6 +38,8 @@ private:
     bool buttonModel;
     QPixmap pixmap;
     QGraphicsScene *scene;
+
+    QPoint dragPosition;
 private slots:
     void slotPlayMusic(int id);
 
@@ -59,7 +61,9 @@ private slots:
 signals:
     void signalPlayerMusic(int);
     void signalLoadList();
-
+protected:
+    void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
 };
 
 #endif // WIDGET_H
