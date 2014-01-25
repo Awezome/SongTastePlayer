@@ -10,5 +10,7 @@
         <file>image/back.png</file>
         <file>image/button_stop.png</file>
         <file>image/logo.png</file>
+        <file>image/button_normal.png</file>
+        <file>image/button_combo.png</file>
     </qresource>
 </RCC>

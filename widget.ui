@@ -55,7 +55,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>120</y>
+     <y>110</y>
      <width>341</width>
      <height>22</height>
     </rect>
@@ -109,7 +109,7 @@ background: #81C300;
    <property name="geometry">
     <rect>
      <x>450</x>
-     <y>120</y>
+     <y>110</y>
      <width>41</width>
      <height>21</height>
     </rect>
@@ -245,7 +245,7 @@ background: #81C300;
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>120</y>
+     <y>110</y>
      <width>41</width>
      <height>21</height>
     </rect>
@@ -315,10 +315,19 @@ background: #81C300;
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>420</y>
+     <y>417</y>
      <width>151</width>
      <height>16</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:#759B01</string>
    </property>
    <property name="text">
     <string>正在加载...</string>
@@ -327,11 +336,21 @@ background: #81C300;
   <widget class="QPushButton" name="buttonRefresh">
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>40</x>
      <y>140</y>
-     <width>51</width>
-     <height>23</height>
+     <width>62</width>
+     <height>20</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{border-image: url(:/image/button_normal.png);}
+QPushButton:hover {border-image: url(:/image/button_normal.png);}
+QPushButton:pressed {border-image: url(:/image/button_normal.png);}</string>
    </property>
    <property name="text">
     <string>刷新</string>
@@ -340,11 +359,52 @@ background: #81C300;
   <widget class="QComboBox" name="comboMusicType">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>110</x>
      <y>140</y>
-     <width>69</width>
-     <height>22</height>
+     <width>62</width>
+     <height>20</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+    </font>
+   </property>
+   <property name="acceptDrops">
+    <bool>true</bool>
+   </property>
+   <property name="toolTip">
+    <string>更改音乐列表</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QComboBox{border-image: url(:/image/button_combo.png)}
+QComboBox::drop-down{border-style:none;text-align:center;}
+</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelVersion">
+   <property name="geometry">
+    <rect>
+     <x>291</x>
+     <y>417</y>
+     <width>211</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="text">
+    <string>Songtaste Player 1.20140125</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
   </widget>
   <zorder>labelBg</zorder>
@@ -363,6 +423,7 @@ background: #81C300;
   <zorder>labelMessage</zorder>
   <zorder>buttonRefresh</zorder>
   <zorder>comboMusicType</zorder>
+  <zorder>labelVersion</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

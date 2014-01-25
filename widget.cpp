@@ -19,6 +19,8 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->setWindowTitle(Config::title);
     this->setFixedSize(530,450);
 
+    ui->labelVersion->setText(Config::title+" "+Config::version);
+
     palyNumber=0;
     musicListSize=0;
     buttonModel=false;//是否为点击了下一个或上一个，做为标记，会影响正常下的顺序播放。暂时的。
@@ -61,6 +63,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->showTrayIcon();
 
     //list type
+   // ui->comboMusicType->lineEdit()->setAlignment(Qt::AlignRight);
     ui->comboMusicType->insertItems(0,songteste->typeLists());
     connect(ui->comboMusicType,SIGNAL(currentIndexChanged(int)),this, SLOT(slotLoadList(int)));
 
@@ -278,13 +281,9 @@ void Widget::contentMenu(){
     QAction *menuWindowsMinimized = new QAction("隐藏主界面", this);
     connect(menuWindowsMinimized, SIGNAL(triggered(bool)), this, SLOT(slotMenuWindowsMinimized()));
 
-    QAction *Tray_version = new QAction(Config::version, this);
-
     trayMenu = new QMenu(this);//创建菜单
     trayMenu->addAction(Tray_homepage);
     trayMenu->addAction(Tray_changelog);
-    trayMenu->addSeparator();
-    trayMenu->addAction(Tray_version);
     trayMenu->addSeparator();
     trayMenu->addAction(menuWindowsMinimized);
     trayMenu->addAction(Tray_quit);
