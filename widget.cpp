@@ -101,6 +101,7 @@ void Widget::slotLoadList(int type){
         this->ui->tablemusiclist->setRowHeight(i,22);
     }
 
+    this->palyNumber=0;//刷新列表后重新计数为-1，播放完后会加1，重新开始播放
     ui->labelMessage->setText("加载"+ui->comboMusicType->currentText()+"列表完成");
 }
 
@@ -238,7 +239,7 @@ void Widget::playerMediaStatus(QMediaPlayer::MediaStatus stats){
             break;
         case QMediaPlayer::InvalidMedia:
             player.stop();
-            ui->labelMessage->setText("无效的音乐");
+            ui->labelMessage->setText("无法连接当前音乐");
             break;
         case QMediaPlayer::BufferedMedia:
             ui->labelMessage->setText("正在播放...");
