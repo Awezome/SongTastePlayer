@@ -14,7 +14,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->songteste =new STPage();
 
     this->setWindowOpacity(1);
-    this->setWindowFlags(Qt::FramelessWindowHint|Qt::Popup|Qt::Tool);
+    this->setWindowFlags(Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowTitle(Config::title);
     this->setFixedSize(530,450);
@@ -26,7 +26,6 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
 
     //table
     this->loadListView();
-    //this->loadListData();
     connect(ui->tablemusiclist,SIGNAL(cellDoubleClicked(int,int)),this, SLOT( getTableItem(int,int)) );
     connect(this,SIGNAL(signalLoadList()),this, SLOT( slotLoadList()) );
 
@@ -315,8 +314,6 @@ void Widget::slotTrayClicked(QSystemTrayIcon::ActivationReason reason) {
     if (reason == QSystemTrayIcon::Trigger) {
         if (isHidden()){
             this->showNormal();
-        }else{
-            this->hide();
         }
     }
 }
