@@ -324,6 +324,19 @@ background: #81C300;
     <string>正在加载...</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="buttonRefresh">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>140</y>
+     <width>51</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>刷新</string>
+   </property>
+  </widget>
   <zorder>labelBg</zorder>
   <zorder>tablemusiclist</zorder>
   <zorder>musicSlider</zorder>
@@ -338,6 +351,7 @@ background: #81C300;
   <zorder>labelVolumeLarge</zorder>
   <zorder>labelImage</zorder>
   <zorder>labelMessage</zorder>
+  <zorder>buttonRefresh</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

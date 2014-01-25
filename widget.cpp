@@ -49,6 +49,8 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(ui->buttonPre, SIGNAL(clicked()),this, SLOT(slotPreButton()));
     connect(ui->buttonNext, SIGNAL(clicked()),this, SLOT(slotNextButton()));
 
+    connect(ui->buttonRefresh, SIGNAL(clicked()),this, SLOT(slotLoadList()));
+
     //音量
     player.setVolume(50);
     ui->sliderVolume->setRange(0,100);
@@ -234,7 +236,7 @@ void Widget::playerMediaStatus(QMediaPlayer::MediaStatus stats){
     qDebug()<<stats;
 }
 
-//
+//system
 void Widget::mousePressEvent(QMouseEvent * event){
     if (event->button() == Qt::LeftButton){
          dragPosition = event->globalPos() - frameGeometry().topLeft();
