@@ -76,6 +76,8 @@ private slots:
     void playerError();
 
     void playerMediaStatus(QMediaPlayer::MediaStatus stats);
+
+    void slotHideList();
 signals:
     void signalPlayerMusic(int);
     void signalLoadList(int);

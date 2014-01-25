@@ -251,6 +251,20 @@ void Widget::playerMediaStatus(QMediaPlayer::MediaStatus stats){
     qDebug()<<stats;
 }
 
+void Widget::slotHideList(){
+    if(ui->tablemusiclist->isHidden()){
+        this->setFixedSize(530,450);
+        ui->tablemusiclist->show();
+        ui->buttonRefresh->show();
+        ui->comboMusicType->show();
+    }else{
+        this->setFixedSize(530,164);
+        ui->tablemusiclist->hide();
+        ui->buttonRefresh->hide();
+        ui->comboMusicType->hide();
+    }
+}
+
 //system
 void Widget::mousePressEvent(QMouseEvent * event){
     if (event->button() == Qt::LeftButton){
@@ -282,7 +296,11 @@ void Widget::contentMenu(){
     QAction *menuWindowsMinimized = new QAction("隐藏主界面", this);
     connect(menuWindowsMinimized, SIGNAL(triggered(bool)), this, SLOT(slotMenuWindowsMinimized()));
 
+    QAction *menuHideList = new QAction("隐藏/显示列表", this);
+    connect(menuHideList, SIGNAL(triggered(bool)), this, SLOT(slotHideList()));
+
     trayMenu = new QMenu(this);//创建菜单
+    trayMenu->addAction(menuHideList);
     trayMenu->addAction(Tray_homepage);
     trayMenu->addAction(Tray_changelog);
     trayMenu->addSeparator();
