@@ -4,6 +4,8 @@
 #include <QMouseEvent>
 #include <QDesktopServices>
 #include "config.h"
+#include <QtMultimediaWidgets/QtMultimediaWidgets>
+#include <QtOpenGL/QtOpenGL>
 
 
 Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
@@ -18,6 +20,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->setFixedSize(530,450);
 
     palyNumber=0;
+    musicListSize=0;
     buttonModel=false;//是否为点击了下一个或上一个，做为标记，会影响正常下的顺序播放。暂时的。
     scene=new QGraphicsScene();
 
@@ -30,6 +33,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     //播放音乐
     connect(this,SIGNAL(signalPlayerMusic(int)),this,SLOT(slotPlayMusic(int)));
     connect(&player,SIGNAL(stateChanged(QMediaPlayer::State)),this, SLOT(playerStateChanged(QMediaPlayer::State)));
+    connect(&player, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(playerError()));
+    connect(&player, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this, SLOT(playerMediaStatus(QMediaPlayer::MediaStatus)));
+    //connect(&player, SIGNAL(bufferStatusChanged(int)), this, SLOT(playerBufferStatus(int)));
 
     //进度条
     ui->musicSlider->setRange(0, 0);
@@ -75,9 +81,9 @@ void Widget::loadListView(){
 
 void Widget::slotLoadList(){
     this->musicLists=this->songteste->musicLists();
-    int listsize=this->musicLists.size();
-    ui->tablemusiclist->setRowCount(listsize);
-    for(int i=0;i<listsize;i++){
+    this->musicListSize=this->musicLists.size();
+    ui->tablemusiclist->setRowCount(musicListSize);
+    for(int i=0;i<musicListSize;i++){
         STModel song=this->musicLists.at(i);
         this->ui->tablemusiclist->setItem(i,0,new QTableWidgetItem(song.name));
         this->ui->tablemusiclist->setItem(i,1,new QTableWidgetItem(song.author));
@@ -129,9 +135,9 @@ void Widget::setRowColor(int row, QColor textcolor,QColor backcolor){
 }
 
 void Widget::slotPlayMusic(int id){
-    int size=musicLists.size()-1;
-    id=id>size?0:id;
-    id=id<0?size:id;
+    if(id<0||id>=this->musicListSize){
+        return ;
+    }
 
     STModel song=this->musicLists.at(id);
     QString songurl=this->songteste->songUrl(song.id);
@@ -166,9 +172,7 @@ void Widget::playerStateChanged(QMediaPlayer::State state){
         //ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
         break;
     default:
-        if(!buttonModel){
-            emit this->signalPlayerMusic(palyNumber+1);
-        }
+        ui->buttonPlay->setStyleSheet("QPushButton{border-image: url(:/image/button_stop.png);}");
         break;
     }
 }
@@ -179,7 +183,7 @@ void Widget::slotPlayButton(){
             player.pause();
             break;
         case QMediaPlayer::StoppedState:
-            if(palyNumber==0&&musicLists.size()>0){
+            if(palyNumber==0&&this->musicListSize>0){
                 emit this->signalPlayerMusic(0);
             }
         default:
@@ -189,17 +193,44 @@ void Widget::slotPlayButton(){
 }
 
 void Widget::slotPreButton(){    
-    if(musicLists.size()>0){
+    if(this->musicListSize>0){
         buttonModel=true;
         emit this->signalPlayerMusic(palyNumber-1);
     }
 }
 
 void Widget::slotNextButton(){    
-    if(musicLists.size()>0){
+    if(this->musicListSize>0){
         buttonModel=true;
         emit this->signalPlayerMusic(palyNumber+1);
     }
+}
+
+void Widget::playerError(){
+    qDebug()<<player.errorString();
+}
+
+
+void Widget::playerMediaStatus(QMediaPlayer::MediaStatus stats){
+    switch(stats){
+        case QMediaPlayer::EndOfMedia:
+            emit this->signalPlayerMusic(palyNumber+1);
+            break;
+        case QMediaPlayer::LoadingMedia:
+            ui->labelMessage->setText("正在缓冲...");
+            break;
+        case QMediaPlayer::InvalidMedia:
+            player.stop();
+            ui->labelMessage->setText("无效的音乐");
+            break;
+        case QMediaPlayer::BufferedMedia:
+            ui->labelMessage->setText("正在播放...");
+            break;
+        default:
+
+            break;
+    }
+    qDebug()<<stats;
 }
 
 //

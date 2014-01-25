@@ -8,5 +8,6 @@
         <file>image/volume_large.png</file>
         <file>image/volume_small.png</file>
         <file>image/back.png</file>
+        <file>image/button_stop.png</file>
     </qresource>
 </RCC>

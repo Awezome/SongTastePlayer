@@ -25,9 +25,8 @@ public:
 private:
     Ui::Widget *ui;
     QList<STModel> musicLists;
+    int musicListSize;
     STPage *songteste;
-
-    QTime totalTime;
 
     void loadListView();
 
@@ -68,6 +67,9 @@ private slots:
     void slotChangelog();
     void slotHomepage();
     void slotQuit();
+    void playerError();
+
+    void playerMediaStatus(QMediaPlayer::MediaStatus stats);
 signals:
     void signalPlayerMusic(int);
     void signalLoadList();
