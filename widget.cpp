@@ -14,7 +14,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->songteste =new STPage();
 
     this->setWindowOpacity(1);
-    this->setWindowFlags(Qt::FramelessWindowHint);
+    this->setWindowFlags(Qt::FramelessWindowHint|Qt::Popup|Qt::Tool);
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowTitle(Config::title);
     this->setFixedSize(530,450);
@@ -57,6 +57,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
 
     //contentmenu
     this->contentMenu();
+    this->showTrayIcon();
 
     //load music list
     emit signalLoadList();
@@ -261,6 +262,9 @@ void Widget::contentMenu(){
     QAction *Tray_changelog = new QAction("更新日志", this);
     connect(Tray_changelog, SIGNAL(triggered(bool)), this, SLOT(slotChangelog()));
 
+    QAction *menuWindowsMinimized = new QAction("隐藏主界面", this);
+    connect(menuWindowsMinimized, SIGNAL(triggered(bool)), this, SLOT(slotMenuWindowsMinimized()));
+
     QAction *Tray_version = new QAction(Config::version, this);
 
     trayMenu = new QMenu(this);//创建菜单
@@ -269,6 +273,7 @@ void Widget::contentMenu(){
     trayMenu->addSeparator();
     trayMenu->addAction(Tray_version);
     trayMenu->addSeparator();
+    trayMenu->addAction(menuWindowsMinimized);
     trayMenu->addAction(Tray_quit);
 }
 
@@ -288,4 +293,28 @@ void Widget::slotHomepage(){
 
 void Widget::slotChangelog(){
     QDesktopServices::openUrl(QUrl(Config::changelog));
+}
+void Widget::slotMenuWindowsMinimized(){
+    this->hide();
+}
+
+void Widget::showTrayIcon(){
+    QIcon icon(":/image/logo.png");
+    trayIcon = new QSystemTrayIcon(this);
+    trayIcon->setIcon(icon);
+    trayIcon->show();
+    trayIcon->setContextMenu(trayMenu);//将创建菜单作为系统托盘菜单
+    trayIcon->setToolTip(Config::title);
+    trayIcon->showMessage(Config::title,"我在这~~", QSystemTrayIcon::Information, 5000);
+    connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(slotTrayClicked(QSystemTrayIcon::ActivationReason)));
+}
+
+void Widget::slotTrayClicked(QSystemTrayIcon::ActivationReason reason) {
+    if (reason == QSystemTrayIcon::Trigger) {
+        if (isHidden()){
+            this->showNormal();
+        }else{
+            this->hide();
+        }
+    }
 }

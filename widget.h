@@ -7,6 +7,7 @@
 #include <QTime>
 #include <QGraphicsScene>
 #include <QMenu>
+#include <QSystemTrayIcon>
 
 namespace Ui {
 class Widget;
@@ -44,7 +45,9 @@ private:
     QPoint dragPosition;
 
     QMenu *trayMenu;
+    QSystemTrayIcon* trayIcon;
     void contentMenu();
+    void showTrayIcon();
 private slots:
     void slotPlayMusic(int id);
 
@@ -67,6 +70,8 @@ private slots:
     void slotChangelog();
     void slotHomepage();
     void slotQuit();
+    void slotMenuWindowsMinimized();
+    void slotTrayClicked(QSystemTrayIcon::ActivationReason reason);
     void playerError();
 
     void playerMediaStatus(QMediaPlayer::MediaStatus stats);
