@@ -27,7 +27,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     //table
     this->loadListView();
     connect(ui->tablemusiclist,SIGNAL(cellDoubleClicked(int,int)),this, SLOT( getTableItem(int,int)) );
-    connect(this,SIGNAL(signalLoadList()),this, SLOT( slotLoadList()) );
+    connect(this,SIGNAL(signalLoadList(int)),this, SLOT( slotLoadList(int)) );
 
     //播放音乐
     connect(this,SIGNAL(signalPlayerMusic(int)),this,SLOT(slotPlayMusic(int)));
@@ -48,7 +48,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(ui->buttonPre, SIGNAL(clicked()),this, SLOT(slotPreButton()));
     connect(ui->buttonNext, SIGNAL(clicked()),this, SLOT(slotNextButton()));
 
-    connect(ui->buttonRefresh, SIGNAL(clicked()),this, SLOT(slotLoadList()));
+    connect(ui->buttonRefresh, SIGNAL(clicked()),this, SLOT(slotRefreshList()));
 
     //音量
     player.setVolume(50);
@@ -60,8 +60,12 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->contentMenu();
     this->showTrayIcon();
 
+    //list type
+    ui->comboMusicType->insertItems(0,songteste->typeLists());
+    connect(ui->comboMusicType,SIGNAL(currentIndexChanged(int)),this, SLOT(slotLoadList(int)));
+
     //load music list
-    emit signalLoadList();
+    emit signalLoadList(0);
 }
 
 Widget::~Widget(){
@@ -81,8 +85,10 @@ void Widget::loadListView(){
     ui->tablemusiclist->setStyleSheet("selection-background-color:#D8FAA5");  //设置选中行颜色
 }
 
-void Widget::slotLoadList(){
-    this->musicLists=this->songteste->musicLists();
+void Widget::slotLoadList(int type){
+    ui->labelMessage->setText("正在加载"+ui->comboMusicType->currentText()+"列表...");
+
+    this->musicLists=this->songteste->musicLists(type);
     this->musicListSize=this->musicLists.size();
     ui->tablemusiclist->setRowCount(musicListSize);
     for(int i=0;i<musicListSize;i++){
@@ -91,6 +97,8 @@ void Widget::slotLoadList(){
         this->ui->tablemusiclist->setItem(i,1,new QTableWidgetItem(song.author));
         this->ui->tablemusiclist->setRowHeight(i,22);
     }
+
+    ui->labelMessage->setText("加载"+ui->comboMusicType->currentText()+"列表完成");
 }
 
 void Widget::getTableItem(int row, int column){
@@ -134,6 +142,10 @@ void Widget::setRowColor(int row, QColor textcolor,QColor backcolor){
         item->setBackgroundColor(backcolor);
         item->setTextColor(textcolor);
     }
+}
+
+void Widget::slotRefreshList(){
+    emit slotLoadList(ui->comboMusicType->currentIndex());
 }
 
 void Widget::slotPlayMusic(int id){

@@ -65,7 +65,8 @@ private slots:
     void updateVolume(int volume);
     void setRowColor(int row, QColor textcolor, QColor backcolor);
 
-    void slotLoadList();
+    void slotLoadList(int type);
+    void slotRefreshList();
 
     void slotChangelog();
     void slotHomepage();
@@ -77,7 +78,7 @@ private slots:
     void playerMediaStatus(QMediaPlayer::MediaStatus stats);
 signals:
     void signalPlayerMusic(int);
-    void signalLoadList();
+    void signalLoadList(int);
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);

@@ -15,9 +15,11 @@ STPage::STPage(){
 }
 
 //music lists
-QList<STModel> STPage::musicLists(){
+QList<STModel> STPage::musicLists(int type){
+    QString u=type>0?"040"+QString::number(type):"";
+
     QList<STModel> musiclist;
-    http->get(Config::stindex,"");
+    http->get(Config::stindex+u,"");
     QString url=http->getResult();
     QRegExp reg("MSL\\((.*)\\);");
     int pos =0;
@@ -73,4 +75,8 @@ QString STPage::songString(QString sid){
 QByteArray STPage::userImage(QString image){
     http->get(Config::stimage+image,"");
     return http->getResultByte();
+}
+
+QStringList STPage::typeLists(){
+    return Config::sttype.split(",");
 }

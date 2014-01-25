@@ -11,7 +11,8 @@ class STPage  : public QObject
 
 public:
     STPage();
-    QList<STModel> musicLists();
+    QList<STModel> musicLists(int type);
+    QStringList typeLists();
     QString songUrl(QString sid);
     QByteArray userImage(QString image);
 private:

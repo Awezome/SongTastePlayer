@@ -337,6 +337,16 @@ background: #81C300;
     <string>刷新</string>
    </property>
   </widget>
+  <widget class="QComboBox" name="comboMusicType">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>140</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
   <zorder>labelBg</zorder>
   <zorder>tablemusiclist</zorder>
   <zorder>musicSlider</zorder>
@@ -352,6 +362,7 @@ background: #81C300;
   <zorder>labelImage</zorder>
   <zorder>labelMessage</zorder>
   <zorder>buttonRefresh</zorder>
+  <zorder>comboMusicType</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

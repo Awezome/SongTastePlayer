@@ -13,6 +13,8 @@ class Config{
     static QString stpost;
     static QString stmusicaddress;
     static QString stimage;
+
+    static QString sttype;
 };
 
 #endif
