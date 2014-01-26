@@ -17,10 +17,18 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowTitle(Config::title);
-    this->setFixedSize(530,450);
+    this->setFixedSize(420,360);
+
+    this->setMouseTracking(true);
+    ui->labelBg->setMouseTracking(true);
+    ui->musicSlider->setMouseTracking(true);
 
     ui->labelVersion->setText(Config::title+" "+Config::version);
 
+    //titleShow
+    titleShow();
+
+    //player
     palyNumber=0;
     musicListSize=0;
     buttonModel=false;//是否为点击了下一个或上一个，做为标记，会影响正常下的顺序播放。暂时的。
@@ -49,8 +57,6 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(ui->buttonPlay, SIGNAL(clicked()),this, SLOT(slotPlayButton()));
     connect(ui->buttonPre, SIGNAL(clicked()),this, SLOT(slotPreButton()));
     connect(ui->buttonNext, SIGNAL(clicked()),this, SLOT(slotNextButton()));
-
-    connect(ui->buttonRefresh, SIGNAL(clicked()),this, SLOT(slotRefreshList()));
 
     //音量
     player.setVolume(50);
@@ -81,11 +87,11 @@ void Widget::loadListView(){
     ui->tablemusiclist->setSelectionMode(QAbstractItemView::SingleSelection); //设置为可以选中多个目标
     ui->tablemusiclist->verticalHeader()->setVisible(false); //隐藏行号
     ui->tablemusiclist->horizontalHeader()->setVisible(false); //隐藏行表头
-    ui->tablemusiclist->setColumnWidth(0,360);
-    ui->tablemusiclist->setColumnWidth(1,90);
+    ui->tablemusiclist->setColumnWidth(0,340);
+    ui->tablemusiclist->setColumnWidth(1,60);
     ui->tablemusiclist->setShowGrid(false);
     ui->tablemusiclist->setFocusPolicy(Qt::NoFocus);
-    ui->tablemusiclist->setStyleSheet("selection-background-color:#D8FAA5");  //设置选中行颜色
+    ui->tablemusiclist->setStyleSheet("selection-background-color:#9ED3FE");  //设置选中行颜色
 }
 
 void Widget::slotLoadList(int type){
@@ -168,11 +174,12 @@ void Widget::slotPlayMusic(int id){
 
     //设置歌名
     ui->labelName->setText(song.name);
+    ui->labelAuthor->setText(song.author);
 
     //播放时改变列表中的行颜色
-    setRowColor(palyNumber,QColor("#000"),QColor("#fff"));
+    setRowColor(palyNumber,QColor("#999"),QColor("#fff"));
     this->palyNumber=id;
-    setRowColor(id,QColor("#fff"),QColor("#81C300"));
+    setRowColor(id,QColor("#fff"),QColor("#0579C7"));
 
     //设置头像
     pixmap.loadFromData(songteste->userImage(song.image));
@@ -253,18 +260,40 @@ void Widget::playerMediaStatus(QMediaPlayer::MediaStatus stats){
 
 void Widget::slotHideList(){
     if(ui->tablemusiclist->isHidden()){
-        this->setFixedSize(530,450);
+        this->setFixedHeight(360);
+        ui->labelBg->setFixedHeight(360);
         ui->tablemusiclist->show();
         ui->buttonRefresh->show();
         ui->comboMusicType->show();
     }else{
-        this->setFixedSize(530,164);
+        this->setFixedHeight(60);
+        ui->labelBg->setFixedHeight(60);
         ui->tablemusiclist->hide();
         ui->buttonRefresh->hide();
         ui->comboMusicType->hide();
     }
 }
 
+void Widget::titleShow(){
+    ui->labelName->show();
+    ui->labelAuthor->show();
+    ui->buttonNext->hide();
+    ui->buttonPre->hide();
+    ui->buttonPlay->hide();
+    ui->sliderVolume->hide();
+    ui->labelVolumeSmall->hide();
+}
+
+
+void Widget::titleHide(){
+    ui->labelName->hide();
+    ui->labelAuthor->hide();
+    ui->buttonNext->show();
+    ui->buttonPre->show();
+    ui->buttonPlay->show();
+    ui->sliderVolume->show();
+    ui->labelVolumeSmall->show();
+}
 //system
 void Widget::mousePressEvent(QMouseEvent * event){
     if (event->button() == Qt::LeftButton){
@@ -275,6 +304,11 @@ void Widget::mousePressEvent(QMouseEvent * event){
 }
 
 void Widget::mouseMoveEvent(QMouseEvent * event){
+    if(1<event->y()&&event->y()<40&&61<event->x()&&event->x()<350){
+       titleHide();
+    }else{
+       titleShow();
+    }
     if (event->buttons() == Qt::LeftButton){
          move(event->globalPos()-dragPosition);//移动窗口
          event->accept();
@@ -299,8 +333,12 @@ void Widget::contentMenu(){
     QAction *menuHideList = new QAction("隐藏/显示列表", this);
     connect(menuHideList, SIGNAL(triggered(bool)), this, SLOT(slotHideList()));
 
+    QAction *menuRefreshList = new QAction("刷新列表", this);
+    connect(menuRefreshList, SIGNAL(triggered(bool)), this, SLOT(slotRefreshList()));
+
     trayMenu = new QMenu(this);//创建菜单
     trayMenu->addAction(menuHideList);
+    trayMenu->addAction(menuRefreshList);
     trayMenu->addAction(Tray_homepage);
     trayMenu->addAction(Tray_changelog);
     trayMenu->addSeparator();

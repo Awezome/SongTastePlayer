@@ -48,6 +48,9 @@ private:
     QSystemTrayIcon* trayIcon;
     void contentMenu();
     void showTrayIcon();
+
+    void titleShow();
+    void titleHide();
 private slots:
     void slotPlayMusic(int id);
 
