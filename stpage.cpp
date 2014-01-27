@@ -78,5 +78,5 @@ QByteArray STPage::userImage(QString image){
 }
 
 QStringList STPage::typeLists(){
-    return Config::sttype.split(",");
+    return Config::sttype;
 }

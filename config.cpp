@@ -11,5 +11,5 @@ QString Config::stmusicaddress="http://www.songtaste.com/playmusic.php?song_id="
 QString Config::stpost="http://www.songtaste.com/time.php";
 QString Config::stimage="http://image.songtaste.com/images/usericon/s/";
 
-QString Config::sttype="所有,国语,粤语,英文,日韩,其它";
+QStringList Config::sttype=QStringList()<<"所有"<<"国语"<<"粤语"<<"英文"<<"日韩"<<"其它";
 

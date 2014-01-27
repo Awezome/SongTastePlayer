@@ -1,6 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 #include <QString>
+#include <QStringList>
 
 class Config{
   public:
@@ -14,7 +15,7 @@ class Config{
     static QString stmusicaddress;
     static QString stimage;
 
-    static QString sttype;
+    static QStringList sttype;
 };
 
 #endif
