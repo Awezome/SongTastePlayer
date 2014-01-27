@@ -31,6 +31,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     //player
     palyNumber=0;
     musicListSize=0;
+    musicOrder=0;//0顺序，1单曲
     buttonModel=false;//是否为点击了下一个或上一个，做为标记，会影响正常下的顺序播放。暂时的。
     scene=new QGraphicsScene();
 
@@ -72,6 +73,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
    // ui->comboMusicType->lineEdit()->setAlignment(Qt::AlignRight);
     ui->comboMusicType->insertItems(0,songteste->typeLists());
     connect(ui->comboMusicType,SIGNAL(currentIndexChanged(int)),this, SLOT(slotLoadList(int)));
+    connect(ui->comboMusicOrder,SIGNAL(currentIndexChanged(int)),this, SLOT(slotMusicOrder(int)));
 
     //load music list
     emit signalLoadList(0);
@@ -112,6 +114,10 @@ void Widget::slotLoadList(int type){
         ui->labelMessage->setText(ui->comboMusicType->currentText()+"列表加载失败");
     }
     this->palyNumber=0;//刷新列表后重新计数为-1，播放完后会加1，重新开始播放
+}
+
+void Widget::slotMusicOrder(int i){
+    this->musicOrder=i;
 }
 
 void Widget::getTableItem(int row, int column){
@@ -242,7 +248,11 @@ void Widget::playerError(){
 void Widget::playerMediaStatus(QMediaPlayer::MediaStatus stats){
     switch(stats){
         case QMediaPlayer::EndOfMedia:
-            emit this->signalPlayerMusic(palyNumber+1);
+            if(musicOrder==1){
+                emit this->signalPlayerMusic(palyNumber);
+            }else{
+                emit this->signalPlayerMusic(palyNumber+1);
+            }
             break;
         case QMediaPlayer::LoadingMedia:
             ui->labelMessage->setText("正在缓冲...");

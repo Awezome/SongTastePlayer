@@ -27,6 +27,7 @@ private:
     Ui::Widget *ui;
     QList<STModel> musicLists;
     int musicListSize;
+    int musicOrder;
     STPage *songteste;
 
     void loadListView();
@@ -81,6 +82,7 @@ private slots:
     void playerMediaStatus(QMediaPlayer::MediaStatus stats);
 
     void slotHideList();
+    void slotMusicOrder(int i);
 signals:
     void signalPlayerMusic(int);
     void signalLoadList(int);

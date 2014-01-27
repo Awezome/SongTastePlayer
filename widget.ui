@@ -453,6 +453,66 @@ image:url(:/image/arraw.png);
     <string>|</string>
    </property>
   </widget>
+  <widget class="QComboBox" name="comboMusicOrder">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>60</y>
+     <width>80</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="acceptDrops">
+    <bool>true</bool>
+   </property>
+   <property name="toolTip">
+    <string>更改音乐列表</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"> QComboBox{
+    selection-color:#fff; 
+    color: #fff;
+    background-color:#000;
+    border: 1px black;
+}
+ 
+QComboBox:on { /*shift the text when the popup opens */
+    selection-background-color: rgb(108, 149, 59);
+    color:#436254;
+}
+ 
+QComboBox:!on { /* shift the text when the popup opens */
+    selection-background-color:#000;
+    color:#fff;
+}
+
+
+QComboBox::drop-down {
+    border:1px solid #000
+
+}
+QComboBox::down-arrow {
+image:url(:/image/arraw.png);
+}</string>
+   </property>
+   <item>
+    <property name="text">
+     <string>顺序播放</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>单曲循环</string>
+    </property>
+   </item>
+  </widget>
   <zorder>labelBg</zorder>
   <zorder>tablemusiclist</zorder>
   <zorder>musicSlider</zorder>
@@ -470,6 +530,7 @@ image:url(:/image/arraw.png);
   <zorder>labelVersion</zorder>
   <zorder>labelAuthor</zorder>
   <zorder>labelTotalTime_2</zorder>
+  <zorder>comboMusicOrder</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
