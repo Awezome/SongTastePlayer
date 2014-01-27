@@ -77,7 +77,6 @@ private slots:
     void slotQuit();
     void slotMenuWindowsMinimized();
     void slotTrayClicked(QSystemTrayIcon::ActivationReason reason);
-    void playerError();
 
     void playerMediaStatus(QMediaPlayer::MediaStatus stats);
 

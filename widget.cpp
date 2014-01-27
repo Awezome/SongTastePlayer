@@ -37,40 +37,37 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
 
     //table
     this->loadListView();
-    connect(ui->tablemusiclist,SIGNAL(cellDoubleClicked(int,int)),this, SLOT( getTableItem(int,int)) );
-    connect(this,SIGNAL(signalLoadList(int)),this, SLOT( slotLoadList(int)) );
+    connect(ui->tablemusiclist,&QTableWidget::cellDoubleClicked,this,&Widget::getTableItem);
+    connect(this,&Widget::signalLoadList,&Widget::slotLoadList);
 
     //播放音乐
-    connect(this,SIGNAL(signalPlayerMusic(int)),this,SLOT(slotPlayMusic(int)));
-    connect(&player,SIGNAL(stateChanged(QMediaPlayer::State)),this, SLOT(playerStateChanged(QMediaPlayer::State)));
-    connect(&player, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(playerError()));
-    connect(&player, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), this, SLOT(playerMediaStatus(QMediaPlayer::MediaStatus)));
-    //connect(&player, SIGNAL(bufferStatusChanged(int)), this, SLOT(playerBufferStatus(int)));
+    connect(this,&Widget::signalPlayerMusic,&Widget::slotPlayMusic);
+    connect(&player,&QMediaPlayer::stateChanged,this, &Widget::playerStateChanged);
+    connect(&player, &QMediaPlayer::mediaStatusChanged, this, &Widget::playerMediaStatus);
 
     //进度条
     ui->musicSlider->setRange(0, 0);
-    connect(ui->musicSlider, SIGNAL(sliderMoved(int)),this, SLOT(setPosition(int)));
-    connect(&player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
-    connect(&player, SIGNAL(durationChanged(qint64)), this, SLOT(durationChanged(qint64)));
+    connect(ui->musicSlider,&QSlider::sliderMoved,this, &Widget::setPosition);
+    connect(&player, &QMediaPlayer::positionChanged, this, &Widget::positionChanged);
+    connect(&player,  &QMediaPlayer::durationChanged, this, &Widget::durationChanged);
 
     //按钮
     //ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-    connect(ui->buttonPlay, SIGNAL(clicked()),this, SLOT(slotPlayButton()));
-    connect(ui->buttonPre, SIGNAL(clicked()),this, SLOT(slotPreButton()));
-    connect(ui->buttonNext, SIGNAL(clicked()),this, SLOT(slotNextButton()));
+    connect(ui->buttonPlay,&QPushButton::clicked,this, &Widget::slotPlayButton);
+    connect(ui->buttonPre, &QPushButton::clicked,this, &Widget::slotPreButton);
+    connect(ui->buttonNext,&QPushButton::clicked,this, &Widget::slotNextButton);
 
     //音量
     player.setVolume(50);
     ui->sliderVolume->setRange(0,100);
     ui->sliderVolume->setValue(50);
-    connect(ui->sliderVolume, SIGNAL(valueChanged(int)),this, SLOT(updateVolume(int)));
+    connect(ui->sliderVolume, &QSlider::valueChanged,this, &Widget::updateVolume);
 
     //contentmenu
     this->contentMenu();
     this->showTrayIcon();
 
     //list type
-   // ui->comboMusicType->lineEdit()->setAlignment(Qt::AlignRight);
     ui->comboMusicType->insertItems(0,songteste->typeLists());
     connect(ui->comboMusicType,SIGNAL(currentIndexChanged(int)),this, SLOT(slotLoadList(int)));
     connect(ui->comboMusicOrder,SIGNAL(currentIndexChanged(int)),this, SLOT(slotMusicOrder(int)));
@@ -240,11 +237,6 @@ void Widget::slotNextButton(){
     }
 }
 
-void Widget::playerError(){
-    qDebug()<<player.errorString();
-}
-
-
 void Widget::playerMediaStatus(QMediaPlayer::MediaStatus stats){
     switch(stats){
         case QMediaPlayer::EndOfMedia:
@@ -330,23 +322,23 @@ void Widget::mouseMoveEvent(QMouseEvent * event){
 void Widget::contentMenu(){
     QAction *Tray_quit = new QAction("退出", this);
     //Tray_quit->setIcon(QIcon(":/image/image/delete.png"));
-    connect(Tray_quit, SIGNAL(triggered(bool)), this, SLOT(slotQuit()));
+    connect(Tray_quit,&QAction::triggered, this, &Widget::slotQuit);
 
     QAction *Tray_homepage = new QAction("官方主页", this);
     //Tray_flux_day->setIcon(QIcon(":/image/image/checkmark.png"));
-    connect(Tray_homepage, SIGNAL(triggered(bool)), this, SLOT(slotHomepage()));
+    connect(Tray_homepage,&QAction::triggered, this,&Widget::slotHomepage);
 
     QAction *Tray_changelog = new QAction("更新日志", this);
-    connect(Tray_changelog, SIGNAL(triggered(bool)), this, SLOT(slotChangelog()));
+    connect(Tray_changelog,&QAction::triggered, this,&Widget::slotChangelog);
 
     QAction *menuWindowsMinimized = new QAction("隐藏主界面", this);
-    connect(menuWindowsMinimized, SIGNAL(triggered(bool)), this, SLOT(slotMenuWindowsMinimized()));
+    connect(menuWindowsMinimized,&QAction::triggered, this, &Widget::slotMenuWindowsMinimized);
 
     QAction *menuHideList = new QAction("隐藏/显示列表", this);
-    connect(menuHideList, SIGNAL(triggered(bool)), this, SLOT(slotHideList()));
+    connect(menuHideList,&QAction::triggered, this,&Widget::slotHideList);
 
     QAction *menuRefreshList = new QAction("刷新列表", this);
-    connect(menuRefreshList, SIGNAL(triggered(bool)), this, SLOT(slotRefreshList()));
+    connect(menuRefreshList,&QAction::triggered, this, &Widget::slotRefreshList);
 
     trayMenu = new QMenu(this);//创建菜单
     trayMenu->addAction(menuHideList);
@@ -386,7 +378,7 @@ void Widget::showTrayIcon(){
     trayIcon->setContextMenu(trayMenu);//将创建菜单作为系统托盘菜单
     trayIcon->setToolTip(Config::title);
     trayIcon->showMessage(Config::title,"我在这~~", QSystemTrayIcon::Information, 5000);
-    connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(slotTrayClicked(QSystemTrayIcon::ActivationReason)));
+    connect(trayIcon,&QSystemTrayIcon::activated, this, &Widget::slotTrayClicked);
 }
 
 void Widget::slotTrayClicked(QSystemTrayIcon::ActivationReason reason) {
