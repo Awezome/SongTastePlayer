@@ -297,6 +297,7 @@ void Widget::titleShow(){
 
 
 void Widget::titleHide(){
+    ui->labelAuthor->hide();
     ui->labelName->hide();
     ui->labelAuthor->hide();
     ui->buttonNext->show();
@@ -358,8 +359,7 @@ void Widget::contentMenu(){
 }
 
 void Widget::contextMenuEvent(QContextMenuEvent *){
-    QCursor cur=this->cursor();
-    trayMenu->exec(cur.pos()); //关联到光标
+    trayMenu->exec(this->cursor().pos()); //关联到光标
 }
 
 void Widget::slotQuit(){
@@ -390,9 +390,7 @@ void Widget::showTrayIcon(){
 }
 
 void Widget::slotTrayClicked(QSystemTrayIcon::ActivationReason reason) {
-    if (reason == QSystemTrayIcon::Trigger) {
-        if (isHidden()){
-            this->showNormal();
-        }
+    if (reason == QSystemTrayIcon::Trigger&&this->isHidden()) {
+        this->showNormal();
     }
 }
