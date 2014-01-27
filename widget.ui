@@ -328,29 +328,6 @@ background: #0579C7;
     <string>正在加载...</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="buttonRefresh">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>60</y>
-     <width>60</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {border: none;background-color: #000;color:#fff}</string>
-   </property>
-   <property name="text">
-    <string>刷新</string>
-   </property>
-  </widget>
   <widget class="QComboBox" name="comboMusicType">
    <property name="geometry">
     <rect>
@@ -449,7 +426,7 @@ image:url(:/image/arraw.png);
     <string notr="true">color: #999;</string>
    </property>
    <property name="text">
-    <string>Author</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLabel" name="labelTotalTime_2">
@@ -489,7 +466,6 @@ image:url(:/image/arraw.png);
   <zorder>labelVolumeSmall</zorder>
   <zorder>labelImage</zorder>
   <zorder>labelMessage</zorder>
-  <zorder>buttonRefresh</zorder>
   <zorder>comboMusicType</zorder>
   <zorder>labelVersion</zorder>
   <zorder>labelAuthor</zorder>

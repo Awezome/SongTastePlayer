@@ -95,20 +95,23 @@ void Widget::loadListView(){
 }
 
 void Widget::slotLoadList(int type){
-    ui->labelMessage->setText("正在加载"+ui->comboMusicType->currentText()+"列表...");
+    ui->labelMessage->setText(ui->comboMusicType->currentText()+"列表加载中...");
 
     this->musicLists=this->songteste->musicLists(type);
     this->musicListSize=this->musicLists.size();
-    ui->tablemusiclist->setRowCount(musicListSize);
-    for(int i=0;i<musicListSize;i++){
-        STModel song=this->musicLists.at(i);
-        this->ui->tablemusiclist->setItem(i,0,new QTableWidgetItem(song.name));
-        this->ui->tablemusiclist->setItem(i,1,new QTableWidgetItem(song.author));
-        this->ui->tablemusiclist->setRowHeight(i,22);
+    if(musicListSize>0){
+        ui->tablemusiclist->setRowCount(musicListSize);
+        for(int i=0;i<musicListSize;i++){
+            STModel song=this->musicLists.at(i);
+            this->ui->tablemusiclist->setItem(i,0,new QTableWidgetItem(song.name));
+            this->ui->tablemusiclist->setItem(i,1,new QTableWidgetItem(song.author));
+            this->ui->tablemusiclist->setRowHeight(i,22);
+        }
+        ui->labelMessage->setText(ui->comboMusicType->currentText()+"列表加载完成");
+    }else{
+        ui->labelMessage->setText(ui->comboMusicType->currentText()+"列表加载失败");
     }
-
     this->palyNumber=0;//刷新列表后重新计数为-1，播放完后会加1，重新开始播放
-    ui->labelMessage->setText("加载"+ui->comboMusicType->currentText()+"列表完成");
 }
 
 void Widget::getTableItem(int row, int column){
@@ -263,13 +266,11 @@ void Widget::slotHideList(){
         this->setFixedHeight(360);
         ui->labelBg->setFixedHeight(360);
         ui->tablemusiclist->show();
-        ui->buttonRefresh->show();
         ui->comboMusicType->show();
     }else{
         this->setFixedHeight(60);
         ui->labelBg->setFixedHeight(60);
         ui->tablemusiclist->hide();
-        ui->buttonRefresh->hide();
         ui->comboMusicType->hide();
     }
 }
