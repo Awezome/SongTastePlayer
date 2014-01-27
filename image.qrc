@@ -8,6 +8,5 @@
         <file>image/volume_small.png</file>
         <file>image/button_stop.png</file>
         <file>image/logo.png</file>
-        <file>image/arraw.png</file>
     </qresource>
 </RCC>
