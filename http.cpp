@@ -2,6 +2,7 @@
 #include <QTextCodec>
 #include <QDebug>
 #include <QEventLoop>
+#include <QTimer>
 
 Http::Http(){
     this->net = new QNetworkAccessManager(this);
@@ -34,6 +35,7 @@ void Http::get(QString url, QString content){
     QNetworkReply *reply=this->net->get(req);
 
     QEventLoop eventLoop;
+    QTimer::singleShot(3000, &eventLoop, SLOT(quit()));//超时退出
     connect(net,SIGNAL(finished(QNetworkReply*)),&eventLoop,SLOT(quit()));
 
     eventLoop.exec();
