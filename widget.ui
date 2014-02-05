@@ -16,44 +16,6 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QTableWidget" name="tablemusiclist">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>90</y>
-     <width>420</width>
-     <height>240</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>9</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::NoFrame</enum>
-   </property>
-   <property name="verticalScrollBarPolicy">
-    <enum>Qt::ScrollBarAlwaysOn</enum>
-   </property>
-   <attribute name="horizontalHeaderVisible">
-    <bool>false</bool>
-   </attribute>
-   <column>
-    <property name="text">
-     <string>music</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>author</string>
-    </property>
-   </column>
-  </widget>
   <widget class="QSlider" name="musicSlider">
    <property name="geometry">
     <rect>
@@ -541,8 +503,111 @@ border-style:none;
     <string>|</string>
    </property>
   </widget>
+  <widget class="QStackedWidget" name="stackedWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>90</y>
+     <width>420</width>
+     <height>240</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>1</number>
+   </property>
+   <widget class="QWidget" name="pageList">
+    <widget class="QTableWidget" name="tablemusiclist">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>420</width>
+       <height>240</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>微软雅黑</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOn</enum>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>music</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>author</string>
+      </property>
+     </column>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="pageDownload">
+    <widget class="QTableWidget" name="tableDownloadList">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>420</width>
+       <height>240</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>微软雅黑</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOn</enum>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>music</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>author</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>id</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>state</string>
+      </property>
+     </column>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="pageSetup"/>
+  </widget>
   <zorder>labelBg</zorder>
-  <zorder>tablemusiclist</zorder>
   <zorder>musicSlider</zorder>
   <zorder>labelName</zorder>
   <zorder>labelTotalTime</zorder>
@@ -560,6 +625,7 @@ border-style:none;
   <zorder>labelTotalTime_2</zorder>
   <zorder>comboMusicOrder</zorder>
   <zorder>labelTotalTime_3</zorder>
+  <zorder>stackedWidget</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

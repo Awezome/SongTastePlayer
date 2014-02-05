@@ -37,6 +37,7 @@ void Download::saveFile(){
     f->write(this->result);
     f->flush();
     f->close();
+    emit saved();
 }
 
 void Download::downloadProgress(qint64 recieved, qint64 total){

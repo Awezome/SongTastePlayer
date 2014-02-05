@@ -17,6 +17,7 @@ public:
 
 signals:
     void downloaded();
+    void saved();
     void progress(qint64,qint64);
 private:
     void downloadProgress(qint64 recieved, qint64 total);

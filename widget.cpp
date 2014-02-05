@@ -93,6 +93,20 @@ void Widget::loadListView(){
     ui->tablemusiclist->setStyleSheet("selection-background-color:#9ED3FE");  //设置选中行颜色
     ui->tablemusiclist->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tablemusiclist,&QTableWidget::customContextMenuRequested, this, &Widget::tableContentMenu);
+
+    ui->tableDownloadList->setSelectionBehavior(QAbstractItemView::SelectRows); //整行选中的方式
+    ui->tableDownloadList->setEditTriggers(QAbstractItemView::NoEditTriggers);//禁止编辑
+    ui->tableDownloadList->setSelectionMode(QAbstractItemView::SingleSelection); //设置为可以选中多个目标
+    ui->tableDownloadList->verticalHeader()->setVisible(false); //隐藏行号
+    ui->tableDownloadList->horizontalHeader()->setVisible(false); //隐藏行表头
+    ui->tableDownloadList->setColumnWidth(0,340);
+    ui->tableDownloadList->setColumnWidth(1,60);
+    ui->tableDownloadList->setColumnWidth(2,60);
+    ui->tableDownloadList->setColumnWidth(3,30);//下载状态 1,等待，2正在下载，3下载完成 ，下载出错
+    ui->tableDownloadList->setShowGrid(false);
+    ui->tableDownloadList->setFocusPolicy(Qt::NoFocus);
+    ui->tableDownloadList->setStyleSheet("selection-background-color:#9ED3FE");  //设置选中行颜色
+    //ui->tableDownloadList->setColumnHidden(3,true);
 }
 
 void Widget::slotLoadList(int type){
@@ -164,6 +178,18 @@ void Widget::setRowColor(int row, QColor textcolor,QColor backcolor){
 
 void Widget::slotRefreshList(){
     emit slotLoadList(ui->comboMusicType->currentIndex());
+}
+
+void Widget::slotMusiclist(){
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
+void Widget::slotDownload(){
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+void Widget::slotSetup(){
+    ui->stackedWidget->setCurrentIndex(2);
 }
 
 void Widget::slotPlayMusic(int id){
@@ -289,7 +315,6 @@ void Widget::titleShow(){
     ui->labelVolumeSmall->hide();
 }
 
-
 void Widget::titleHide(){
     ui->labelAuthor->hide();
     ui->labelName->hide();
@@ -302,14 +327,39 @@ void Widget::titleHide(){
 }
 
 void Widget::downloadMusic(int i){
-    QString url=songteste->songUrl(musicLists.at(i).id);
-    QString filename="f:/000/"+musicLists.at(i).name+".mp3";
+    STModel song=musicLists.at(i);
 
-    Download *download=new Download();
-    connect(download,&Download::progress,this,&Widget::downloadProgress);
-    download->setFilename(filename);
-    download->setUrl(url);
-    download->run();
+    int tsize=ui->tableDownloadList->rowCount();
+    qDebug()<<tsize;
+    ui->tableDownloadList->setRowCount(tsize+1);
+    ui->tableDownloadList->setItem(tsize,0,new QTableWidgetItem(song.name));
+    ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("等待下载"));
+    ui->tableDownloadList->setItem(tsize,2,new QTableWidgetItem(song.id));
+    ui->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("wait"));
+    ui->tableDownloadList->setRowHeight(tsize,22);
+}
+
+void Widget::downloadManager(){
+    int tsize=ui->tableDownloadList->rowCount();
+    if(ui->tableDownloadList->item(tsize,3)->text()=="wait"){
+        ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("正在下载"));
+
+        QString url=songteste->songUrl(ui->tableDownloadList->item(tsize,2)->text());
+        QString filename="f:/000/"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
+        Download *download=new Download();
+
+     //   QEventLoop eventLoop;
+     //   connect(download,&Download::saved,&eventLoop, &QEventLoop::quit);
+        connect(download,&Download::progress,this,&Widget::downloadProgress);
+     //   eventLoop.exec();
+
+        download->setFilename(filename);
+        download->setUrl(url);
+        download->run();
+        download->deleteLater();
+
+        ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("下载完成"));
+    }
 }
 
 void Widget::downloadProgress(qint64 recieved, qint64 total){
@@ -359,6 +409,17 @@ void Widget::contentMenu(){
     QAction *menuRefreshList = new QAction("刷新列表", this);
     connect(menuRefreshList,&QAction::triggered, this, &Widget::slotRefreshList);
 
+    QAction *menuMusiclist = new QAction("音乐列表", this);
+    connect(menuMusiclist,&QAction::triggered, this, &Widget::slotMusiclist);
+    QAction *menuDownload = new QAction("下载列表", this);
+    connect(menuDownload,&QAction::triggered, this, &Widget::slotDownload);
+    QAction *menuSetup = new QAction("设置", this);
+    connect(menuSetup,&QAction::triggered, this, &Widget::slotSetup);
+
+    trayMenu->addAction(menuMusiclist);
+    trayMenu->addAction(menuDownload);
+    trayMenu->addAction(menuSetup);
+    trayMenu->addSeparator();
     trayMenu->addAction(menuHideList);
     trayMenu->addAction(menuRefreshList);
     trayMenu->addAction(Tray_homepage);
