@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include <QMenu>
 #include <QSystemTrayIcon>
+#include <QTableWidget>
 
 namespace Ui {
 class Widget;
@@ -50,7 +51,7 @@ private:
 
     QSystemTrayIcon* trayIcon;
 
-    bool isDownloading;
+    int downloadingRow;
     void contentMenu();
     void tableContentMenu(const QPoint &pos);
     void showTrayIcon();
@@ -80,7 +81,7 @@ private slots:
     void slotNextButton();
 
     void updateVolume(int volume);
-    void setRowColor(int row, QColor textcolor, QColor backcolor);
+    void setRowColor(QTableWidget *table,int row, QColor textcolor, QColor backcolor);
 
     void slotLoadList(int type);
     void slotRefreshList();

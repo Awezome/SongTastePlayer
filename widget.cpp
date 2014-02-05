@@ -76,7 +76,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     emit signalLoadList(0);
 
     //download
-    isDownloading=false;
+    downloadingRow=-1;//默认-1当大于-1即有文件下载
 }
 
 Widget::~Widget(){
@@ -102,8 +102,8 @@ void Widget::loadListView(){
     ui->tableDownloadList->setSelectionMode(QAbstractItemView::SingleSelection); //设置为可以选中多个目标
     ui->tableDownloadList->verticalHeader()->setVisible(false); //隐藏行号
     ui->tableDownloadList->horizontalHeader()->setVisible(false); //隐藏行表头
-    ui->tableDownloadList->setColumnWidth(0,340);
-    ui->tableDownloadList->setColumnWidth(1,60);
+    ui->tableDownloadList->setColumnWidth(0,320);
+    ui->tableDownloadList->setColumnWidth(1,80);
     ui->tableDownloadList->setColumnWidth(2,60);
     ui->tableDownloadList->setColumnWidth(3,30);//下载状态 1,等待，2正在下载，3下载完成 ，下载出错
     ui->tableDownloadList->setShowGrid(false);
@@ -170,11 +170,11 @@ void Widget::updateVolume(int volume){
     player.setVolume(volume);
 }
 
-void Widget::setRowColor(int row, QColor textcolor,QColor backcolor){
+void Widget::setRowColor(QTableWidget *table,int row, QColor textcolor,QColor backcolor){
     int size=2;//ui->tablemusiclist->columnCount();
     QTableWidgetItem *item;
     for (int col=0; col<size; col++){
-        item = ui->tablemusiclist->item(row, col);
+        item =table->item(row, col);
         item->setBackgroundColor(backcolor);
         item->setTextColor(textcolor);
     }
@@ -215,9 +215,9 @@ void Widget::slotPlayMusic(int id){
     ui->labelAuthor->setText(song.author);
 
     //播放时改变列表中的行颜色
-    setRowColor(palyNumber,QColor("#999"),QColor("#fff"));
+    setRowColor(ui->tablemusiclist,palyNumber,QColor("#999"),QColor("#fff"));
     this->palyNumber=id;
-    setRowColor(id,QColor("#fff"),QColor("#0579C7"));
+    setRowColor(ui->tablemusiclist,id,QColor("#fff"),QColor("#0579C7"));
 
     //设置头像
     pixmap.loadFromData(songteste->userImage(song.image));
@@ -334,7 +334,7 @@ void Widget::downloadMusic(int i){
     STModel song=musicLists.at(i);
 
     int tsize=ui->tableDownloadList->rowCount();
-    qDebug()<<tsize;
+
     ui->tableDownloadList->setRowCount(tsize+1);
     ui->tableDownloadList->setItem(tsize,0,new QTableWidgetItem(song.name));
     ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("等待下载"));
@@ -342,13 +342,12 @@ void Widget::downloadMusic(int i){
     ui->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("wait"));
     ui->tableDownloadList->setRowHeight(tsize,22);
 
-    if(!isDownloading){
+    if(downloadingRow<0){
         this->downloadManager();
     }
 }
 
 void Widget::downloadManager(){
-    isDownloading=true;
     int tsize=0;
     Download *download=new Download();
     connect(download,&Download::progress,this,&Widget::downloadProgress);
@@ -357,8 +356,7 @@ void Widget::downloadManager(){
             break;
         }
         if(ui->tableDownloadList->item(tsize,3)->text()=="wait"){
-            ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("正在下载"));
-            ui->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("downloading"));
+            downloadingRow=tsize;
 
             QString url=songteste->songUrl(ui->tableDownloadList->item(tsize,2)->text());
             QString filename="f:/000/"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
@@ -368,17 +366,21 @@ void Widget::downloadManager(){
             download->run();
             ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("下载完成"));
             ui->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("downloaded"));
+            setRowColor(ui->tableDownloadList,tsize,QColor("#999"),QColor("#fff"));
+
         }
         tsize++;
         qDebug()<<"ddd"<<tsize;
 
     }
     download->deleteLater();
-    isDownloading=false;
+    downloadingRow=-1;
 }
 
 void Widget::downloadProgress(qint64 recieved, qint64 total){
-    qDebug() << recieved << total;
+    QString a=QString::number(recieved/(1024 * 1024))+"MB/"+QString::number(total/(1024*1024))+"MB";
+    ui->tableDownloadList->setItem(downloadingRow,1,new QTableWidgetItem(a));
+    setRowColor(ui->tableDownloadList,downloadingRow,QColor("#fff"),QColor("#0579C7"));
 }
 
 //system
