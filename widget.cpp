@@ -74,6 +74,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
 
     //load music list
     emit signalLoadList(0);
+
+    //download
+    isDownloading=false;
 }
 
 Widget::~Widget(){
@@ -106,7 +109,8 @@ void Widget::loadListView(){
     ui->tableDownloadList->setShowGrid(false);
     ui->tableDownloadList->setFocusPolicy(Qt::NoFocus);
     ui->tableDownloadList->setStyleSheet("selection-background-color:#9ED3FE");  //设置选中行颜色
-    //ui->tableDownloadList->setColumnHidden(3,true);
+    ui->tableDownloadList->setColumnHidden(2,true);
+    ui->tableDownloadList->setColumnHidden(3,true);
 }
 
 void Widget::slotLoadList(int type){
@@ -337,29 +341,40 @@ void Widget::downloadMusic(int i){
     ui->tableDownloadList->setItem(tsize,2,new QTableWidgetItem(song.id));
     ui->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("wait"));
     ui->tableDownloadList->setRowHeight(tsize,22);
+
+    if(!isDownloading){
+        this->downloadManager();
+    }
 }
 
 void Widget::downloadManager(){
-    int tsize=ui->tableDownloadList->rowCount();
-    if(ui->tableDownloadList->item(tsize,3)->text()=="wait"){
-        ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("正在下载"));
+    isDownloading=true;
+    int tsize=0;
+    Download *download=new Download();
+    connect(download,&Download::progress,this,&Widget::downloadProgress);
+    while(1){
+        if(tsize>=ui->tableDownloadList->rowCount()){
+            break;
+        }
+        if(ui->tableDownloadList->item(tsize,3)->text()=="wait"){
+            ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("正在下载"));
+            ui->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("downloading"));
 
-        QString url=songteste->songUrl(ui->tableDownloadList->item(tsize,2)->text());
-        QString filename="f:/000/"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
-        Download *download=new Download();
+            QString url=songteste->songUrl(ui->tableDownloadList->item(tsize,2)->text());
+            QString filename="f:/000/"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
 
-     //   QEventLoop eventLoop;
-     //   connect(download,&Download::saved,&eventLoop, &QEventLoop::quit);
-        connect(download,&Download::progress,this,&Widget::downloadProgress);
-     //   eventLoop.exec();
+            download->setFilename(filename);
+            download->setUrl(url);
+            download->run();
+            ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("下载完成"));
+            ui->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("downloaded"));
+        }
+        tsize++;
+        qDebug()<<"ddd"<<tsize;
 
-        download->setFilename(filename);
-        download->setUrl(url);
-        download->run();
-        download->deleteLater();
-
-        ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("下载完成"));
     }
+    download->deleteLater();
+    isDownloading=false;
 }
 
 void Widget::downloadProgress(qint64 recieved, qint64 total){

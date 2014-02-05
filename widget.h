@@ -49,6 +49,8 @@ private:
     Http *http;
 
     QSystemTrayIcon* trayIcon;
+
+    bool isDownloading;
     void contentMenu();
     void tableContentMenu(const QPoint &pos);
     void showTrayIcon();
