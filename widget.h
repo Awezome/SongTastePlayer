@@ -1,6 +1,5 @@
 #ifndef WIDGET_H
 #define WIDGET_H
-
 #include <QWidget>
 #include <QMediaPlayer>
 #include "stpage.h"
@@ -21,7 +20,7 @@ public:
     explicit Widget(QWidget *parent = 0);
     ~Widget();
 
-    void contextMenuEvent(QContextMenuEvent *);
+    void contextMenuEvent(QContextMenuEvent *event);
     
 private:
     Ui::Widget *ui;
@@ -31,7 +30,6 @@ private:
     STPage *songteste;
 
     void loadListView();
-
 
     QMediaPlayer player;
 
@@ -46,12 +44,19 @@ private:
     QPoint dragPosition;
 
     QMenu *trayMenu;
+
+    Http *http;
+
     QSystemTrayIcon* trayIcon;
     void contentMenu();
+    void tableContentMenu(const QPoint &pos);
     void showTrayIcon();
 
     void titleShow();
     void titleHide();
+
+    void downloadMusic(int i);
+    void downloadProgress(qint64 recieved, qint64 total);
 private slots:
     void slotPlayMusic(int id);
 
@@ -82,6 +87,9 @@ private slots:
 
     void slotHideList();
     void slotMusicOrder(int i);
+
+
+
 signals:
     void signalPlayerMusic(int);
     void signalLoadList(int);

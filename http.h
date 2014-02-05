@@ -14,7 +14,6 @@ public:
     void post(QString url,QString content);
     void get(QString url,QString content);
     QByteArray getResultByte();
-
 private slots:
     void replyFinished(QNetworkReply* reply);
 private:

@@ -41,6 +41,7 @@ void Http::get(QString url, QString content){
     eventLoop.exec();
 
     this->resultByte=reply->readAll();
+    reply->deleteLater();
 }
 
 void Http::replyFinished(QNetworkReply *reply){

@@ -6,7 +6,7 @@
 #include "config.h"
 #include <QtMultimediaWidgets/QtMultimediaWidgets>
 #include <QtOpenGL/QtOpenGL>
-
+#include "download.h"
 
 Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
 
@@ -91,6 +91,8 @@ void Widget::loadListView(){
     ui->tablemusiclist->setShowGrid(false);
     ui->tablemusiclist->setFocusPolicy(Qt::NoFocus);
     ui->tablemusiclist->setStyleSheet("selection-background-color:#9ED3FE");  //设置选中行颜色
+    ui->tablemusiclist->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tablemusiclist,&QTableWidget::customContextMenuRequested, this, &Widget::tableContentMenu);
 }
 
 void Widget::slotLoadList(int type){
@@ -126,8 +128,8 @@ void Widget::setPosition(int position){
 }
 
 void Widget::positionChanged(qint64 position){
-     this->updateTime(position);
-     ui->musicSlider->setValue(position);
+    this->updateTime(position);
+    ui->musicSlider->setValue(position);
 }
 
 void Widget::durationChanged(qint64 duration){
@@ -298,10 +300,26 @@ void Widget::titleHide(){
     ui->sliderVolume->show();
     ui->labelVolumeSmall->show();
 }
+
+void Widget::downloadMusic(int i){
+    QString url=songteste->songUrl(musicLists.at(i).id);
+    QString filename="f:/000/"+musicLists.at(i).name+".mp3";
+
+    Download *download=new Download();
+    connect(download,&Download::progress,this,&Widget::downloadProgress);
+    download->setFilename(filename);
+    download->setUrl(url);
+    download->run();
+}
+
+void Widget::downloadProgress(qint64 recieved, qint64 total){
+    qDebug() << recieved << total;
+}
+
 //system
 void Widget::mousePressEvent(QMouseEvent * event){
     if (event->button() == Qt::LeftButton){
-         dragPosition = event->globalPos() - frameGeometry().topLeft();
+         dragPosition    = event->globalPos() - frameGeometry().topLeft();
          //globalPos()获取根窗口的相对路径，frameGeometry().topLeft()获取主窗口左上角的位置
          event->accept();   //鼠标事件被系统接收
     }
@@ -320,6 +338,7 @@ void Widget::mouseMoveEvent(QMouseEvent * event){
 }
 
 void Widget::contentMenu(){
+    trayMenu = new QMenu(this);//创建菜单
     QAction *Tray_quit = new QAction("退出", this);
     //Tray_quit->setIcon(QIcon(":/image/image/delete.png"));
     connect(Tray_quit,&QAction::triggered, this, &Widget::slotQuit);
@@ -340,7 +359,6 @@ void Widget::contentMenu(){
     QAction *menuRefreshList = new QAction("刷新列表", this);
     connect(menuRefreshList,&QAction::triggered, this, &Widget::slotRefreshList);
 
-    trayMenu = new QMenu(this);//创建菜单
     trayMenu->addAction(menuHideList);
     trayMenu->addAction(menuRefreshList);
     trayMenu->addAction(Tray_homepage);
@@ -350,7 +368,17 @@ void Widget::contentMenu(){
     trayMenu->addAction(Tray_quit);
 }
 
-void Widget::contextMenuEvent(QContextMenuEvent *){
+void Widget::tableContentMenu(const QPoint &pos){
+    QAction *downMusic = new QAction("下载", this);
+    QMenu menu(this);
+    menu.addAction(downMusic);
+    QAction *m=menu.exec(ui->tablemusiclist ->viewport()->mapToGlobal(pos));
+    if(m==downMusic){
+        downloadMusic(ui->tablemusiclist->itemAt(pos)->row());
+    }
+}
+
+void Widget::contextMenuEvent(QContextMenuEvent *event){
     trayMenu->exec(this->cursor().pos()); //关联到光标
 }
 
