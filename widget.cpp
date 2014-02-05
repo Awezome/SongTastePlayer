@@ -359,7 +359,7 @@ void Widget::downloadManager(){
             downloadingRow=tsize;
 
             QString url=songteste->songUrl(ui->tableDownloadList->item(tsize,2)->text());
-            QString filename="f:/000/"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
+            QString filename="./"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
 
             download->setFilename(filename);
             download->setUrl(url);
@@ -435,7 +435,7 @@ void Widget::contentMenu(){
 
     trayMenu->addAction(menuMusiclist);
     trayMenu->addAction(menuDownload);
-    trayMenu->addAction(menuSetup);
+    //trayMenu->addAction(menuSetup);
     trayMenu->addSeparator();
     trayMenu->addAction(menuHideList);
     trayMenu->addAction(menuRefreshList);
@@ -456,7 +456,7 @@ void Widget::tableContentMenu(const QPoint &pos){
     }
 }
 
-void Widget::contextMenuEvent(QContextMenuEvent *event){
+void Widget::contextMenuEvent(QContextMenuEvent *){
     trayMenu->exec(this->cursor().pos()); //关联到光标
 }
 

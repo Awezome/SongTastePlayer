@@ -15,10 +15,10 @@ TEMPLATE = app
 SOURCES += main.cpp\
         widget.cpp \
     stpage.cpp \
-    stmodel.cpp \
     http.cpp \
     config.cpp \
-    download.cpp
+    download.cpp \
+    stmodel.cpp
 
 HEADERS  += widget.h \
     stpage.h \

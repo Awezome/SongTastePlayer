@@ -21,7 +21,7 @@ public:
     explicit Widget(QWidget *parent = 0);
     ~Widget();
 
-    void contextMenuEvent(QContextMenuEvent *event);
+    void contextMenuEvent(QContextMenuEvent *);
     
 private:
     Ui::Widget *ui;
