@@ -109,6 +109,7 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
+    void keyPressEvent(QKeyEvent *k );
 };
 
 #endif // WIDGET_H

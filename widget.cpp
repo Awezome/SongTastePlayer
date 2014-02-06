@@ -18,7 +18,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowTitle(Config::title);
     this->setFixedSize(420,360);
-
+    this->setFocus();
     this->setMouseTracking(true);
     ui->labelBg->setMouseTracking(true);
     ui->musicSlider->setMouseTracking(true);
@@ -108,8 +108,8 @@ void Widget::loadListView(){
     ui->tableDownloadList->setSelectionMode(QAbstractItemView::SingleSelection); //设置为可以选中多个目标
     ui->tableDownloadList->verticalHeader()->setVisible(false); //隐藏行号
     ui->tableDownloadList->horizontalHeader()->setVisible(false); //隐藏行表头
-    ui->tableDownloadList->setColumnWidth(0,320);
-    ui->tableDownloadList->setColumnWidth(1,80);
+    ui->tableDownloadList->setColumnWidth(0,300);
+    ui->tableDownloadList->setColumnWidth(1,100);
     ui->tableDownloadList->setColumnWidth(2,60);
     ui->tableDownloadList->setColumnWidth(3,30);//下载状态 1,等待，2正在下载，3下载完成 ，下载出错
     ui->tableDownloadList->setShowGrid(false);
@@ -380,7 +380,7 @@ void Widget::downloadManager(){
 }
 
 void Widget::downloadProgress(qint64 recieved, qint64 total){
-    QString a=QString::number(recieved/(1024 * 1024))+"MB/"+QString::number(total/(1024*1024))+"MB";
+    QString a=QString::number(recieved/1024)+"KB/"+QString::number(total/1024)+"KB";
     ui->tableDownloadList->setItem(downloadingRow,1,new QTableWidgetItem(a));
     setRowColor(ui->tableDownloadList,downloadingRow,QColor("#fff"),QColor("#0579C7"));
 }
@@ -521,5 +521,37 @@ void Widget::showTrayIcon(){
 void Widget::slotTrayClicked(QSystemTrayIcon::ActivationReason reason) {
     if (reason == QSystemTrayIcon::Trigger&&this->isHidden()) {
         this->showNormal();
+    }
+}
+
+void Widget::keyPressEvent(QKeyEvent *k){
+    if (k->modifiers() == Qt::ControlModifier){
+        switch(k->key()){
+            case Qt::Key_Left: //上一首
+                slotPreButton();
+                break;
+            case Qt::Key_Right://下一首
+                slotNextButton();
+                break;
+            case Qt::Key_Up://音量大
+                ui->sliderVolume->setValue(ui->sliderVolume->value()+5);
+                break;
+            case Qt::Key_Down://音量小
+                ui->sliderVolume->setValue(ui->sliderVolume->value()-5);
+                break;
+            case Qt::Key_F5://刷新列表
+                slotRefreshList();
+                break;
+            default:
+                break;
+        }
+    }else{
+        switch(k->key()){
+            case Qt::Key_Space:  //播放暂停
+                slotPlayButton();
+                break;
+            default:
+                break;
+        }
     }
 }
