@@ -91,7 +91,6 @@ private slots:
     void slotLoadList(int type);
     void slotRefreshList();
 
-    void slotChangelog();
     void slotHomepage();
     void slotQuit();
     void slotMenuWindowsMinimized();

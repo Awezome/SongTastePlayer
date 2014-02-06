@@ -117,6 +117,7 @@ void Widget::loadListView(){
     ui->tableDownloadList->setStyleSheet("selection-background-color:#9ED3FE");  //设置选中行颜色
     ui->tableDownloadList->setColumnHidden(2,true);
     ui->tableDownloadList->setColumnHidden(3,true);
+    ui->tableDownloadList->setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 void Widget::slotLoadList(int type){
@@ -298,16 +299,14 @@ void Widget::playerMediaStatus(QMediaPlayer::MediaStatus stats){
 }
 
 void Widget::slotHideList(){
-    if(ui->tablemusiclist->isHidden()){
+    if(ui->stackedWidget->isHidden()){
         this->setFixedHeight(360);
         ui->labelBg->setFixedHeight(360);
-        ui->tablemusiclist->show();
-        ui->comboMusicType->show();
+        ui->stackedWidget->show();
     }else{
         this->setFixedHeight(60);
         ui->labelBg->setFixedHeight(60);
-        ui->tablemusiclist->hide();
-        ui->comboMusicType->hide();
+        ui->stackedWidget->hide();
     }
 }
 
@@ -361,7 +360,8 @@ void Widget::downloadManager(){
             downloadingRow=tsize;
 
             QString url=songteste->songUrl(ui->tableDownloadList->item(tsize,2)->text());
-            QString filename=(this->downloadDir)+"./"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
+            QString filename=(this->downloadDir)+"/"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
+            qDebug()<<filename;
 
             download->setFilename(filename);
             download->setUrl(url);
@@ -451,12 +451,9 @@ void Widget::contentMenu(){
     //Tray_quit->setIcon(QIcon(":/image/image/delete.png"));
     connect(Tray_quit,&QAction::triggered, this, &Widget::slotQuit);
 
-    QAction *Tray_homepage = new QAction("官方主页", this);
+    QAction *Tray_homepage = new QAction("检查更新", this);
     //Tray_flux_day->setIcon(QIcon(":/image/image/checkmark.png"));
     connect(Tray_homepage,&QAction::triggered, this,&Widget::slotHomepage);
-
-    QAction *Tray_changelog = new QAction("更新日志", this);
-    connect(Tray_changelog,&QAction::triggered, this,&Widget::slotChangelog);
 
     QAction *menuWindowsMinimized = new QAction("隐藏主界面", this);
     connect(menuWindowsMinimized,&QAction::triggered, this, &Widget::slotMenuWindowsMinimized);
@@ -464,30 +461,29 @@ void Widget::contentMenu(){
     QAction *menuHideList = new QAction("隐藏/显示列表", this);
     connect(menuHideList,&QAction::triggered, this,&Widget::slotHideList);
 
-    QAction *menuRefreshList = new QAction("刷新列表", this);
-    connect(menuRefreshList,&QAction::triggered, this, &Widget::slotRefreshList);
-
     QAction *menuMusiclist = new QAction("音乐列表", this);
     connect(menuMusiclist,&QAction::triggered, this, &Widget::slotMusiclist);
     QAction *menuDownload = new QAction("下载列表", this);
     connect(menuDownload,&QAction::triggered, this, &Widget::slotDownload);
 
+    trayMenu->addAction(menuHideList);
+    trayMenu->addAction(menuWindowsMinimized);
+    trayMenu->addSeparator();
     trayMenu->addAction(menuMusiclist);
     trayMenu->addAction(menuDownload);
     trayMenu->addSeparator();
-    trayMenu->addAction(menuHideList);
-    trayMenu->addAction(menuRefreshList);
     trayMenu->addAction(Tray_homepage);
-    trayMenu->addAction(Tray_changelog);
-    trayMenu->addSeparator();
-    trayMenu->addAction(menuWindowsMinimized);
     trayMenu->addAction(Tray_quit);
 }
 
 void Widget::tableContentMenu(const QPoint &pos){
+    QAction *menuRefreshList = new QAction("刷新列表", this);
+    connect(menuRefreshList,&QAction::triggered, this, &Widget::slotRefreshList);
+
     QAction *downMusic = new QAction("下载", this);
     QMenu menu(this);
     menu.addAction(downMusic);
+    menu.addAction(menuRefreshList);
     QAction *m=menu.exec(ui->tablemusiclist ->viewport()->mapToGlobal(pos));
     if(m==downMusic){
         downloadMusic(ui->tablemusiclist->itemAt(pos)->row());
@@ -507,9 +503,6 @@ void Widget::slotHomepage(){
     QDesktopServices::openUrl(QUrl(Config::homepage));
 }
 
-void Widget::slotChangelog(){
-    QDesktopServices::openUrl(QUrl(Config::changelog));
-}
 void Widget::slotMenuWindowsMinimized(){
     this->hide();
 }
