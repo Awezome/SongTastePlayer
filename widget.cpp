@@ -390,6 +390,7 @@ void Widget::slotSetDir(){
     if(dir!=""){
         this->downloadDir=dir;
         ui->pushButtonOpenDir->setText(dir);
+        this->setConfigFile();
         qDebug()<<QDir::cleanPath(dir);
     }
 }
@@ -401,8 +402,26 @@ void Widget::slotOpenDir(){
 }
 
 void Widget::getConfig(){
-    this->downloadDir=QDir::homePath();
+    QFile file(QDir::homePath()+"/"+Config::config);
+    if(file.open(QIODevice::ReadOnly)){
+        QDataStream in(&file);
+        in>>this->downloadDir;
+    }else{
+        this->downloadDir=QDir::homePath();
+        this->setConfigFile();
+    }
+    file.close();
+
     ui->pushButtonOpenDir->setText(this->downloadDir);
+}
+
+void Widget::setConfigFile(){
+    QFile file(QDir::homePath()+"/"+Config::config);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+       return;
+    QDataStream out(&file);
+    out <<this->downloadDir;
+    file.close();
 }
 
 //system

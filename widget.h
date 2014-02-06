@@ -63,9 +63,11 @@ private:
     void downloadMusic(int i);
     void downloadProgress(qint64 recieved, qint64 total);
     void downloadManager();
+
     void slotOpenDir();
     void slotSetDir();
     void getConfig();
+    void setConfigFile();
 
     void slotMusiclist();
     void slotDownload();

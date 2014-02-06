@@ -378,7 +378,7 @@ background: #0579C7;
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="pageList">
     <widget class="QTableWidget" name="tablemusiclist">
@@ -647,7 +647,7 @@ border-style:none;
       <rect>
        <x>80</x>
        <y>0</y>
-       <width>271</width>
+       <width>181</width>
        <height>30</height>
       </rect>
      </property>
@@ -669,7 +669,7 @@ border-style:none;
       <string notr="true">QPushButton{border: none;color:#fff;background:rgb(0,0,0,0);text-align:left}</string>
      </property>
      <property name="text">
-      <string>更改下载位置</string>
+      <string/>
      </property>
     </widget>
    </widget>

@@ -9,6 +9,7 @@ class Config{
     static QString homepage;
     static QString changelog;
     static QString version;
+    static QString config;
 
     static QString stindex;
     static QString stpost;
