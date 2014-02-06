@@ -44,6 +44,7 @@ private:
 
     QPoint dragPosition;
     QMap<int,QString> downloadList;
+    QString downloadDir;
 
     QMenu *trayMenu;
 
@@ -62,10 +63,12 @@ private:
     void downloadMusic(int i);
     void downloadProgress(qint64 recieved, qint64 total);
     void downloadManager();
+    void slotOpenDir();
+    void slotSetDir();
+    void getConfig();
 
     void slotMusiclist();
     void slotDownload();
-    void slotSetup();
 private slots:
     void slotPlayMusic(int id);
 

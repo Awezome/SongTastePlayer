@@ -56,6 +56,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(ui->buttonPlay,&QPushButton::clicked,this, &Widget::slotPlayButton);
     connect(ui->buttonPre, &QPushButton::clicked,this, &Widget::slotPreButton);
     connect(ui->buttonNext,&QPushButton::clicked,this, &Widget::slotNextButton);
+    //download dir
+    connect(ui->pushButtonDownloadDir,&QPushButton::clicked,this, &Widget::slotSetDir);
+    connect(ui->pushButtonOpenDir,&QPushButton::clicked,this, &Widget::slotOpenDir);
 
     //音量
     player.setVolume(50);
@@ -71,6 +74,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     ui->comboMusicType->insertItems(0,songteste->typeLists());
     connect(ui->comboMusicType,SIGNAL(currentIndexChanged(int)),this, SLOT(slotLoadList(int)));
     connect(ui->comboMusicOrder,SIGNAL(currentIndexChanged(int)),this, SLOT(slotMusicOrder(int)));
+
+    //open config
+    this->getConfig();
 
     //load music list
     emit signalLoadList(0);
@@ -190,10 +196,6 @@ void Widget::slotMusiclist(){
 
 void Widget::slotDownload(){
     ui->stackedWidget->setCurrentIndex(1);
-}
-
-void Widget::slotSetup(){
-    ui->stackedWidget->setCurrentIndex(2);
 }
 
 void Widget::slotPlayMusic(int id){
@@ -359,7 +361,7 @@ void Widget::downloadManager(){
             downloadingRow=tsize;
 
             QString url=songteste->songUrl(ui->tableDownloadList->item(tsize,2)->text());
-            QString filename="./"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
+            QString filename=(this->downloadDir)+"./"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
 
             download->setFilename(filename);
             download->setUrl(url);
@@ -381,6 +383,26 @@ void Widget::downloadProgress(qint64 recieved, qint64 total){
     QString a=QString::number(recieved/(1024 * 1024))+"MB/"+QString::number(total/(1024*1024))+"MB";
     ui->tableDownloadList->setItem(downloadingRow,1,new QTableWidgetItem(a));
     setRowColor(ui->tableDownloadList,downloadingRow,QColor("#fff"),QColor("#0579C7"));
+}
+
+void Widget::slotSetDir(){
+    QString dir = QFileDialog::getExistingDirectory(this,tr("打开目录"),this->downloadDir,QFileDialog::ShowDirsOnly);
+    if(dir!=""){
+        this->downloadDir=dir;
+        ui->pushButtonOpenDir->setText(dir);
+        qDebug()<<QDir::cleanPath(dir);
+    }
+}
+
+void Widget::slotOpenDir(){
+    QString path=this->downloadDir;//获取程序当前目录
+    path.replace("/","\\");//将地址中的"/"替换为"\"，因为在Windows下使用的是"\"。
+    QProcess::startDetached("explorer "+path);//打开上面获取的目录
+}
+
+void Widget::getConfig(){
+    this->downloadDir=QDir::homePath();
+    ui->pushButtonOpenDir->setText(this->downloadDir);
 }
 
 //system
@@ -430,12 +452,9 @@ void Widget::contentMenu(){
     connect(menuMusiclist,&QAction::triggered, this, &Widget::slotMusiclist);
     QAction *menuDownload = new QAction("下载列表", this);
     connect(menuDownload,&QAction::triggered, this, &Widget::slotDownload);
-    QAction *menuSetup = new QAction("设置", this);
-    connect(menuSetup,&QAction::triggered, this, &Widget::slotSetup);
 
     trayMenu->addAction(menuMusiclist);
     trayMenu->addAction(menuDownload);
-    //trayMenu->addAction(menuSetup);
     trayMenu->addSeparator();
     trayMenu->addAction(menuHideList);
     trayMenu->addAction(menuRefreshList);
