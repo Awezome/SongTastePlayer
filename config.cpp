@@ -3,7 +3,7 @@
 QString Config::title="SongTaste Player";
 QString Config::homepage="http://songtasteplayer.lofter.com/";
 QString Config::changelog="http://songtasteplayer.lofter.com/post/2fc8fe_cfb6f6";
-QString Config::version="1.4.20140205";
+QString Config::version="1.5.20140206";
 QString Config::config="SongTastePlayer.config";
 
 
