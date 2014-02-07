@@ -17,8 +17,7 @@ SOURCES += main.cpp\
     stpage.cpp \
     http.cpp \
     config.cpp \
-    download.cpp \
-    stmodel.cpp
+    download.cpp
 
 HEADERS  += widget.h \
     stpage.h \
