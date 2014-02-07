@@ -7,22 +7,18 @@ Download::Download(QObject *parent):QObject(parent){
     connect(this, &Download::downloaded, this,&Download::saveFile);
 }
 
-void Download::setUrl(QString url){
+void Download::run(QString url,QString fileName){
     this->url=QUrl(url);
-}
-
-void Download::setFilename(QString fileName){
     this->fileName=fileName;
-}
-
-void Download::run(){
     QNetworkRequest req;
     req.setUrl(this->url);
     QNetworkReply *reply=this->net->get(req);
 
     QEventLoop eventLoop;
     connect(net,&QNetworkAccessManager::finished,&eventLoop,&QEventLoop::quit);
-    connect(reply,&QNetworkReply::downloadProgress, this,&Download::downloadProgress);
+    connect(reply,&QNetworkReply::downloadProgress,[this](qint64 bytesReceived,qint64 bytesTotal){
+         emit progress(bytesReceived,bytesTotal);
+    });
     eventLoop.exec();
 
     this->result=reply->readAll();
@@ -38,8 +34,4 @@ void Download::saveFile(){
     f->flush();
     f->close();
     emit saved();
-}
-
-void Download::downloadProgress(qint64 recieved, qint64 total){
-    emit progress(recieved,total);
 }

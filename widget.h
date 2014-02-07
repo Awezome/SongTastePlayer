@@ -34,9 +34,6 @@ private:
 
     QMediaPlayer player;
 
-    void updateTime(qint64 currentTimeNumber);
-    QTime qint64ToTime(qint64 time);
-
     int palyNumber;
     bool buttonModel;
     QPixmap pixmap;
@@ -64,44 +61,23 @@ private:
     void downloadProgress(qint64 recieved, qint64 total);
     void downloadManager();
 
-    void slotOpenDir();
     void slotSetDir();
     void getConfig();
     void setConfigFile();
 
-    void slotMusiclist();
-    void slotDownload();
 private slots:
     void slotPlayMusic(int id);
-
-    void getTableItem(int row,int column);
-
-    void setPosition(int position);
-    void positionChanged(qint64 position);
-    void durationChanged(qint64 duration);
     void playerStateChanged(QMediaPlayer::State state);
 
     void slotPlayButton();
     void slotPreButton();
     void slotNextButton();
 
-    void updateVolume(int volume);
     void setRowColor(QTableWidget *table,int row, QColor textcolor, QColor backcolor);
 
     void slotLoadList(int type);
-    void slotRefreshList();
-
-    void slotHomepage();
-    void slotQuit();
-    void slotMenuWindowsMinimized();
-    void slotTrayClicked(QSystemTrayIcon::ActivationReason reason);
-
     void playerMediaStatus(QMediaPlayer::MediaStatus stats);
-
     void slotHideList();
-    void slotMusicOrder(int i);
-
-
 
 signals:
     void signalPlayerMusic(int);

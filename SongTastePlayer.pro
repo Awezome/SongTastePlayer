@@ -17,14 +17,16 @@ SOURCES += main.cpp\
     stpage.cpp \
     http.cpp \
     config.cpp \
-    download.cpp
+    download.cpp \
+    tool.cpp
 
 HEADERS  += widget.h \
     stpage.h \
     stmodel.h \
     http.h \
     config.h \
-    download.h
+    download.h \
+    tool.h
 
 FORMS    += widget.ui
 
@@ -32,3 +34,5 @@ RC_FILE = icon.rc
 
 RESOURCES += \
     image.qrc
+
+CONFIG += c++11

@@ -7,6 +7,7 @@
 #include <QtMultimediaWidgets/QtMultimediaWidgets>
 #include <QtOpenGL/QtOpenGL>
 #include "download.h"
+#include "tool.h"
 
 Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
 
@@ -37,7 +38,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
 
     //table
     this->loadListView();
-    connect(ui->tablemusiclist,&QTableWidget::cellDoubleClicked,this,&Widget::getTableItem);
+    connect(ui->tablemusiclist,&QTableWidget::cellDoubleClicked,[this](int row,int){
+        emit this->signalPlayerMusic(row);
+    });
     connect(this,&Widget::signalLoadList,&Widget::slotLoadList);
 
     //播放音乐
@@ -47,9 +50,17 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
 
     //进度条
     ui->musicSlider->setRange(0, 0);
-    connect(ui->musicSlider,&QSlider::sliderMoved,this, &Widget::setPosition);
-    connect(&player, &QMediaPlayer::positionChanged, this, &Widget::positionChanged);
-    connect(&player,  &QMediaPlayer::durationChanged, this, &Widget::durationChanged);
+    connect(ui->musicSlider,&QSlider::sliderMoved,[this](int position){
+        player.setPosition(position);
+    });
+    connect(&player, &QMediaPlayer::positionChanged, [this](qint64 position){
+        ui->musicSlider->setValue(position);
+        ui->labelCurrentTime->setText(Tool::qint64ToTime(position).toString("mm:ss"));
+    });
+    connect(&player,  &QMediaPlayer::durationChanged, [this](qint64 duration){
+        ui->musicSlider->setRange(0, duration);
+        ui->labelTotalTime->setText(Tool::qint64ToTime(duration).toString("mm:ss"));
+    });
 
     //按钮
     //ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
@@ -58,13 +69,17 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(ui->buttonNext,&QPushButton::clicked,this, &Widget::slotNextButton);
     //download dir
     connect(ui->pushButtonDownloadDir,&QPushButton::clicked,this, &Widget::slotSetDir);
-    connect(ui->pushButtonOpenDir,&QPushButton::clicked,this, &Widget::slotOpenDir);
+    connect(ui->pushButtonOpenDir,&QPushButton::clicked,[this](){
+        QDesktopServices::openUrl(this->downloadDir);
+    });
 
     //音量
     player.setVolume(50);
     ui->sliderVolume->setRange(0,100);
     ui->sliderVolume->setValue(50);
-    connect(ui->sliderVolume, &QSlider::valueChanged,this, &Widget::updateVolume);
+    connect(ui->sliderVolume, &QSlider::valueChanged,[this](int value){
+        player.setVolume(value);
+    });
 
     //contentmenu
     this->contentMenu();
@@ -73,7 +88,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     //list type
     ui->comboMusicType->insertItems(0,songteste->typeLists());
     connect(ui->comboMusicType,SIGNAL(currentIndexChanged(int)),this, SLOT(slotLoadList(int)));
-    connect(ui->comboMusicOrder,SIGNAL(currentIndexChanged(int)),this, SLOT(slotMusicOrder(int)));
+    QObject::connect(ui->comboMusicOrder,static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),[this](int i){
+        this->musicOrder=i;
+    });//不明白为什么QComboBox要类型转换，其它的都不用，static_cast<void (QComboBox::*)(int)>
 
     //open config
     this->getConfig();
@@ -140,43 +157,6 @@ void Widget::slotLoadList(int type){
     this->palyNumber=0;//刷新列表后重新计数为-1，播放完后会加1，重新开始播放
 }
 
-void Widget::slotMusicOrder(int i){
-    this->musicOrder=i;
-}
-
-void Widget::getTableItem(int row, int column){
-    emit this->signalPlayerMusic(row);
-}
-
-void Widget::setPosition(int position){
-    player.setPosition(position);
-}
-
-void Widget::positionChanged(qint64 position){
-    this->updateTime(position);
-    ui->musicSlider->setValue(position);
-}
-
-void Widget::durationChanged(qint64 duration){
-    ui->musicSlider->setRange(0, duration);
-    ui->labelTotalTime->setText(qint64ToTime(duration).toString("mm:ss"));
-}
-
-void Widget::updateTime(qint64 currentTimeNumber){
-    QString str = qint64ToTime(currentTimeNumber).toString("mm:ss");
-    ui->labelCurrentTime->setText(str);
-}
-
-QTime Widget::qint64ToTime(qint64 time){
-    //3个参数分别代表时，分，秒；60000毫秒为1分钟，所以分钟第二个参数是先除6000,第3个参数是直接除1s
-    QTime t(0,(time/60000)%60,(time/1000)%60);
-    return t;
-}
-
-void Widget::updateVolume(int volume){
-    player.setVolume(volume);
-}
-
 void Widget::setRowColor(QTableWidget *table,int row, QColor textcolor,QColor backcolor){
     int size=2;//ui->tablemusiclist->columnCount();
     QTableWidgetItem *item;
@@ -185,18 +165,6 @@ void Widget::setRowColor(QTableWidget *table,int row, QColor textcolor,QColor ba
         item->setBackgroundColor(backcolor);
         item->setTextColor(textcolor);
     }
-}
-
-void Widget::slotRefreshList(){
-    emit slotLoadList(ui->comboMusicType->currentIndex());
-}
-
-void Widget::slotMusiclist(){
-    ui->stackedWidget->setCurrentIndex(0);
-}
-
-void Widget::slotDownload(){
-    ui->stackedWidget->setCurrentIndex(1);
 }
 
 void Widget::slotPlayMusic(int id){
@@ -361,26 +329,20 @@ void Widget::downloadManager(){
 
             QString url=songteste->songUrl(ui->tableDownloadList->item(tsize,2)->text());
             QString filename=(this->downloadDir)+"/"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
-            qDebug()<<filename;
-
-            download->setFilename(filename);
-            download->setUrl(url);
-            download->run();
+            qDebug()<<"downloading : "<<filename;
+            download->run(url,filename);
             ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("下载完成"));
             ui->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("downloaded"));
             setRowColor(ui->tableDownloadList,tsize,QColor("#999"),QColor("#fff"));
-
         }
         tsize++;
-        qDebug()<<"ddd"<<tsize;
-
     }
     download->deleteLater();
     downloadingRow=-1;
 }
 
 void Widget::downloadProgress(qint64 recieved, qint64 total){
-    QString a=QString::number(recieved/1024)+"KB/"+QString::number(total/1024)+"KB";
+    QString a=Tool::qint64ToStringKb(recieved)+"KB/"+Tool::qint64ToStringKb(total)+"KB";
     ui->tableDownloadList->setItem(downloadingRow,1,new QTableWidgetItem(a));
     setRowColor(ui->tableDownloadList,downloadingRow,QColor("#fff"),QColor("#0579C7"));
 }
@@ -393,12 +355,6 @@ void Widget::slotSetDir(){
         this->setConfigFile();
         qDebug()<<QDir::cleanPath(dir);
     }
-}
-
-void Widget::slotOpenDir(){
-    QString path=this->downloadDir;//获取程序当前目录
-    path.replace("/","\\");//将地址中的"/"替换为"\"，因为在Windows下使用的是"\"。
-    QProcess::startDetached("explorer "+path);//打开上面获取的目录
 }
 
 void Widget::getConfig(){
@@ -440,8 +396,8 @@ void Widget::mouseMoveEvent(QMouseEvent * event){
        titleShow();
     }
     if (event->buttons() == Qt::LeftButton){
-         move(event->globalPos()-dragPosition);//移动窗口
-         event->accept();
+        move(event->globalPos()-dragPosition);//移动窗口
+        event->accept();
     }
 }
 
@@ -449,22 +405,33 @@ void Widget::contentMenu(){
     trayMenu = new QMenu(this);//创建菜单
     QAction *Tray_quit = new QAction("退出", this);
     //Tray_quit->setIcon(QIcon(":/image/image/delete.png"));
-    connect(Tray_quit,&QAction::triggered, this, &Widget::slotQuit);
+    connect(Tray_quit,&QAction::triggered, [this](){
+        this->close();
+        QApplication::quit();
+    });
 
     QAction *Tray_homepage = new QAction("检查更新", this);
     //Tray_flux_day->setIcon(QIcon(":/image/image/checkmark.png"));
-    connect(Tray_homepage,&QAction::triggered, this,&Widget::slotHomepage);
+    connect(Tray_homepage,&QAction::triggered, [this](){
+        QDesktopServices::openUrl(QUrl(Config::homepage));
+    });
 
     QAction *menuWindowsMinimized = new QAction("隐藏主界面", this);
-    connect(menuWindowsMinimized,&QAction::triggered, this, &Widget::slotMenuWindowsMinimized);
+    connect(menuWindowsMinimized,&QAction::triggered, [this](){
+        this->hide();
+    });
 
     QAction *menuHideList = new QAction("隐藏/显示列表", this);
     connect(menuHideList,&QAction::triggered, this,&Widget::slotHideList);
 
     QAction *menuMusiclist = new QAction("音乐列表", this);
-    connect(menuMusiclist,&QAction::triggered, this, &Widget::slotMusiclist);
+    connect(menuMusiclist,&QAction::triggered,[this](){
+        ui->stackedWidget->setCurrentIndex(0);
+    });
     QAction *menuDownload = new QAction("下载列表", this);
-    connect(menuDownload,&QAction::triggered, this, &Widget::slotDownload);
+    connect(menuDownload,&QAction::triggered, [this](){
+        ui->stackedWidget->setCurrentIndex(1);
+    });
 
     trayMenu->addAction(menuHideList);
     trayMenu->addAction(menuWindowsMinimized);
@@ -478,7 +445,9 @@ void Widget::contentMenu(){
 
 void Widget::tableContentMenu(const QPoint &pos){
     QAction *menuRefreshList = new QAction("刷新列表", this);
-    connect(menuRefreshList,&QAction::triggered, this, &Widget::slotRefreshList);
+    connect(menuRefreshList,&QAction::triggered, [this](){
+        emit slotLoadList(ui->comboMusicType->currentIndex());
+    });
 
     QAction *downMusic = new QAction("下载", this);
     QMenu menu(this);
@@ -494,19 +463,6 @@ void Widget::contextMenuEvent(QContextMenuEvent *){
     trayMenu->exec(this->cursor().pos()); //关联到光标
 }
 
-void Widget::slotQuit(){
-    this->close();
-    QApplication::quit();
-}
-
-void Widget::slotHomepage(){
-    QDesktopServices::openUrl(QUrl(Config::homepage));
-}
-
-void Widget::slotMenuWindowsMinimized(){
-    this->hide();
-}
-
 void Widget::showTrayIcon(){
     QIcon icon(":/image/logo.png");
     trayIcon = new QSystemTrayIcon(this);
@@ -515,13 +471,11 @@ void Widget::showTrayIcon(){
     trayIcon->setContextMenu(trayMenu);//将创建菜单作为系统托盘菜单
     trayIcon->setToolTip(Config::title);
     trayIcon->showMessage(Config::title,"我在这~~", QSystemTrayIcon::Information, 5000);
-    connect(trayIcon,&QSystemTrayIcon::activated, this, &Widget::slotTrayClicked);
-}
-
-void Widget::slotTrayClicked(QSystemTrayIcon::ActivationReason reason) {
-    if (reason == QSystemTrayIcon::Trigger&&this->isHidden()) {
-        this->showNormal();
-    }
+    connect(trayIcon,&QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason){
+        if (reason == QSystemTrayIcon::Trigger&&this->isHidden()) {
+            this->showNormal();
+        }
+    });
 }
 
 void Widget::keyPressEvent(QKeyEvent *k){
@@ -538,9 +492,6 @@ void Widget::keyPressEvent(QKeyEvent *k){
                 break;
             case Qt::Key_Down://音量小
                 ui->sliderVolume->setValue(ui->sliderVolume->value()-5);
-                break;
-            case Qt::Key_F5://刷新列表
-                slotRefreshList();
                 break;
             default:
                 break;
