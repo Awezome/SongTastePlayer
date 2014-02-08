@@ -3,9 +3,9 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QDesktopServices>
+#include <QDir>
+#include <QFileDialog>
 #include "config.h"
-#include <QtMultimediaWidgets/QtMultimediaWidgets>
-#include <QtOpenGL/QtOpenGL>
 #include "download.h"
 #include "tool.h"
 

@@ -21,15 +21,11 @@ public:
     explicit Widget(QWidget *parent = 0);
     ~Widget();
 
-    void contextMenuEvent(QContextMenuEvent *);
-    
 private:
     Ui::Widget *ui;
     QList<STModel> musicLists;
     int musicListSize;
     STPage *songteste;
-
-    void loadListView();
 
     QMediaPlayer player;
     QSettings *settings;
@@ -40,20 +36,18 @@ private:
     QGraphicsScene *scene;
 
     QPoint dragPosition;
-    QMap<int,QString> downloadList;
     QString downloadDir;
     int musicOrder;
 
     QMenu *trayMenu;
-
     Http *http;
-
     QSystemTrayIcon* trayIcon;
 
     int downloadingRow;
     void contentMenu();
     void tableContentMenu(const QPoint &pos);
     void showTrayIcon();
+    void loadListView();
 
     void titleShow();
     void titleHide();
@@ -63,7 +57,6 @@ private:
     void downloadManager();
 
     void slotSetDir();
-private slots:
     void slotPlayMusic(int id);
     void playerStateChanged(QMediaPlayer::State state);
 
@@ -80,6 +73,7 @@ signals:
     void signalPlayerMusic(int);
     void signalLoadList(int);
 protected:
+    void contextMenuEvent(QContextMenuEvent *);
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *);
