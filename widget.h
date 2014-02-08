@@ -8,7 +8,7 @@
 #include <QMenu>
 #include <QSystemTrayIcon>
 #include <QTableWidget>
-
+#include <QSettings>
 namespace Ui {
 class Widget;
 }
@@ -27,12 +27,12 @@ private:
     Ui::Widget *ui;
     QList<STModel> musicLists;
     int musicListSize;
-    int musicOrder;
     STPage *songteste;
 
     void loadListView();
 
     QMediaPlayer player;
+    QSettings *settings;
 
     int palyNumber;
     bool buttonModel;
@@ -42,6 +42,7 @@ private:
     QPoint dragPosition;
     QMap<int,QString> downloadList;
     QString downloadDir;
+    int musicOrder;
 
     QMenu *trayMenu;
 
@@ -62,9 +63,6 @@ private:
     void downloadManager();
 
     void slotSetDir();
-    void getConfig();
-    void setConfigFile();
-
 private slots:
     void slotPlayMusic(int id);
     void playerStateChanged(QMediaPlayer::State state);
@@ -78,7 +76,6 @@ private slots:
     void slotLoadList(int type);
     void playerMediaStatus(QMediaPlayer::MediaStatus stats);
     void slotHideList();
-
 signals:
     void signalPlayerMusic(int);
     void signalLoadList(int);

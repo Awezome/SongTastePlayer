@@ -5,7 +5,6 @@
 class Tool
 {
 public:
-    Tool();
     static QTime qint64ToTime(qint64 time);
     static QString qint64ToStringKb(qint64 i);
 };

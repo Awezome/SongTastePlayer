@@ -1,9 +1,5 @@
 #include "tool.h"
 
-Tool::Tool()
-{
-}
-
 QTime Tool::qint64ToTime(qint64 time){
     //3个参数分别代表时，分，秒；60000毫秒为1分钟，所以分钟第二个参数是先除6000,第3个参数是直接除1s
     QTime t(0,(time/60000)%60,(time/1000)%60);

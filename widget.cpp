@@ -30,10 +30,20 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     //titleShow
     titleShow();
 
+    //get config
+    this->settings =new QSettings (QDir::homePath()+"/"+Config::config, QSettings ::IniFormat);
+    if(!settings->contains("Player/downloadDir")){
+        settings->setValue("Player/downloadDir",QDir::homePath());
+        settings->setValue("Player/musicOrder",0);
+        settings->setValue("Player/musicType",0);
+        settings->setValue("Player/volume",50);
+    }
+    downloadDir=settings->value("Player/downloadDir").toString();
+    musicOrder=settings->value("Player/musicOrder").toInt();
+
     //player
     palyNumber=0;
     musicListSize=0;
-    musicOrder=0;//0顺序，1单曲
     buttonModel=false;//是否为点击了下一个或上一个，做为标记，会影响正常下的顺序播放。暂时的。
     scene=new QGraphicsScene();
     dragPosition=QPoint(-1, -1);//防止鼠标在控件上拖动窗口失效
@@ -70,35 +80,37 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(ui->buttonPre, &QPushButton::clicked,this, &Widget::slotPreButton);
     connect(ui->buttonNext,&QPushButton::clicked,this, &Widget::slotNextButton);
     //download dir
+    ui->pushButtonOpenDir->setText(downloadDir);
     connect(ui->pushButtonDownloadDir,&QPushButton::clicked,this, &Widget::slotSetDir);
     connect(ui->pushButtonOpenDir,&QPushButton::clicked,[this](){
         QDesktopServices::openUrl(this->downloadDir);
     });
 
     //音量
-    player.setVolume(50);
     ui->sliderVolume->setRange(0,100);
-    ui->sliderVolume->setValue(50);
+    ui->sliderVolume->setValue(0);
     connect(ui->sliderVolume, &QSlider::valueChanged,[this](int value){
         player.setVolume(value);
+        this->settings->setValue("Player/volume",value);
     });
-
+    ui->sliderVolume->setValue(settings->value("Player/volume").toInt());
     //contentmenu
     this->contentMenu();
     this->showTrayIcon();
 
     //list type
     ui->comboMusicType->insertItems(0,songteste->typeLists());
-    connect(ui->comboMusicType,SIGNAL(currentIndexChanged(int)),this, SLOT(slotLoadList(int)));
-    QObject::connect(ui->comboMusicOrder,static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),[this](int i){
-        this->musicOrder=i;
+    ui->comboMusicType->setCurrentIndex(-1);
+    connect(ui->comboMusicType,static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),[this](int i){
+        settings->setValue("Player/musicType",i);
+        slotLoadList(i);
+    });
+    connect(ui->comboMusicOrder,static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),[this](int i){
+        musicOrder=i;
+        settings->setValue("Player/musicOrder",i);
     });//不明白为什么QComboBox要类型转换，其它的都不用，static_cast<void (QComboBox::*)(int)>
-
-    //open config
-    this->getConfig();
-
-    //load music list
-    emit signalLoadList(0);
+    ui->comboMusicType->setCurrentIndex(settings->value("Player/musicType").toInt());
+    ui->comboMusicOrder->setCurrentIndex(musicOrder);
 
     //download
     downloadingRow=-1;//默认-1当大于-1即有文件下载
@@ -352,34 +364,10 @@ void Widget::downloadProgress(qint64 recieved, qint64 total){
 void Widget::slotSetDir(){
     QString dir = QFileDialog::getExistingDirectory(this,tr("打开目录"),this->downloadDir,QFileDialog::ShowDirsOnly);
     if(dir!=""){
-        this->downloadDir=dir;
+        downloadDir=dir;
+        settings->setValue("Player/downloadDir",dir);
         ui->pushButtonOpenDir->setText(dir);
-        this->setConfigFile();
-        qDebug()<<QDir::cleanPath(dir);
     }
-}
-
-void Widget::getConfig(){
-    QFile file(QDir::homePath()+"/"+Config::config);
-    if(file.open(QIODevice::ReadOnly)){
-        QDataStream in(&file);
-        in>>this->downloadDir;
-    }else{
-        this->downloadDir=QDir::homePath();
-        this->setConfigFile();
-    }
-    file.close();
-
-    ui->pushButtonOpenDir->setText(this->downloadDir);
-}
-
-void Widget::setConfigFile(){
-    QFile file(QDir::homePath()+"/"+Config::config);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-       return;
-    QDataStream out(&file);
-    out <<this->downloadDir;
-    file.close();
 }
 
 //system
@@ -406,10 +394,8 @@ void Widget::mouseMoveEvent(QMouseEvent * event){
        titleShow();
     }
 
-    if (event->buttons() &Qt::LeftButton){
-        if (dragPosition != QPoint(-1, -1)){
-            move(event->globalPos() - dragPosition);
-        }
+    if (event->buttons()==Qt::LeftButton && dragPosition != QPoint(-1, -1)){
+        move(event->globalPos() - dragPosition);
         event->accept();
     }
 }
@@ -441,6 +427,7 @@ void Widget::contentMenu(){
     connect(menuMusiclist,&QAction::triggered,[this](){
         ui->stackedWidget->setCurrentIndex(0);
     });
+
     QAction *menuDownload = new QAction("下载列表", this);
     connect(menuDownload,&QAction::triggered, [this](){
         ui->stackedWidget->setCurrentIndex(1);
@@ -519,3 +506,4 @@ void Widget::keyPressEvent(QKeyEvent *k){
         }
     }
 }
+
