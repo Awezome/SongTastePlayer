@@ -557,11 +557,6 @@ border-style:none;
       <string>|</string>
      </property>
     </widget>
-    <zorder>tablemusiclist</zorder>
-    <zorder>comboMusicOrder</zorder>
-    <zorder>comboMusicOrder</zorder>
-    <zorder>comboMusicType</zorder>
-    <zorder>labelTotalTime_3</zorder>
    </widget>
    <widget class="QWidget" name="pageDownload">
     <widget class="QTableWidget" name="tableDownloadList">

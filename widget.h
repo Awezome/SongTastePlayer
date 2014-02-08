@@ -84,6 +84,7 @@ signals:
     void signalLoadList(int);
 protected:
     void mousePressEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent *k );
 };

@@ -23,6 +23,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->setMouseTracking(true);
     ui->labelBg->setMouseTracking(true);
     ui->musicSlider->setMouseTracking(true);
+    ui->sliderVolume->setMouseTracking(true);
 
     ui->labelVersion->setText(Config::title+" "+Config::version);
 
@@ -35,6 +36,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     musicOrder=0;//0顺序，1单曲
     buttonModel=false;//是否为点击了下一个或上一个，做为标记，会影响正常下的顺序播放。暂时的。
     scene=new QGraphicsScene();
+    dragPosition=QPoint(-1, -1);//防止鼠标在控件上拖动窗口失效
 
     //table
     this->loadListView();
@@ -381,6 +383,14 @@ void Widget::setConfigFile(){
 }
 
 //system
+void Widget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton){
+        dragPosition = QPoint(-1, -1);
+        event->accept();
+    }
+}
+
 void Widget::mousePressEvent(QMouseEvent * event){
     if (event->button() == Qt::LeftButton){
          dragPosition    = event->globalPos() - frameGeometry().topLeft();
@@ -390,13 +400,16 @@ void Widget::mousePressEvent(QMouseEvent * event){
 }
 
 void Widget::mouseMoveEvent(QMouseEvent * event){
-    if(1<event->y()&&event->y()<40&&61<event->x()&&event->x()<350){
+    if(1<event->y()&&event->y()<40&&61<event->x()&&event->x()<415){
        titleHide();
     }else{
        titleShow();
     }
-    if (event->buttons() == Qt::LeftButton){
-        move(event->globalPos()-dragPosition);//移动窗口
+
+    if (event->buttons() &Qt::LeftButton){
+        if (dragPosition != QPoint(-1, -1)){
+            move(event->globalPos() - dragPosition);
+        }
         event->accept();
     }
 }
