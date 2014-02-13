@@ -34,13 +34,11 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->settings =new QSettings (QDir::homePath()+"/"+Config::config, QSettings ::IniFormat);
     if(!settings->contains("Player/downloadDir")){
         settings->setValue("Player/downloadDir",QDir::homePath());
-        settings->setValue("Player/musicOrder",0);
         settings->setValue("Player/musicType",0);
         settings->setValue("Player/volume",50);
     }
     downloadDir=settings->value("Player/downloadDir").toString();
-    //musicOrder=settings->value("Player/musicOrder").toInt();
-    musicOrder=0;//暂时去掉播放模式的记忆
+    musicOrder=0;
     ui->buttonPlayMode->setToolTip("顺序播放");
 
     //player
@@ -463,15 +461,9 @@ void Widget::contentMenu(){
 }
 
 void Widget::tableContentMenu(const QPoint &pos){
-    QAction *menuRefreshList = new QAction("刷新列表", this);
-    connect(menuRefreshList,&QAction::triggered, [this](){
-        emit slotLoadList(ui->comboMusicType->currentIndex());
-    });
-
     QAction *downMusic = new QAction("下载", this);
     QMenu menu(this);
     menu.addAction(downMusic);
-    menu.addAction(menuRefreshList);
     QAction *m=menu.exec(ui->tablemusiclist ->viewport()->mapToGlobal(pos));
     if(m==downMusic){
         downloadMusic(ui->tablemusiclist->itemAt(pos)->row());

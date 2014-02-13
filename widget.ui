@@ -311,7 +311,7 @@ background: #0579C7;
     <string notr="true">color:#fff</string>
    </property>
    <property name="text">
-    <string>Songtaste Player 1.20140125</string>
+    <string/>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
