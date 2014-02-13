@@ -514,6 +514,26 @@ border-style:none;
       <string/>
      </property>
     </widget>
+    <widget class="QPushButton" name="buttonRefresh">
+     <property name="geometry">
+      <rect>
+       <x>75</x>
+       <y>5</y>
+       <width>20</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{border-image: url(:/image/refresh.png);}
+QPushButton:hover {border-image: url(:/image/refresh_mouseover.png);}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="pageDownload">
     <widget class="QTableWidget" name="tableDownloadList">

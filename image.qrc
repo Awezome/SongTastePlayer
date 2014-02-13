@@ -10,5 +10,7 @@
         <file>image/logo.png</file>
         <file>image/playmode_repeatone.png</file>
         <file>image/playmode_sequence.png</file>
+        <file>image/refresh.png</file>
+        <file>image/refresh_mouseover.png</file>
     </qresource>
 </RCC>

@@ -99,6 +99,10 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
         }
         //settings->setValue("Player/musicOrder",musicOrder);
     });
+    ui->buttonRefresh->setToolTip("刷新列表");
+    connect(ui->buttonRefresh,&QPushButton::clicked,this,[this](){
+        emit slotLoadList(ui->comboMusicType->currentIndex());
+    });
 
     //音量
     ui->sliderVolume->setRange(0,100);
