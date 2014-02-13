@@ -388,7 +388,7 @@ void Widget::mousePressEvent(QMouseEvent * event){
 }
 
 void Widget::mouseMoveEvent(QMouseEvent * event){
-    if(1<y()&&y()<40&&61<x()&&x()<415){
+    if(1<event->y()&&event->y()<40&&61<event->x()&&event->x()<415){
        titleHide();
     }else{
        titleShow();
