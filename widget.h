@@ -78,6 +78,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent *k );
+    void mouseDoubleClickEvent(QMouseEvent *event);
 };
 
 #endif // WIDGET_H

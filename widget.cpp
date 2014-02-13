@@ -388,7 +388,7 @@ void Widget::mousePressEvent(QMouseEvent * event){
 }
 
 void Widget::mouseMoveEvent(QMouseEvent * event){
-    if(1<event->y()&&event->y()<40&&61<event->x()&&event->x()<415){
+    if(1<y()&&y()<40&&61<x()&&x()<415){
        titleHide();
     }else{
        titleShow();
@@ -398,6 +398,12 @@ void Widget::mouseMoveEvent(QMouseEvent * event){
         move(event->globalPos() - dragPosition);
         event->accept();
     }
+}
+
+//双击显示隐藏列表
+void Widget::mouseDoubleClickEvent(QMouseEvent *event){
+    slotHideList();
+    event->accept();
 }
 
 void Widget::contentMenu(){
