@@ -8,5 +8,7 @@
         <file>image/volume_small.png</file>
         <file>image/button_stop.png</file>
         <file>image/logo.png</file>
+        <file>image/playmode_repeatone.png</file>
+        <file>image/playmode_sequence.png</file>
     </qresource>
 </RCC>

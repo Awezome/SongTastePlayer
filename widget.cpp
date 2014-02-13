@@ -39,7 +39,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
         settings->setValue("Player/volume",50);
     }
     downloadDir=settings->value("Player/downloadDir").toString();
-    musicOrder=settings->value("Player/musicOrder").toInt();
+    //musicOrder=settings->value("Player/musicOrder").toInt();
+    musicOrder=0;//暂时去掉播放模式的记忆
+    ui->buttonPlayMode->setToolTip("顺序播放");
 
     //player
     palyNumber=0;
@@ -85,6 +87,18 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(ui->pushButtonOpenDir,&QPushButton::clicked,[this](){
         QDesktopServices::openUrl(this->downloadDir);
     });
+    connect(ui->buttonPlayMode,&QPushButton::clicked,this,[this](){
+        if(musicOrder==1){
+            musicOrder=0;//顺序播放
+            ui->buttonPlayMode->setStyleSheet("QPushButton{border-image: url(:/image/playmode_sequence.png);}");
+            ui->buttonPlayMode->setToolTip("顺序播放");
+        }else{
+            musicOrder=1;//单曲循环
+            ui->buttonPlayMode->setStyleSheet("QPushButton{border-image: url(:/image/playmode_repeatone.png);}");
+            ui->buttonPlayMode->setToolTip("单曲循环");
+        }
+        //settings->setValue("Player/musicOrder",musicOrder);
+    });
 
     //音量
     ui->sliderVolume->setRange(0,100);
@@ -104,13 +118,8 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(ui->comboMusicType,static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),[this](int i){
         settings->setValue("Player/musicType",i);
         slotLoadList(i);
-    });
-    connect(ui->comboMusicOrder,static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),[this](int i){
-        musicOrder=i;
-        settings->setValue("Player/musicOrder",i);
     });//不明白为什么QComboBox要类型转换，其它的都不用，static_cast<void (QComboBox::*)(int)>
     ui->comboMusicType->setCurrentIndex(settings->value("Player/musicType").toInt());
-    ui->comboMusicOrder->setCurrentIndex(musicOrder);
 
     //download
     downloadingRow=-1;//默认-1当大于-1即有文件下载
