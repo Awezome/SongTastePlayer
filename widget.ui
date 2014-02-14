@@ -128,9 +128,6 @@
      <height>360</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: #000;border-radius: 4px;</string>
-   </property>
    <property name="text">
     <string/>
    </property>
@@ -175,9 +172,6 @@
      <width>60</width>
      <height>60</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-image: url(:/image/logo.png);</string>
    </property>
    <property name="text">
     <string/>
@@ -241,9 +235,6 @@
      <weight>75</weight>
      <bold>true</bold>
     </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #666;</string>
    </property>
    <property name="text">
     <string>|</string>
@@ -416,22 +407,11 @@
        <height>30</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <family>微软雅黑</family>
-       <pointsize>8</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="cursor">
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="toolTip">
       <string>更改下载位置</string>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton{border: none;color:#fff;background:rgb(0,0,0,0)}</string>
      </property>
      <property name="text">
       <string>更改下载位置</string>
@@ -446,22 +426,11 @@
        <height>30</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <family>微软雅黑</family>
-       <pointsize>8</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="cursor">
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="toolTip">
       <string>打开下载位置</string>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton{border: none;color:#fff;background:rgb(0,0,0,0);text-align:left}</string>
      </property>
      <property name="text">
       <string/>

@@ -1,10 +1,13 @@
 #include "widget.h"
 #include <QApplication>
 #include <QTextCodec>
+#include "tool.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-     QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf-8"));
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf-8"));
+
+    a.setStyleSheet(Tool::getQss(":/qss/style.css"));
     Widget w;
     w.show();
     

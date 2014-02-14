@@ -43,7 +43,7 @@ private:
     QMenu *trayMenu;
     Http *http;
     QSystemTrayIcon* trayIcon;
-    UI u;
+
     int downloadingRow;
     void contentMenu();
     void tableContentMenu(const QPoint &pos);

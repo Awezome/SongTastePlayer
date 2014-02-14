@@ -7,22 +7,13 @@
 #include <QScrollBar>
 class UI{
 public:
-    UI();
-    QString fontFamily;
+    static QString font();
+    static QString pushBotton(QString normal);
+    static QString pushBotton(QString normal,QString hover);
+    static QString pushBotton(QString normal,QString hover,QString pressed);
 
-    QString font();
-    QString color(QString color);
-    QString fontWidget();
-    QFont fontSmall();
-    QFont fontBig();
-    QString comboBox();
-    QString pushBotton(QString normal);
-    QString pushBotton(QString normal,QString hover);
-    QString pushBotton(QString normal,QString hover,QString pressed);
-    QString slider();
-
-    void tableWidgetRowColor(QTableWidget *table,int row, QColor textcolor,QColor backcolor);
-    void tableWidgetView(QTableWidget *table);
+    static void tableWidgetRowColor(QTableWidget *table,int row, QColor textcolor,QColor backcolor);
+    static void tableWidgetView(QTableWidget *table);
 };
 
 #endif // UI_H

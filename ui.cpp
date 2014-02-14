@@ -1,39 +1,11 @@
 #include "ui.h"
-UI::UI(){
-#ifdef Q_OS_WIN
-    fontFamily="微软雅黑";
-#else
-    fontFamily="宋体";//字体怎么弄？
-#endif
-}
 
 QString UI::font(){
-    return fontFamily;
-}
-
-QString UI::fontWidget(){
-    return this->fontFamily;
-}
-
-QFont UI::fontSmall(){
-    return QFont(fontFamily,8,QFont::Bold);
-}
-
-QFont UI::fontBig(){
-    return QFont(fontFamily,9,QFont::Bold);
-}
-
-QString UI::color(QString color){
-    return "color:"+color+";";
-}
-
-QString UI::comboBox(){
-    return "QComboBox{color: #fff;background-color:#000;border:none;padding:0 5px;}"
-        "QComboBox:on{selection-background-color: #0579C7;}"
-        "QComboBox:!on{selection-background-color:#0579C7; color:#fff;}"
-        "QComboBox::drop-down{border:none;width:0;}"
-        "QComboBox::down-arrow{border-style:none;}"
-        "QListView{background: #000;color:#fff};";
+#ifdef Q_OS_WIN
+    return "微软雅黑";
+#else
+    return "宋体";//字体怎么弄？
+#endif
 }
 
 QString UI::pushBotton(QString normal){
@@ -49,13 +21,6 @@ QString UI::pushBotton(QString normal,QString hover,QString pressed){
     return "QPushButton{border-image: url(:/image/"+normal+".png);}"
         "QPushButton:hover{border-image: url(:/image/"+hover+".png);}"
         "QPushButton:pressed{border-image: url(:/image/"+pressed+".png);}";
-}
-
-QString UI::slider(){
-    return "QSlider::groove:horizontal{height: 2px;background: #eee;}"
-        "QSlider::handle:horizontal {background: #ddd;width: 8px;margin: -3px 0;border-radius: 4px;}"
-        "QSlider::add-page:horizontal{background: #333;}"
-        "QSlider::sub-page:horizontal{background: #0579C7;}";
 }
 
 void UI::tableWidgetRowColor(QTableWidget *table,int row, QColor textcolor,QColor backcolor){
@@ -80,11 +45,4 @@ void UI::tableWidgetView(QTableWidget *table){
     table->setContextMenuPolicy(Qt::CustomContextMenu);
     table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    table->verticalScrollBar()->setStyleSheet(
-      "QScrollBar{background:#999;width: 10px;}"
-      "QScrollBar::handle{background:#999;border:0;}"
-      "QScrollBar::handle:hover{background:#0579C7;}"
-      "QScrollBar::sub-page{background:#fff;}"
-      "QScrollBar::add-page{background:#fff;}");
 }

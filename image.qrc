@@ -13,4 +13,7 @@
         <file>image/refresh.png</file>
         <file>image/refresh_mouseover.png</file>
     </qresource>
+    <qresource prefix="/qss">
+        <file>style.css</file>
+    </qresource>
 </RCC>
