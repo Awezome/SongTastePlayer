@@ -510,9 +510,9 @@ void Widget::setUi(){
 
     u.tableWidgetView(ui->tableDownloadList);
     u.tableWidgetView(ui->tablemusiclist);
-    ui->tablemusiclist->setColumnWidth(0,340);
+    ui->tablemusiclist->setColumnWidth(0,350);
     ui->tablemusiclist->setColumnWidth(1,60);
-    ui->tableDownloadList->setColumnWidth(0,300);
+    ui->tableDownloadList->setColumnWidth(0,310);
     ui->tableDownloadList->setColumnWidth(1,100);
     ui->tableDownloadList->setColumnWidth(2,60);
     ui->tableDownloadList->setColumnWidth(3,30);//下载状态 1,等待，2正在下载，3下载完成 ，下载出错

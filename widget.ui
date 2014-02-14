@@ -277,9 +277,6 @@
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
-     </property>
      <attribute name="horizontalHeaderVisible">
       <bool>false</bool>
      </attribute>
@@ -383,14 +380,8 @@
        <pointsize>9</pointsize>
       </font>
      </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOn</enum>
      </property>
      <attribute name="horizontalHeaderVisible">
       <bool>false</bool>
@@ -477,7 +468,6 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="pageSetup"/>
   </widget>
   <zorder>labelBg</zorder>
   <zorder>musicSlider</zorder>
