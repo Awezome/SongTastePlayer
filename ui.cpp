@@ -28,11 +28,12 @@ QString UI::color(QString color){
 }
 
 QString UI::comboBox(){
-    return "QComboBox{selection-color:#fff;color: #fff;background-color:#000;border: 1px black;padding:0 5px;}"
-        "QComboBox:on{selection-background-color: rgb(108, 149, 59);color:#436254;}"
-        "QComboBox:!on{selection-background-color:#000; color:#fff;}"
-        "QComboBox::drop-down{border:1px solid #000;width:0;}"
-        "QComboBox::down-arrow{border-style:none;}";
+    return "QComboBox{color: #fff;background-color:#000;border:none;padding:0 5px;}"
+        "QComboBox:on{selection-background-color: #0579C7;}"
+        "QComboBox:!on{selection-background-color:#0579C7; color:#fff;}"
+        "QComboBox::drop-down{border:none;width:0;}"
+        "QComboBox::down-arrow{border-style:none;}"
+        "QListView{background: #000};";
 }
 
 QString UI::pushBotton(QString normal){
