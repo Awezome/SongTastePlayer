@@ -24,8 +24,10 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     ui->labelBg->setMouseTracking(true);
     ui->musicSlider->setMouseTracking(true);
     ui->sliderVolume->setMouseTracking(true);
-
     ui->labelVersion->setText(Config::title+" "+Config::version);
+
+    //ui
+    setUi();
 
     //titleShow
     titleShow();
@@ -49,7 +51,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     dragPosition=QPoint(-1, -1);//防止鼠标在控件上拖动窗口失效
 
     //table
-    this->loadListView();
+    connect(ui->tablemusiclist,&QTableWidget::customContextMenuRequested, this, &Widget::tableContentMenu);
     connect(ui->tablemusiclist,&QTableWidget::cellDoubleClicked,[this](int row,int){
         emit this->signalPlayerMusic(row);
     });
@@ -88,14 +90,13 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(ui->buttonPlayMode,&QPushButton::clicked,this,[this](){
         if(musicOrder==1){
             musicOrder=0;//顺序播放
-            ui->buttonPlayMode->setStyleSheet("QPushButton{border-image: url(:/image/playmode_sequence.png);}");
+            ui->buttonPlayMode->setStyleSheet(u.pushBotton("playmode_sequence"));
             ui->buttonPlayMode->setToolTip("顺序播放");
         }else{
             musicOrder=1;//单曲循环
-            ui->buttonPlayMode->setStyleSheet("QPushButton{border-image: url(:/image/playmode_repeatone.png);}");
+            ui->buttonPlayMode->setStyleSheet(u.pushBotton("playmode_repeatone"));
             ui->buttonPlayMode->setToolTip("单曲循环");
         }
-        //settings->setValue("Player/musicOrder",musicOrder);
     });
     ui->buttonRefresh->setToolTip("刷新列表");
     connect(ui->buttonRefresh,&QPushButton::clicked,this,[this](){
@@ -131,37 +132,6 @@ Widget::~Widget(){
     delete ui;
 }
 
-void Widget::loadListView(){
-    ui->tablemusiclist->setSelectionBehavior(QAbstractItemView::SelectRows); //整行选中的方式
-    ui->tablemusiclist->setEditTriggers(QAbstractItemView::NoEditTriggers);//禁止编辑
-    ui->tablemusiclist->setSelectionMode(QAbstractItemView::SingleSelection); //设置为可以选中多个目标
-    ui->tablemusiclist->verticalHeader()->setVisible(false); //隐藏行号
-    ui->tablemusiclist->horizontalHeader()->setVisible(false); //隐藏行表头
-    ui->tablemusiclist->setColumnWidth(0,340);
-    ui->tablemusiclist->setColumnWidth(1,60);
-    ui->tablemusiclist->setShowGrid(false);
-    ui->tablemusiclist->setFocusPolicy(Qt::NoFocus);
-    ui->tablemusiclist->setStyleSheet("selection-background-color:#9ED3FE");  //设置选中行颜色
-    ui->tablemusiclist->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tablemusiclist,&QTableWidget::customContextMenuRequested, this, &Widget::tableContentMenu);
-
-    ui->tableDownloadList->setSelectionBehavior(QAbstractItemView::SelectRows); //整行选中的方式
-    ui->tableDownloadList->setEditTriggers(QAbstractItemView::NoEditTriggers);//禁止编辑
-    ui->tableDownloadList->setSelectionMode(QAbstractItemView::SingleSelection); //设置为可以选中多个目标
-    ui->tableDownloadList->verticalHeader()->setVisible(false); //隐藏行号
-    ui->tableDownloadList->horizontalHeader()->setVisible(false); //隐藏行表头
-    ui->tableDownloadList->setColumnWidth(0,300);
-    ui->tableDownloadList->setColumnWidth(1,100);
-    ui->tableDownloadList->setColumnWidth(2,60);
-    ui->tableDownloadList->setColumnWidth(3,30);//下载状态 1,等待，2正在下载，3下载完成 ，下载出错
-    ui->tableDownloadList->setShowGrid(false);
-    ui->tableDownloadList->setFocusPolicy(Qt::NoFocus);
-    ui->tableDownloadList->setStyleSheet("selection-background-color:#9ED3FE");  //设置选中行颜色
-    ui->tableDownloadList->setColumnHidden(2,true);
-    ui->tableDownloadList->setColumnHidden(3,true);
-    ui->tableDownloadList->setContextMenuPolicy(Qt::CustomContextMenu);
-}
-
 void Widget::slotLoadList(int type){
     ui->labelMessage->setText(ui->comboMusicType->currentText()+"列表加载中...");
 
@@ -180,16 +150,6 @@ void Widget::slotLoadList(int type){
         ui->labelMessage->setText(ui->comboMusicType->currentText()+"列表加载失败");
     }
     this->palyNumber=0;//刷新列表后重新计数为-1，播放完后会加1，重新开始播放
-}
-
-void Widget::setRowColor(QTableWidget *table,int row, QColor textcolor,QColor backcolor){
-    int size=2;//ui->tablemusiclist->columnCount();
-    QTableWidgetItem *item;
-    for (int col=0; col<size; col++){
-        item =table->item(row, col);
-        item->setBackgroundColor(backcolor);
-        item->setTextColor(textcolor);
-    }
 }
 
 void Widget::slotPlayMusic(int id){
@@ -211,9 +171,9 @@ void Widget::slotPlayMusic(int id){
     ui->labelAuthor->setText(song.author);
 
     //播放时改变列表中的行颜色
-    setRowColor(ui->tablemusiclist,palyNumber,QColor("#999"),QColor("#fff"));
+    u.tableWidgetRowColor(ui->tablemusiclist,palyNumber,QColor("#999"),QColor("#fff"));
     this->palyNumber=id;
-    setRowColor(ui->tablemusiclist,id,QColor("#fff"),QColor("#0579C7"));
+    u.tableWidgetRowColor(ui->tablemusiclist,id,QColor("#fff"),QColor("#0579C7"));
 
     //设置头像
     pixmap.loadFromData(songteste->userImage(song.image));
@@ -223,15 +183,15 @@ void Widget::slotPlayMusic(int id){
 void Widget::playerStateChanged(QMediaPlayer::State state){
     switch(state) {
     case QMediaPlayer::PlayingState:
-        ui->buttonPlay->setStyleSheet("QPushButton{border-image: url(:/image/button_pause.png);}");
+        ui->buttonPlay->setStyleSheet(u.pushBotton("button_pause"));
         //ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
         break;
     case QMediaPlayer::PausedState:
-        ui->buttonPlay->setStyleSheet("QPushButton{border-image: url(:/image/button_play.png);}");
+        ui->buttonPlay->setStyleSheet(u.pushBotton("button_play"));
         //ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
         break;
     default:
-        ui->buttonPlay->setStyleSheet("QPushButton{border-image: url(:/image/button_stop.png);}");
+        ui->buttonPlay->setStyleSheet(u.pushBotton("button_stop"));
         break;
     }
 }
@@ -358,7 +318,7 @@ void Widget::downloadManager(){
             download->run(url,filename);
             ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("下载完成"));
             ui->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("downloaded"));
-            setRowColor(ui->tableDownloadList,tsize,QColor("#999"),QColor("#fff"));
+            u.tableWidgetRowColor(ui->tableDownloadList,tsize,QColor("#999"),QColor("#fff"));
         }
         tsize++;
     }
@@ -369,7 +329,7 @@ void Widget::downloadManager(){
 void Widget::downloadProgress(qint64 recieved, qint64 total){
     QString a=Tool::qint64ToStringKb(recieved)+"KB/"+Tool::qint64ToStringKb(total)+"KB";
     ui->tableDownloadList->setItem(downloadingRow,1,new QTableWidgetItem(a));
-    setRowColor(ui->tableDownloadList,downloadingRow,QColor("#fff"),QColor("#0579C7"));
+    u.tableWidgetRowColor(ui->tableDownloadList,downloadingRow,QColor("#fff"),QColor("#0579C7"));
 }
 
 void Widget::slotSetDir(){
@@ -518,3 +478,44 @@ void Widget::keyPressEvent(QKeyEvent *k){
     }
 }
 
+void Widget::setUi(){
+    this->setFont(QFont(u.font(),12));
+    this->setStyleSheet("font-family:"+u.font());
+
+    ui->labelCurrentTime->setFont(u.fontSmall());
+    ui->labelTotalTime->setFont(u.fontSmall());
+    ui->labelTotalTime->setFont(u.fontSmall());
+    ui->labelAuthor->setFont(u.fontSmall());
+    ui->labelName->setFont(u.fontBig());
+    ui->comboMusicType->setFont(u.fontBig());
+    ui->labelMessage->setFont(u.fontBig());
+    ui->labelVersion->setFont(u.fontBig());
+    ui->comboMusicType->setStyleSheet(u.comboBox());
+
+    ui->buttonPre->setStyleSheet(u.pushBotton("button_pre"));
+    ui->buttonNext->setStyleSheet(u.pushBotton("button_next"));
+    ui->buttonPlay->setStyleSheet(u.pushBotton("button_play"));
+    ui->buttonRefresh->setStyleSheet(u.pushBotton("refresh","refresh_mouseover"));
+    ui->buttonPlayMode->setStyleSheet(u.pushBotton("playmode_sequence"));
+
+    ui->labelName->setStyleSheet(u.color("#fff"));
+    ui->labelAuthor->setStyleSheet(u.color("#999"));
+    ui->labelCurrentTime->setStyleSheet(u.color("#fff"));
+    ui->labelTotalTime->setStyleSheet(u.color("#999"));
+    ui->labelMessage->setStyleSheet(u.color("#0579C7"));
+    ui->labelVersion->setStyleSheet(u.color("#fff"));
+
+    ui->sliderVolume->setStyleSheet(u.slider());
+    ui->musicSlider->setStyleSheet(u.slider());
+
+    u.tableWidgetView(ui->tableDownloadList);
+    u.tableWidgetView(ui->tablemusiclist);
+    ui->tablemusiclist->setColumnWidth(0,340);
+    ui->tablemusiclist->setColumnWidth(1,60);
+    ui->tableDownloadList->setColumnWidth(0,300);
+    ui->tableDownloadList->setColumnWidth(1,100);
+    ui->tableDownloadList->setColumnWidth(2,60);
+    ui->tableDownloadList->setColumnWidth(3,30);//下载状态 1,等待，2正在下载，3下载完成 ，下载出错
+    ui->tableDownloadList->setColumnHidden(2,true);
+    ui->tableDownloadList->setColumnHidden(3,true);
+}

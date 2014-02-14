@@ -2,13 +2,14 @@
 #define WIDGET_H
 #include <QWidget>
 #include <QMediaPlayer>
-#include "stpage.h"
 #include <QTime>
 #include <QGraphicsScene>
 #include <QMenu>
 #include <QSystemTrayIcon>
 #include <QTableWidget>
 #include <QSettings>
+#include "stpage.h"
+#include "ui.h"
 namespace Ui {
 class Widget;
 }
@@ -42,12 +43,11 @@ private:
     QMenu *trayMenu;
     Http *http;
     QSystemTrayIcon* trayIcon;
-
+    UI u;
     int downloadingRow;
     void contentMenu();
     void tableContentMenu(const QPoint &pos);
     void showTrayIcon();
-    void loadListView();
 
     void titleShow();
     void titleHide();
@@ -63,12 +63,10 @@ private:
     void slotPlayButton();
     void slotPreButton();
     void slotNextButton();
-
-    void setRowColor(QTableWidget *table,int row, QColor textcolor, QColor backcolor);
-
     void slotLoadList(int type);
     void playerMediaStatus(QMediaPlayer::MediaStatus stats);
     void slotHideList();
+    void setUi();
 signals:
     void signalPlayerMusic(int);
     void signalLoadList(int);

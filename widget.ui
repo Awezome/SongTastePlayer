@@ -26,23 +26,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QSlider::groove:horizontal {
-height: 2px;
-background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #fff, stop:1 #222222);
-}
-QSlider::handle:horizontal {
-background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #fff, stop:1 #ddd);
-width: 8px;
-margin: -3px 0;
-border-radius: 4px;
-}
-
-QSlider::add-page:horizontal {
-background: #333;
-}
-QSlider::sub-page:horizontal {
-background: #0579C7;
-}</string>
+    <string notr="true"/>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -57,16 +41,8 @@ background: #0579C7;
      <height>16</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>9</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
    <property name="styleSheet">
-    <string notr="true">color: #fff;</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string>SongTeste Player</string>
@@ -77,20 +53,12 @@ background: #0579C7;
     <rect>
      <x>370</x>
      <y>30</y>
-     <width>31</width>
+     <width>40</width>
      <height>16</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>8</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
    <property name="styleSheet">
-    <string notr="true">color: #999;</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string>00:00</string>
@@ -109,9 +77,7 @@ background: #0579C7;
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="styleSheet">
-    <string notr="true">QPushButton{border-image: url(:/image/button_play.png);}
-QPushButton:hover {border-image: url(:/image/button_play.png);}
-QPushButton:pressed {border-image: url(:/image/button_play.png);}</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -130,9 +96,7 @@ QPushButton:pressed {border-image: url(:/image/button_play.png);}</string>
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="styleSheet">
-    <string notr="true">QPushButton{border-image: url(:/image/button_pre.png);}
-QPushButton:hover {border-image: url(:/image/button_pre.png);}
-QPushButton:pressed {border-image: url(:/image/button_pre.png);}</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -151,12 +115,7 @@ QPushButton:pressed {border-image: url(:/image/button_pre.png);}</string>
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="styleSheet">
-    <string notr="true">QPushButton{border-image: url(:/image/button_next.png);}
-QPushButton:hover {border-image: url(:/image/button_next.png);}
-QPushButton:pressed {border-image: url(:/image/button_next.png);}
-
-
-</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -172,23 +131,7 @@ QPushButton:pressed {border-image: url(:/image/button_next.png);}
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QSlider::groove:horizontal {
-height: 2px;
-background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #fff, stop:1 #eee);
-}
-QSlider::handle:horizontal {
-background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #fff, stop:1 #ddd);
-width: 6px;
-margin: -2px 0;
-border-radius: 3px;
-}
-
-QSlider::add-page:horizontal {
-background: #333;
-}
-QSlider::sub-page:horizontal {
-background: #0579C7;
-}</string>
+    <string notr="true"/>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -215,20 +158,12 @@ background: #0579C7;
     <rect>
      <x>320</x>
      <y>30</y>
-     <width>31</width>
+     <width>40</width>
      <height>16</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>8</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
    <property name="styleSheet">
-    <string notr="true">color: #fff;</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string>00:00</string>
@@ -275,16 +210,8 @@ background: #0579C7;
      <height>20</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>9</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
    <property name="styleSheet">
-    <string notr="true">color:#0579C7</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string>正在加载...</string>
@@ -293,22 +220,14 @@ background: #0579C7;
   <widget class="QLabel" name="labelVersion">
    <property name="geometry">
     <rect>
-     <x>223</x>
+     <x>203</x>
      <y>336</y>
-     <width>191</width>
+     <width>211</width>
      <height>20</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>9</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
    <property name="styleSheet">
-    <string notr="true">color:#fff</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -326,16 +245,8 @@ background: #0579C7;
      <height>16</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>8</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
    <property name="styleSheet">
-    <string notr="true">color: #999;</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -428,13 +339,6 @@ background: #0579C7;
        <height>30</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <family>微软雅黑</family>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
      <property name="acceptDrops">
       <bool>true</bool>
      </property>
@@ -442,33 +346,7 @@ background: #0579C7;
       <string>更改音乐列表</string>
      </property>
      <property name="styleSheet">
-      <string notr="true"> QComboBox{
-    selection-color:#fff; 
-    color: #fff;
-    background-color:#000;
-    border: 1px black;
-	padding:0 5px;
-}
- 
-QComboBox:on { /*shift the text when the popup opens */
-    selection-background-color: rgb(108, 149, 59);
-    color:#436254;
-}
- 
-QComboBox:!on { /* shift the text when the popup opens */
-    selection-background-color:#000;
-    color:#fff;
-}
-
-
-QComboBox::drop-down {
-    border:1px solid #000;
-	width:0;
-
-}
-QComboBox::down-arrow {
-border-style:none;
-}</string>
+      <string notr="true"/>
      </property>
     </widget>
     <widget class="QLabel" name="labelTotalTime_3">
@@ -508,7 +386,7 @@ border-style:none;
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{border-image: url(:/image/playmode_sequence.png);}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string/>
@@ -527,8 +405,7 @@ border-style:none;
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{border-image: url(:/image/refresh.png);}
-QPushButton:hover {border-image: url(:/image/refresh_mouseover.png);}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string/>

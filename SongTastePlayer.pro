@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     http.cpp \
     config.cpp \
     download.cpp \
-    tool.cpp
+    tool.cpp \
+    ui.cpp
 
 HEADERS  += widget.h \
     stpage.h \
@@ -26,7 +27,8 @@ HEADERS  += widget.h \
     http.h \
     config.h \
     download.h \
-    tool.h
+    tool.h \
+    ui.h
 
 FORMS    += widget.ui
 
