@@ -2,9 +2,9 @@
 
 QString UI::font(){
 #ifdef Q_OS_WIN
-    return "微软雅黑";
+    return "font-family:微软雅黑";
 #else
-    return "宋体";//字体怎么弄？
+    return "font-family:sans;font-weight:bold;";//字体怎么弄？
 #endif
 }
 
@@ -41,7 +41,7 @@ void UI::tableWidgetView(QTableWidget *table){
     table->horizontalHeader()->setVisible(false); //隐藏行表头
     table->setShowGrid(false);
     table->setFocusPolicy(Qt::NoFocus);
-    table->setStyleSheet("selection-background-color:#9ED3FE");  //设置选中行颜色
+    table->setStyleSheet("selection-background-color:#9ED3FE;selection-color:#000");  //设置选中行颜色
     table->setContextMenuPolicy(Qt::CustomContextMenu);
     table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

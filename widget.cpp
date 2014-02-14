@@ -479,7 +479,7 @@ void Widget::keyPressEvent(QKeyEvent *k){
 }
 
 void Widget::setUi(){
-    this->setStyleSheet("font-family:"+UI::font());
+    this->setStyleSheet(UI::font());
 
     UI::tableWidgetView(ui->tableDownloadList);
     UI::tableWidgetView(ui->tablemusiclist);
