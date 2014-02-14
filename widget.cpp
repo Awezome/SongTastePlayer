@@ -5,6 +5,7 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QFileDialog>
+#include <QDesktopWidget>
 #include "config.h"
 #include "download.h"
 #include "tool.h"
@@ -480,6 +481,10 @@ void Widget::keyPressEvent(QKeyEvent *k){
 
 void Widget::setUi(){
     this->setStyleSheet(UI::font());
+    //center
+    int x=(QApplication::desktop()->width()-width())/2;
+    int y=(QApplication::desktop()->height()-height())/2;
+    move (x,y);
 
     UI::tableWidgetView(ui->tableDownloadList);
     UI::tableWidgetView(ui->tablemusiclist);
