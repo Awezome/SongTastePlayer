@@ -4,6 +4,7 @@
 #include <QFont>
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QScrollBar>
 class UI{
 public:
     UI();

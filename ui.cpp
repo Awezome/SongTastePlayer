@@ -77,4 +77,11 @@ void UI::tableWidgetView(QTableWidget *table){
     table->setFocusPolicy(Qt::NoFocus);
     table->setStyleSheet("selection-background-color:#9ED3FE");  //设置选中行颜色
     table->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    table->verticalScrollBar()->setStyleSheet(
+      "QScrollBar{background:#999;width: 10px;}"
+      "QScrollBar::handle{background:#999;border:0;}"
+      "QScrollBar::handle:hover{background:#0579C7;}"
+      "QScrollBar::sub-page{background:#fff;}"
+      "QScrollBar::add-page{background:#fff;}");
 }
