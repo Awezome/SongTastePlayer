@@ -33,7 +33,7 @@ QString UI::comboBox(){
         "QComboBox:!on{selection-background-color:#0579C7; color:#fff;}"
         "QComboBox::drop-down{border:none;width:0;}"
         "QComboBox::down-arrow{border-style:none;}"
-        "QListView{background: #000};";
+        "QListView{background: #000;color:#fff};";
 }
 
 QString UI::pushBotton(QString normal){
