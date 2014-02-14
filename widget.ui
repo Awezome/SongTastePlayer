@@ -25,9 +25,6 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
@@ -40,9 +37,6 @@
      <width>331</width>
      <height>16</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
    </property>
    <property name="text">
     <string>SongTeste Player</string>
@@ -76,9 +70,6 @@
    <property name="cursor">
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
    <property name="text">
     <string/>
    </property>
@@ -94,9 +85,6 @@
    </property>
    <property name="cursor">
     <cursorShape>PointingHandCursor</cursorShape>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -114,9 +102,6 @@
    <property name="cursor">
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
    <property name="text">
     <string/>
    </property>
@@ -129,9 +114,6 @@
      <width>61</width>
      <height>16</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -210,9 +192,6 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
    <property name="text">
     <string>正在加载...</string>
    </property>
@@ -225,9 +204,6 @@
      <width>211</width>
      <height>20</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -244,9 +220,6 @@
      <width>201</width>
      <height>16</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -307,9 +280,6 @@
        <pointsize>9</pointsize>
       </font>
      </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -344,9 +314,6 @@
      </property>
      <property name="toolTip">
       <string>更改音乐列表</string>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
      </property>
     </widget>
     <widget class="QLabel" name="labelTotalTime_3">
@@ -385,9 +352,6 @@
      <property name="cursor">
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
      <property name="text">
       <string/>
      </property>
@@ -403,9 +367,6 @@
      </property>
      <property name="cursor">
       <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
      </property>
      <property name="text">
       <string/>
