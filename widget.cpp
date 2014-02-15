@@ -409,16 +409,18 @@ void Widget::contentMenu(){
 
     QAction *menuMusiclist = new QAction("音乐列表", this);
     connect(menuMusiclist,&QAction::triggered,[this](){
+        slotHideList();
         ui->stackedWidget->setCurrentIndex(0);
     });
 
     QAction *menuDownload = new QAction("下载列表", this);
     connect(menuDownload,&QAction::triggered, [this](){
+        slotHideList();
         ui->stackedWidget->setCurrentIndex(1);
     });
 
-    trayMenu->addAction(menuHideList);
     trayMenu->addAction(menuWindowsMinimized);
+    trayMenu->addAction(menuHideList);
     trayMenu->addSeparator();
     trayMenu->addAction(menuMusiclist);
     trayMenu->addAction(menuDownload);
@@ -494,8 +496,8 @@ void Widget::setUi(){
 
     UI::tableWidgetView(ui->tableDownloadList);
     UI::tableWidgetView(ui->tablemusiclist);
-    ui->tablemusiclist->setColumnWidth(0,350);
-    ui->tablemusiclist->setColumnWidth(1,60);
+    ui->tablemusiclist->setColumnWidth(0,340);
+    ui->tablemusiclist->setColumnWidth(1,70);
     ui->tableDownloadList->setColumnWidth(0,310);
     ui->tableDownloadList->setColumnWidth(1,100);
     ui->tableDownloadList->setColumnWidth(2,60);
