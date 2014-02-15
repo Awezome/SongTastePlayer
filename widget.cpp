@@ -409,13 +409,11 @@ void Widget::contentMenu(){
 
     QAction *menuMusiclist = new QAction("音乐列表", this);
     connect(menuMusiclist,&QAction::triggered,[this](){
-        slotHideList();
         ui->stackedWidget->setCurrentIndex(0);
     });
 
     QAction *menuDownload = new QAction("下载列表", this);
     connect(menuDownload,&QAction::triggered, [this](){
-        slotHideList();
         ui->stackedWidget->setCurrentIndex(1);
     });
 
