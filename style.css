@@ -27,6 +27,8 @@ QLabel#labelAuthor{color: #999;font-weight:bold;}
 QLabel#labelTotalTime{color: #999;font-weight:bold;}
 QLabel#labelMessage{color: #0579C7;font-weight:bold;}
 QLabel#labelTotalTime_2{color: #666;font-weight:bold;}
+QLabel#labelTotalTime_3{color: #fff;font-weight:bold;}
+QLabel#labelVolumeSmall{background-image: url(:/image/volume_small.png);}
 
 QPushButton#buttonPre{border-image: url(:/image/button_pre.png);}
 QPushButton#buttonNext{border-image: url(:/image/button_next.png);}
@@ -37,3 +39,5 @@ QPushButton:hover#buttonRefresh{border-image: url(:/image/refresh_mouseover.png)
 
 QPushButton#pushButtonDownloadDir{border: none;color:#fff;background:transparent;font-weight:bold;}
 QPushButton#pushButtonOpenDir{border: none;color:#fff;background:transparent;text-align:left;font-weight:bold;}
+
+QTableWidget{selection-background-color:#9ED3FE;selection-color:#000}

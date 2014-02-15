@@ -41,7 +41,6 @@ void UI::tableWidgetView(QTableWidget *table){
     table->horizontalHeader()->setVisible(false); //隐藏行表头
     table->setShowGrid(false);
     table->setFocusPolicy(Qt::NoFocus);
-    table->setStyleSheet("selection-background-color:#9ED3FE;selection-color:#000");  //设置选中行颜色
     table->setContextMenuPolicy(Qt::CustomContextMenu);
     table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
