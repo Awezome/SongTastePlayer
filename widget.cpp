@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QDesktopWidget>
+#include <QMessageBox>
 #include "config.h"
 #include "download.h"
 #include "tool.h"
@@ -32,6 +33,11 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
 
     //titleShow
     titleShow();
+
+    //
+    if (!player.isAvailable()) {
+        QMessageBox::warning(this,"无法正常播放音乐","系统可能缺少Player必要的组件");
+    }
 
     //get config
     this->settings =new QSettings (QDir::homePath()+"/"+Config::config, QSettings ::IniFormat);
@@ -212,7 +218,7 @@ void Widget::slotPlayButton(){
     }
 }
 
-void Widget::slotPreButton(){    
+void Widget::slotPreButton(){
     if(this->musicListSize>0){
         buttonModel=true;
         emit this->signalPlayerMusic(palyNumber-1);
