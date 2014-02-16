@@ -17,7 +17,6 @@ public:
     QByteArray userImage(QString image);
 private:
     QString songString(QString sid);
-    Http *http;
 };
 
 #endif // STPAGE_H

@@ -41,7 +41,6 @@ private:
     int musicOrder;
 
     QMenu *trayMenu;
-    Http *http;
     QSystemTrayIcon* trayIcon;
 
     int downloadingRow;

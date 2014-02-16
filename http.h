@@ -8,18 +8,8 @@ class Http  : public QObject
 {
     Q_OBJECT
 public:
-    Http();
-    ~Http();
-    QString getResult();
-    void post(QString url,QString content);
-    void get(QString url,QString content);
-    QByteArray getResultByte();
-private slots:
-    void replyFinished(QNetworkReply* reply);
-private:
-    QNetworkAccessManager *net;
-    QString result;
-    QByteArray resultByte;
+    static QByteArray post(QString url,QString content);
+    static QByteArray get(QString url);
 };
 
 #endif // HTTP_H

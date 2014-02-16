@@ -9,18 +9,17 @@
 #include <QTextCodec>
 #include <QStringList>
 #include "config.h"
+#include "tool.h"
 
 STPage::STPage(){
-    this->http=new Http();
+
 }
 
 //music lists
 QList<STModel> STPage::musicLists(int type){
     QString u=type>0?"040"+QString::number(type):"";
-
-    QList<STModel> musiclist;
-    http->get(STIndex+u,"");
-    QString url=http->getResult();
+    QList<STModel> musiclist;    
+    QString url=Tool::byte2String(Http::get(STIndex+u));
     QRegExp reg("MSL\\((.*)\\);");
     int pos =0;
     reg.setMinimal(true);
@@ -44,15 +43,12 @@ QList<STModel> STPage::musicLists(int type){
 
 QString STPage::songUrl(QString sid){
     QString str= this->songString(sid);
-    http->post(STPost,"str="+str+"&sid="+sid);
-    qDebug()<<http->getResult();
-    return http->getResult();
+    return Tool::byte2String(Http::post(STPost,"str="+str+"&sid="+sid));
 }
 
 QString STPage::songString(QString sid){
     QString songstring="";
-    http->get(STMusicaddress+sid,"");
-    QString url=http->getResult();
+    QString url=Tool::byte2String(Http::get(STMusicaddress+sid));
     QRegExp reg("WrtSongLine\\((.*)\\);");
     int pos =0;
     reg.setMinimal(true);
@@ -73,8 +69,7 @@ QString STPage::songString(QString sid){
 }
 
 QByteArray STPage::userImage(QString image){
-    http->get(STImage+image,"");
-    return http->getResultByte();
+    return Http::get(STImage+image);
 }
 
 QStringList STPage::typeLists(){
