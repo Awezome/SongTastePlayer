@@ -13,10 +13,7 @@
 #include "tool.h"
 
 Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
-
     ui->setupUi(this);
-    this->songteste =new STPage();
-
     this->setWindowOpacity(1);
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
@@ -124,7 +121,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->showTrayIcon();
 
     //list type
-    ui->comboMusicType->insertItems(0,songteste->typeLists());
+    ui->comboMusicType->insertItems(0,STPage::typeLists());
     ui->comboMusicType->setCurrentIndex(-1);
     connect(ui->comboMusicType,static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),[this](int i){
         settings->setValue("Player/musicType",i);
@@ -149,7 +146,7 @@ void Widget::initional(){
 void Widget::slotLoadList(int type){
     ui->labelMessage->setText(ui->comboMusicType->currentText()+"列表加载中...");
 
-    this->musicLists=this->songteste->musicLists(type);
+    this->musicLists=STPage::musicLists(type);
     this->musicListSize=this->musicLists.size();
     if(musicListSize>0){
         ui->tablemusiclist->setRowCount(musicListSize);
@@ -172,7 +169,7 @@ void Widget::slotPlayMusic(int id){
     }
 
     STModel song=this->musicLists.at(id);
-    QString songurl=this->songteste->songUrl(song.id);
+    QString songurl=STPage::songUrl(song.id);
 
     player.setMedia(QUrl(songurl));
     player.play();
@@ -190,7 +187,7 @@ void Widget::slotPlayMusic(int id){
     UI::tableWidgetRowColor(ui->tablemusiclist,id,QColor("#fff"),QColor("#0579C7"));
 
     //设置头像
-    pixmap.loadFromData(songteste->userImage(song.image));
+    pixmap.loadFromData(STPage::userImage(song.image));
     ui->labelImage->setPixmap(pixmap);
 }
 
@@ -326,7 +323,7 @@ void Widget::downloadManager(){
         if(ui->tableDownloadList->item(tsize,3)->text()=="wait"){
             downloadingRow=tsize;
 
-            QString url=songteste->songUrl(ui->tableDownloadList->item(tsize,2)->text());
+            QString url=STPage::songUrl(ui->tableDownloadList->item(tsize,2)->text());
             QString filename=(this->downloadDir)+"/"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
             qDebug()<<"downloading : "<<filename;
             download->run(url,filename);

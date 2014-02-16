@@ -26,7 +26,6 @@ private:
     Ui::Widget *ui;
     QList<STModel> musicLists;
     int musicListSize;
-    STPage *songteste;
 
     QMediaPlayer player;
     QSettings *settings;

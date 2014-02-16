@@ -1,18 +1,6 @@
 #include "stpage.h"
-#include <QNetworkAccessManager>
-#include <QEventLoop>
-#include <QUrl>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QtDebug>
 #include <QRegExp>
-#include <QTextCodec>
-#include <QStringList>
 #include "config.h"
-
-STPage::STPage(){
-
-}
 
 //music lists
 QList<STModel> STPage::musicLists(int type){
@@ -41,7 +29,7 @@ QList<STModel> STPage::musicLists(int type){
 }
 
 QString STPage::songUrl(QString sid){
-    QString str= this->songString(sid);
+    QString str=songString(sid);
     return Http::postString(STPost,"str="+str+"&sid="+sid);
 }
 

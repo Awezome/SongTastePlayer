@@ -1,22 +1,15 @@
 #ifndef STPAGE_H
 #define STPAGE_H
-#include <QString>
-#include <QObject>
-#include <QNetworkReply>
-#include <QList>
 #include "stmodel.h"
 #include "http.h"
-class STPage  : public QObject
-{
-
+class STPage{
 public:
-    STPage();
-    QList<STModel> musicLists(int type);
-    QStringList typeLists();
-    QString songUrl(QString sid);
-    QByteArray userImage(QString image);
+    static QList<STModel> musicLists(int type);
+    static QStringList typeLists();
+    static QString songUrl(QString sid);
+    static QByteArray userImage(QString image);
 private:
-    QString songString(QString sid);
+    static QString songString(QString sid);
 };
 
 #endif // STPAGE_H
