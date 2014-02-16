@@ -16,10 +16,9 @@ SOURCES += main.cpp\
         widget.cpp \
     stpage.cpp \
     http.cpp \
-    config.cpp \
-    download.cpp \
     tool.cpp \
-    ui.cpp
+    ui.cpp \
+    download.cpp
 
 HEADERS  += widget.h \
     stpage.h \

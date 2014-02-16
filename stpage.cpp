@@ -19,7 +19,7 @@ QList<STModel> STPage::musicLists(int type){
     QString u=type>0?"040"+QString::number(type):"";
 
     QList<STModel> musiclist;
-    http->get(Config::stindex+u,"");
+    http->get(STIndex+u,"");
     QString url=http->getResult();
     QRegExp reg("MSL\\((.*)\\);");
     int pos =0;
@@ -44,14 +44,14 @@ QList<STModel> STPage::musicLists(int type){
 
 QString STPage::songUrl(QString sid){
     QString str= this->songString(sid);
-    http->post(Config::stpost,"str="+str+"&sid="+sid);
+    http->post(STPost,"str="+str+"&sid="+sid);
     qDebug()<<http->getResult();
     return http->getResult();
 }
 
 QString STPage::songString(QString sid){
     QString songstring="";
-    http->get(Config::stmusicaddress+sid,"");
+    http->get(STMusicaddress+sid,"");
     QString url=http->getResult();
     QRegExp reg("WrtSongLine\\((.*)\\);");
     int pos =0;
@@ -73,10 +73,10 @@ QString STPage::songString(QString sid){
 }
 
 QByteArray STPage::userImage(QString image){
-    http->get(Config::stimage+image,"");
+    http->get(STImage+image,"");
     return http->getResultByte();
 }
 
 QStringList STPage::typeLists(){
-    return Config::sttype;
+    return STType;
 }

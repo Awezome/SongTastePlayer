@@ -3,20 +3,16 @@
 #include <QString>
 #include <QStringList>
 
-class Config{
-  public:
-    static QString title;
-    static QString homepage;
-    static QString changelog;
-    static QString version;
-    static QString config;
+const QString ZTitle="SongTaste Player";
+const QString ZHomepage="http://songtasteplayer.lofter.com/";
+const QString ZChangelog="http://songtasteplayer.lofter.com/post/2fc8fe_cfb6f6";
+const QString ZVersion="1.7.20140214";
+const QString ZConfig="SongTastePlayer.ini";
 
-    static QString stindex;
-    static QString stpost;
-    static QString stmusicaddress;
-    static QString stimage;
+const QString STIndex="http://www.songtaste.com/music/rec/lan";
+const QString STMusicaddress="http://www.songtaste.com/playmusic.php?song_id=";
+const QString STPost="http://www.songtaste.com/time.php";
+const QString STImage="http://image.songtaste.com/images/usericon/s/";
 
-    static QStringList sttype;
-};
-
+const QStringList STType=QStringList()<<"所有"<<"国语"<<"粤语"<<"英文"<<"日韩"<<"其它";
 #endif

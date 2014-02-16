@@ -20,14 +20,14 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->setWindowOpacity(1);
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
-    this->setWindowTitle(Config::title);
+    this->setWindowTitle(ZTitle);
     this->setFixedSize(420,360);
     this->setFocus();
     this->setMouseTracking(true);
     ui->labelBg->setMouseTracking(true);
     ui->musicSlider->setMouseTracking(true);
     ui->sliderVolume->setMouseTracking(true);
-    ui->labelVersion->setText(Config::title+" "+Config::version);
+    ui->labelVersion->setText(ZTitle+" "+ZVersion);
 
     //ui
     setUi();
@@ -41,7 +41,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     }
 
     //get config
-    this->settings =new QSettings (QDir::homePath()+"/"+Config::config, QSettings ::IniFormat);
+    this->settings =new QSettings (QDir::homePath()+"/"+ZConfig, QSettings ::IniFormat);
     if(!settings->contains("Player/downloadDir")){
         settings->setValue("Player/downloadDir",QDir::homePath());
         settings->setValue("Player/musicType",0);
@@ -403,7 +403,7 @@ void Widget::contentMenu(){
     QAction *Tray_homepage = new QAction("检查更新", this);
     //Tray_flux_day->setIcon(QIcon(":/image/image/checkmark.png"));
     connect(Tray_homepage,&QAction::triggered, [this](){
-        QDesktopServices::openUrl(QUrl(Config::homepage));
+        QDesktopServices::openUrl(QUrl(ZHomepage));
     });
 
     QAction *menuWindowsMinimized = new QAction("隐藏主界面", this);
@@ -454,8 +454,8 @@ void Widget::showTrayIcon(){
     trayIcon->setIcon(icon);
     trayIcon->show();
     trayIcon->setContextMenu(trayMenu);//将创建菜单作为系统托盘菜单
-    trayIcon->setToolTip(Config::title);
-    trayIcon->showMessage(Config::title,"我在这~~", QSystemTrayIcon::Information, 5000);
+    trayIcon->setToolTip(ZTitle);
+    trayIcon->showMessage(ZTitle,"我在这~~", QSystemTrayIcon::Information, 5000);
     connect(trayIcon,&QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason){
         if (reason == QSystemTrayIcon::Trigger&&this->isHidden()) {
             this->showNormal();
