@@ -15,10 +15,10 @@ QScrollBar::add-page{background:#fff;}
 
 QSlider::groove:horizontal{height: 2px;background: #eee;}
 QSlider::handle:horizontal {background: #ddd;width: 8px;margin: -3px 0;border-radius: 4px;}
-QSlider::add-page:horizontal{background: #333;}
+QSlider::add-page:horizontal{background: #000;}
 QSlider::sub-page:horizontal{background: #0579C7;}
 
-QLabel#labelBg{background-color: #000;border-radius:4px;}
+QLabel#labelBg{background-color:rgb(0,0,0,210);border-radius:4px;}
 QLabel#labelImage{background-image: url(:/image/logo.png);}
 QLabel#labelName{color: #fff;font-weight:bold;}
 QLabel#labelCurrentTime{color: #fff;font-weight:bold;}
