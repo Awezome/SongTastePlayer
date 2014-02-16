@@ -6,7 +6,7 @@
 const QString ZTitle="SongTaste Player";
 const QString ZHomepage="http://songtasteplayer.lofter.com/";
 const QString ZChangelog="http://songtasteplayer.lofter.com/post/2fc8fe_cfb6f6";
-const QString ZVersion="1.7.20140214";
+const QString ZVersion="1.8.20140216";
 const QString ZConfig="SongTastePlayer.ini";
 
 const QString STIndex="http://www.songtaste.com/music/rec/lan";
