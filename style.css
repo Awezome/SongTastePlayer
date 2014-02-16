@@ -1,6 +1,6 @@
 *{font-size:12px;}
 
-QComboBox{font-weight:bold;color: #fff;background-color:#000;border:none;padding:0 5px;}
+QComboBox{font-weight:bold;color: #fff;background:transparent;border:none;padding:0 5px;}
 QComboBox:on{selection-background-color: #0579C7;}
 QComboBox:!on{selection-background-color:#0579C7; color:#fff;}
 QComboBox::drop-down{border:none;width:0;}

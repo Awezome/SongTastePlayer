@@ -70,6 +70,8 @@ private:
 signals:
     void signalPlayerMusic(int);
     void signalLoadList(int);
+private slots:
+    void initional();
 protected:
     void contextMenuEvent(QContextMenuEvent *);
     void mousePressEvent(QMouseEvent *);

@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QDesktopWidget>
 #include <QMessageBox>
+#include <QTimer>
 #include "config.h"
 #include "download.h"
 #include "tool.h"
@@ -129,14 +130,20 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
         settings->setValue("Player/musicType",i);
         slotLoadList(i);
     });//不明白为什么QComboBox要类型转换，其它的都不用，static_cast<void (QComboBox::*)(int)>
-    ui->comboMusicType->setCurrentIndex(settings->value("Player/musicType").toInt());
 
     //download
     downloadingRow=-1;//默认-1当大于-1即有文件下载
+
+    //load musiclists
+    QTimer::singleShot(0,this, SLOT(initional()));
 }
 
 Widget::~Widget(){
     delete ui;
+}
+
+void Widget::initional(){
+    ui->comboMusicType->setCurrentIndex(settings->value("Player/musicType").toInt());
 }
 
 void Widget::slotLoadList(int type){
