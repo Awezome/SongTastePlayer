@@ -5,7 +5,7 @@ QComboBox:on{selection-background-color: #0579C7;}
 QComboBox:!on{selection-background-color:#0579C7; color:#fff;}
 QComboBox::drop-down{border:none;width:0;}
 QComboBox::down-arrow{border-style:none;}
-QListView{background: #000;color:#fff}
+QListView{background: #000;color:#fff;border:none}
 
 QScrollBar{background:#999;width: 10px;}
 QScrollBar::handle{background:#999;border:0;}
@@ -35,7 +35,7 @@ QPushButton#buttonNext{border-image: url(:/image/button_next.png);}
 QPushButton#buttonPlay{border-image: url(:/image/button_play.png);}
 QPushButton#buttonPlayMode{border-image: url(:/image/playmode_sequence.png);}
 QPushButton#buttonRefresh{border-image: url(:/image/refresh.png);}
-QPushButton:hover#buttonRefresh{border-image: url(:/image/refresh_mouseover.png);}
+QPushButton#buttonRefresh:hover{border-image: url(:/image/refresh_mouseover.png);}
 
 QPushButton#pushButtonDownloadDir{border: none;color:#fff;background:transparent;font-weight:bold;}
 QPushButton#pushButtonOpenDir{border: none;color:#fff;background:transparent;text-align:left;font-weight:bold;}
