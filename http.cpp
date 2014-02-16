@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QEventLoop>
 #include <QTimer>
+#include <QTextCodec>
 
 QByteArray Http::post(QString url, QString content){
     QNetworkAccessManager *net=new QNetworkAccessManager();
@@ -24,7 +25,6 @@ QByteArray Http::post(QString url, QString content){
     return result;
 }
 
-
 QByteArray Http::get(QString url){
     QNetworkAccessManager *net=new QNetworkAccessManager();
     QNetworkRequest req;
@@ -39,4 +39,17 @@ QByteArray Http::get(QString url){
     QByteArray result=reply->readAll();
     reply->deleteLater();
     return result;
+}
+
+QString Http::getString(QString url){
+    return byte2String(get(url));
+}
+
+QString Http::postString(QString url, QString content){
+    return byte2String(post(url,content));
+}
+
+QString Http::byte2String(QByteArray byte){
+    QTextCodec *codec = QTextCodec::codecForName("gbk");
+    return  codec->toUnicode(byte).toUtf8();
 }

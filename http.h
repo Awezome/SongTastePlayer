@@ -10,6 +10,9 @@ class Http  : public QObject
 public:
     static QByteArray post(QString url,QString content);
     static QByteArray get(QString url);
+    static QString getString(QString url);
+    static QString postString(QString url, QString content);
+    static QString byte2String(QByteArray byte);
 };
 
 #endif // HTTP_H

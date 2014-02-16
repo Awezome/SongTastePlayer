@@ -9,7 +9,6 @@
 #include <QTextCodec>
 #include <QStringList>
 #include "config.h"
-#include "tool.h"
 
 STPage::STPage(){
 
@@ -19,7 +18,7 @@ STPage::STPage(){
 QList<STModel> STPage::musicLists(int type){
     QString u=type>0?"040"+QString::number(type):"";
     QList<STModel> musiclist;    
-    QString url=Tool::byte2String(Http::get(STIndex+u));
+    QString url=Http::getString(STIndex+u);
     QRegExp reg("MSL\\((.*)\\);");
     int pos =0;
     reg.setMinimal(true);
@@ -43,12 +42,12 @@ QList<STModel> STPage::musicLists(int type){
 
 QString STPage::songUrl(QString sid){
     QString str= this->songString(sid);
-    return Tool::byte2String(Http::post(STPost,"str="+str+"&sid="+sid));
+    return Http::postString(STPost,"str="+str+"&sid="+sid);
 }
 
 QString STPage::songString(QString sid){
     QString songstring="";
-    QString url=Tool::byte2String(Http::get(STMusicaddress+sid));
+    QString url=Http::getString(STMusicaddress+sid);
     QRegExp reg("WrtSongLine\\((.*)\\);");
     int pos =0;
     reg.setMinimal(true);
