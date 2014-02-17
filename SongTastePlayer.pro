@@ -1,17 +1,8 @@
-#-------------------------------------------------
-#
 # Project created by QtCreator 2014-01-21T11:53:24
-#
-#-------------------------------------------------
 
-QT       += core gui network multimedia
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+QT       += core widgets gui network multimedia
 TARGET = SongTastePlayer
 TEMPLATE = app
-
-
 SOURCES += main.cpp\
         widget.cpp \
     stpage.cpp \
@@ -19,7 +10,6 @@ SOURCES += main.cpp\
     tool.cpp \
     ui.cpp \
     download.cpp
-
 HEADERS  += widget.h \
     stpage.h \
     stmodel.h \
@@ -28,12 +18,7 @@ HEADERS  += widget.h \
     download.h \
     tool.h \
     ui.h
-
 FORMS    += widget.ui
-
-RC_FILE = icon.rc
-
-RESOURCES += \
-    image.qrc
-
+RC_FILE = pro.rc
+RESOURCES += image.qrc
 CONFIG += c++11
