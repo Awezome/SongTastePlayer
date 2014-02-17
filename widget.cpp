@@ -8,6 +8,7 @@
 #include <QDesktopWidget>
 #include <QMessageBox>
 #include <QTimer>
+#include <QShortcut>
 #include "config.h"
 #include "download.h"
 #include "tool.h"
@@ -33,6 +34,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget),
 
     //titleShow
     titleShow();
+    createKeys();
 
     //
     if (!player.isAvailable()) {
@@ -475,33 +477,25 @@ void Widget::showTrayIcon(){
     });
 }
 
-void Widget::keyPressEvent(QKeyEvent *k){
-    if (k->modifiers() == Qt::ControlModifier){
-        switch(k->key()){
-            case Qt::Key_Left: //上一首
-                slotPreButton();
-                break;
-            case Qt::Key_Right://下一首
-                slotNextButton();
-                break;
-            case Qt::Key_Up://音量大
-                ui->sliderVolume->setValue(ui->sliderVolume->value()+5);
-                break;
-            case Qt::Key_Down://音量小
-                ui->sliderVolume->setValue(ui->sliderVolume->value()-5);
-                break;
-            default:
-                break;
-        }
-    }else{
-        switch(k->key()){
-            case Qt::Key_Space:  //播放暂停
-                slotPlayButton();
-                break;
-            default:
-                break;
-        }
-    }
+void Widget::createKeys(){
+    QShortcut *increaseShortcut = new QShortcut(Qt::Key_Up, this);
+    connect(increaseShortcut,&QShortcut::activated, [this](){
+        ui->sliderVolume->triggerAction(QSlider::SliderPageStepAdd);
+    });
+
+    QShortcut *decreaseShortcut = new QShortcut(Qt::Key_Down, this);
+    connect(decreaseShortcut,&QShortcut::activated, [this](){
+        ui->sliderVolume->triggerAction(QSlider::SliderPageStepSub);
+    });
+
+    QShortcut *toggleShortcut = new QShortcut(Qt::Key_Space, this);
+    connect(toggleShortcut, &QShortcut::activated,this,&Widget::slotPlayButton);
+
+    QShortcut *nextShortcut = new QShortcut(Qt::CTRL+Qt::Key_Right, this);
+    connect(nextShortcut, &QShortcut::activated,this,&Widget::slotNextButton);
+
+    QShortcut *preShortcut = new QShortcut(Qt::CTRL+Qt::Key_Left, this);
+    connect(preShortcut, &QShortcut::activated,this,&Widget::slotPreButton);
 }
 
 void Widget::setUi(){
@@ -555,7 +549,6 @@ void Widget::createTaskbar(){
     taskbarButton->setWindow(windowHandle());
 
     taskbarProgress = taskbarButton->progress();
-    taskbarProgress->setValue(123);
     connect(ui->musicSlider,&QSlider::valueChanged, taskbarProgress,&QWinTaskbarProgress::setValue);
     connect(ui->musicSlider,&QSlider::rangeChanged, taskbarProgress,&QWinTaskbarProgress::setRange);
 

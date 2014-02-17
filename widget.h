@@ -52,6 +52,7 @@ private:
     void contentMenu();
     void tableContentMenu(const QPoint &pos);
     void showTrayIcon();
+    void createKeys();
 
     void titleShow();
     void titleHide();
@@ -81,7 +82,6 @@ protected:
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *);
-    void keyPressEvent(QKeyEvent *k );
     void mouseDoubleClickEvent(QMouseEvent *event);
 };
 
