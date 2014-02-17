@@ -55,7 +55,6 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget),
     //player
     palyNumber=0;
     musicListSize=0;
-    buttonModel=false;//是否为点击了下一个或上一个，做为标记，会影响正常下的顺序播放。暂时的。
     scene=new QGraphicsScene();
     dragPosition=QPoint(-1, -1);//防止鼠标在控件上拖动窗口失效
 
@@ -174,14 +173,10 @@ void Widget::slotPlayMusic(int id){
         return ;
     }
 
-    STModel song=this->musicLists.at(id);
+    STModel song=this->musicLists.at(id);qDebug()<<2;
     QString songurl=STPage::songUrl(song.id);
-
     player.setMedia(QUrl(songurl));
     player.play();
-
-    //
-    buttonModel=false;
 
     //设置歌名
     ui->labelName->setText(song.name);
@@ -230,14 +225,12 @@ void Widget::slotPlayButton(){
 
 void Widget::slotPreButton(){
     if(this->musicListSize>0){
-        buttonModel=true;
         emit this->signalPlayerMusic(palyNumber-1);
     }
 }
 
 void Widget::slotNextButton(){    
     if(this->musicListSize>0){
-        buttonModel=true;
         emit this->signalPlayerMusic(palyNumber+1);
     }
 }

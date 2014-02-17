@@ -1,6 +1,5 @@
 #include "stpage.h"
 #include <QRegExp>
-#include <QDebug>
 #include "config.h"
 
 //music lists
@@ -8,6 +7,9 @@ QList<STModel> STPage::musicLists(int type){
     QString u=type>0?"040"+QString::number(type):"";
     QList<STModel> musiclist;    
     QString url=Http::getString(STIndex+u);
+    if(url==""){
+        return musiclist;
+    }
     QRegExp reg("MSL\\((.*)\\);");
     int pos =0;
     reg.setMinimal(true);
@@ -27,7 +29,8 @@ QString STPage::songUrl(QString sid){
 }
 
 QString STPage::songString(QString sid){
-    return songList(sid).at(6);
+    QStringList list=songList(sid);
+    return list.empty()?"error":list.at(6);
 }
 
 STModel STPage::song(QString sid){
@@ -36,10 +39,12 @@ STModel STPage::song(QString sid){
 
 STModel STPage::list2song(QStringList list){
     STModel song;
-    song.id=list.at(1);
-    song.name=list.at(0);
-    song.author=list.at(2);
-    song.image=list.at(4);
+    if(!list.empty()){
+        song.id=list.at(1);
+        song.name=list.at(0);
+        song.author=list.at(2);
+        song.image=list.at(4);
+    }
     return song;
 }
 
@@ -47,6 +52,9 @@ STModel STPage::list2song(QStringList list){
 QStringList STPage::songList(QString sid){
     QStringList list;
     QString url=Http::getString(STMusicaddress+sid);
+    if(url==""){
+        return list;
+    }
     QRegExp reg("WrtSongLine\\((.*)\\);");
     int pos =0;
     reg.setMinimal(true);
