@@ -324,7 +324,7 @@ void Widget::downloadManager(){
             downloadingRow=tsize;
 
             QString url=STPage::songUrl(ui->tableDownloadList->item(tsize,2)->text());
-            QString filename=(this->downloadDir)+"/"+ui->tableDownloadList->item(tsize,0)->text()+".mp3";
+            QString filename=(this->downloadDir)+"/"+ui->tableDownloadList->item(tsize,0)->text().trimmed()+".mp3";
             qDebug()<<"downloading : "<<filename;
             download->run(url,filename);
             ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("下载完成"));
