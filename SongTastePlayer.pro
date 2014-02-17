@@ -1,6 +1,9 @@
 # Project created by QtCreator 2014-01-21T11:53:24
 
 QT       += core widgets gui network multimedia
+win32{
+    QT+=winextras
+}
 TARGET = SongTastePlayer
 TEMPLATE = app
 SOURCES += main.cpp\

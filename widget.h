@@ -8,6 +8,7 @@
 #include <QSystemTrayIcon>
 #include <QTableWidget>
 #include <QSettings>
+#include <QtWinExtras>
 #include "stpage.h"
 #include "ui.h"
 namespace Ui {
@@ -41,7 +42,12 @@ private:
 
     QMenu *trayMenu;
     QSystemTrayIcon* trayIcon;
-
+#ifdef Q_OS_WIN
+    QWinTaskbarButton* taskbarButton;
+    QWinTaskbarProgress* taskbarProgress;
+    void createTaskbar();
+    void updateTaskbar();
+#endif
     int downloadingRow;
     void contentMenu();
     void tableContentMenu(const QPoint &pos);

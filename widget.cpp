@@ -12,7 +12,9 @@
 #include "download.h"
 #include "tool.h"
 
-Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
+Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget),
+    taskbarButton(0), taskbarProgress(0)
+{
     ui->setupUi(this);
     this->setWindowOpacity(1);
     this->setWindowFlags(Qt::FramelessWindowHint);
@@ -119,7 +121,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     //contentmenu
     this->contentMenu();
     this->showTrayIcon();
-
+#ifdef Q_OS_WIN
+    createTaskbar();
+#endif
     //list type
     ui->comboMusicType->insertItems(0,STPage::typeLists());
     ui->comboMusicType->setCurrentIndex(-1);
@@ -518,3 +522,43 @@ void Widget::setUi(){
     ui->tableDownloadList->setColumnHidden(2,true);
     ui->tableDownloadList->setColumnHidden(3,true);
 }
+
+//only for windows taskbar
+#ifdef Q_OS_WIN
+void Widget::updateTaskbar(){
+    switch (player.state()) {
+    case QMediaPlayer::PlayingState:
+        taskbarButton->setOverlayIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+        taskbarProgress->show();
+        taskbarProgress->resume();
+        break;
+    case QMediaPlayer::PausedState:
+        taskbarButton->setOverlayIcon(style()->standardIcon(QStyle::SP_MediaPause));
+        taskbarProgress->show();
+        taskbarProgress->pause();
+        break;
+    case QMediaPlayer::StoppedState:
+        taskbarButton->setOverlayIcon(style()->standardIcon(QStyle::SP_MediaStop));
+        taskbarProgress->hide();
+        break;
+    }
+}
+
+void Widget::createTaskbar(){
+    if (QtWin::isCompositionEnabled()) {
+        QtWin::enableBlurBehindWindow(trayMenu);
+    } else {
+        QtWin::disableBlurBehindWindow(trayMenu);
+    }
+
+    taskbarButton = new QWinTaskbarButton(this);
+    taskbarButton->setWindow(windowHandle());
+
+    taskbarProgress = taskbarButton->progress();
+    taskbarProgress->setValue(123);
+    connect(ui->musicSlider,&QSlider::valueChanged, taskbarProgress,&QWinTaskbarProgress::setValue);
+    connect(ui->musicSlider,&QSlider::rangeChanged, taskbarProgress,&QWinTaskbarProgress::setRange);
+
+    connect(&player,&QMediaPlayer::stateChanged, this,&Widget::updateTaskbar);
+}
+#endif
