@@ -62,3 +62,7 @@ QByteArray STPage::userImage(QString image){
 QStringList STPage::typeLists(){
     return STType;
 }
+
+QString STPage::songWeb(QString id){
+    return STWeb+id+"/";
+}

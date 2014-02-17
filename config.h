@@ -13,6 +13,6 @@ const QString STIndex="http://www.songtaste.com/music/rec/lan";
 const QString STMusicaddress="http://www.songtaste.com/playmusic.php?song_id=";
 const QString STPost="http://www.songtaste.com/time.php";
 const QString STImage="http://image.songtaste.com/images/usericon/s/";
-
+const QString STWeb="http://www.songtaste.com/song/";
 const QStringList STType=QStringList()<<"所有"<<"国语"<<"粤语"<<"英文"<<"日韩"<<"其它";
 #endif

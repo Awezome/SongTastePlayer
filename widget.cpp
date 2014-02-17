@@ -432,13 +432,24 @@ void Widget::contentMenu(){
 }
 
 void Widget::tableContentMenu(const QPoint &pos){
-    QAction *downMusic = new QAction("下载", this);
+    QAction *downMusic = new QAction("下载歌曲", this);
+    QAction *playMusic = new QAction("播放歌曲", this);
+    QAction *openUrl = new QAction("打开网页", this);
+
     QMenu menu(this);
+    menu.addAction(playMusic);
     menu.addAction(downMusic);
+    menu.addAction(openUrl);
+
+    int row=ui->tablemusiclist->itemAt(pos)->row();
     QAction *m=menu.exec(ui->tablemusiclist ->viewport()->mapToGlobal(pos));
     if(m==downMusic){
-        downloadMusic(ui->tablemusiclist->itemAt(pos)->row());
-    }
+        downloadMusic(row);
+    }else if(m==playMusic){
+        emit this->signalPlayerMusic(row);
+    }else if(m==openUrl){
+        QDesktopServices::openUrl(STPage::songWeb(this->musicLists.at(row).id));
+    }else{}
 }
 
 void Widget::contextMenuEvent(QContextMenuEvent *){
