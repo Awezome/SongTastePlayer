@@ -12,6 +12,15 @@
         <file>image/playmode_sequence.png</file>
         <file>image/refresh.png</file>
         <file>image/refresh_mouseover.png</file>
+        <file>icon/download.png</file>
+        <file>icon/handset.png</file>
+        <file>icon/link.png</file>
+        <file>icon/copy_paste-2.png</file>
+        <file>icon/expand-2.png</file>
+        <file>icon/iCloud-down.png</file>
+        <file>icon/music-note.png</file>
+        <file>icon/plane-2.png</file>
+        <file>icon/power.png</file>
     </qresource>
     <qresource prefix="/qss">
         <file>style.css</file>

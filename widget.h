@@ -32,7 +32,6 @@ private:
     QSettings *settings;
 
     int palyNumber;
-    bool buttonModel;
     QPixmap pixmap;
     QGraphicsScene *scene;
 

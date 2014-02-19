@@ -390,32 +390,36 @@ void Widget::mouseDoubleClickEvent(QMouseEvent *event){
 void Widget::contentMenu(){
     trayMenu = new QMenu(this);//创建菜单
     QAction *Tray_quit = new QAction("退出", this);
-    //Tray_quit->setIcon(QIcon(":/image/image/delete.png"));
+    Tray_quit->setIcon(QIcon(":/icon/power.png"));
     connect(Tray_quit,&QAction::triggered, [this](){
         this->close();
         QApplication::quit();
     });
 
     QAction *Tray_homepage = new QAction("检查更新", this);
-    //Tray_flux_day->setIcon(QIcon(":/image/image/checkmark.png"));
+    Tray_homepage->setIcon(QIcon(":/icon/plane-2.png"));
     connect(Tray_homepage,&QAction::triggered, [this](){
         QDesktopServices::openUrl(QUrl(ZHomepage));
     });
 
     QAction *menuWindowsMinimized = new QAction("隐藏主界面", this);
+    menuWindowsMinimized->setIcon(QIcon(":/icon/expand-2.png"));
     connect(menuWindowsMinimized,&QAction::triggered, [this](){
         this->hide();
     });
 
     QAction *menuHideList = new QAction("隐藏/显示列表", this);
+    menuHideList->setIcon(QIcon(":/icon/copy_paste-2.png"));
     connect(menuHideList,&QAction::triggered, this,&Widget::slotHideList);
 
     QAction *menuMusiclist = new QAction("音乐列表", this);
+    menuMusiclist->setIcon(QIcon(":/icon/music-note.png"));
     connect(menuMusiclist,&QAction::triggered,[this](){
         ui->stackedWidget->setCurrentIndex(0);
     });
 
     QAction *menuDownload = new QAction("下载列表", this);
+    menuDownload->setIcon(QIcon(":/icon/download.png"));
     connect(menuDownload,&QAction::triggered, [this](){
         ui->stackedWidget->setCurrentIndex(1);
     });
@@ -432,8 +436,11 @@ void Widget::contentMenu(){
 
 void Widget::tableContentMenu(const QPoint &pos){
     QAction *downMusic = new QAction("下载歌曲", this);
+    downMusic->setIcon(QIcon(":/icon/iCloud-down.png"));
     QAction *playMusic = new QAction("播放歌曲", this);
+    playMusic->setIcon(QIcon(":/icon/handset.png"));
     QAction *openUrl = new QAction("打开网页", this);
+    openUrl->setIcon(QIcon(":/icon/link.png"));
 
     QMenu menu(this);
     menu.addAction(playMusic);
