@@ -45,3 +45,7 @@ void UI::tableWidgetView(QTableWidget *table){
     table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
+
+QIcon UI::icon(QString name){
+    return QIcon(":/icon/"+name+".png");
+}

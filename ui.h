@@ -5,6 +5,7 @@
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QScrollBar>
+#include <QIcon>
 class UI{
 public:
     static QString font();
@@ -14,6 +15,8 @@ public:
 
     static void tableWidgetRowColor(QTableWidget *table,int row, QColor textcolor,QColor backcolor);
     static void tableWidgetView(QTableWidget *table);
+
+    static QIcon icon(QString name);
 };
 
 #endif // UI_H
