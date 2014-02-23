@@ -8,8 +8,8 @@ QComboBox::down-arrow{border-style:none;}
 QListView{background: #000;color:#fff;border:none}
 
 QScrollBar{background:#fff;width: 10px;}
-QScrollBar::handle{background:#999;border:0;border-radius: 5px;}
-QScrollBar::handle:hover{background:#0579C7;}
+QScrollBar::handle{background:#ccc;border:1px solid #bbb;border-radius: 5px;}
+QScrollBar::handle:hover{background:#0579C7;border:none}
 QScrollBar::sub-page{background:#fff;}
 QScrollBar::add-page{background:#fff;}
 
