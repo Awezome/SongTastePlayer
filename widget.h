@@ -1,8 +1,5 @@
 #ifndef WIDGET_H
 #define WIDGET_H
-#ifdef Q_OS_WIN
-#include <QtWinExtras>
-#endif
 #include <QWidget>
 #include <QMediaPlayer>
 #include <QTime>
@@ -13,6 +10,9 @@
 #include <QSettings>
 #include "stpage.h"
 #include "ui.h"
+#ifdef Q_OS_WIN
+#include <QtWinExtras>
+#endif
 namespace Ui {
 class Widget;
 }
