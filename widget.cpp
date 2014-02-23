@@ -13,9 +13,7 @@
 #include "download.h"
 #include "tool.h"
 
-Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget),
-    taskbarButton(0), taskbarProgress(0)
-{
+Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     ui->setupUi(this);
     this->setWindowOpacity(1);
     this->setWindowFlags(Qt::FramelessWindowHint);
