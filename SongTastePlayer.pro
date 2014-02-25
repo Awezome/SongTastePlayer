@@ -1,6 +1,6 @@
 # Project created by QtCreator 2014-01-21T11:53:24
 
-QT       += core widgets gui network multimedia
+QT       += core widgets network multimedia
 win32{
     QT+=winextras
 }
@@ -21,7 +21,6 @@ HEADERS  += widget.h \
     util/http.h \
     util/tool.h \
     config/config.h
-FORMS    += widget.ui
 RC_FILE = config/pro.rc
 RESOURCES += image.qrc
 CONFIG += c++11

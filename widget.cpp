@@ -1,5 +1,4 @@
 #include "widget.h"
-#include "ui_widget.h"
 #include <QDebug>
 #include <QMouseEvent>
 #include <QDesktopServices>
@@ -9,12 +8,13 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <QShortcut>
+#include <QApplication>
 #include "config/config.h"
 #include "util/download.h"
 #include "util/tool.h"
+#include "ui.h"
 
-Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
-    ui->setupUi(this);
+Widget::Widget(QWidget *parent) :QWidget(parent){
     this->setWindowOpacity(1);
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
@@ -22,13 +22,13 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     this->setFixedSize(420,360);
     this->setFocus();
     this->setMouseTracking(true);
-    ui->labelBg->setMouseTracking(true);
-    ui->musicSlider->setMouseTracking(true);
-    ui->sliderVolume->setMouseTracking(true);
-    ui->labelVersion->setText(ZTitle+" "+ZVersion);
 
     //ui
     setUi();
+    this->labelBg->setMouseTracking(true);
+    this->musicSlider->setMouseTracking(true);
+    this->sliderVolume->setMouseTracking(true);
+    this->labelVersion->setText(ZTitle+" "+ZVersion);
 
     //titleShow
     titleShow();
@@ -48,7 +48,7 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     }
     downloadDir=settings->value("Player/downloadDir").toString();
     musicOrder=0;
-    ui->buttonPlayMode->setToolTip("顺序播放");
+    this->buttonPlayMode->setToolTip("顺序播放");
 
     //player
     palyNumber=0;
@@ -57,8 +57,8 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     dragPosition=QPoint(-1, -1);//防止鼠标在控件上拖动窗口失效
 
     //table
-    connect(ui->tablemusiclist,&QTableWidget::customContextMenuRequested, this, &Widget::tableContentMenu);
-    connect(ui->tablemusiclist,&QTableWidget::cellDoubleClicked,[this](int row,int){
+    connect(this->tablemusiclist,&QTableWidget::customContextMenuRequested, this, &Widget::tableContentMenu);
+    connect(this->tablemusiclist,&QTableWidget::cellDoubleClicked,[this](int row,int){
         emit this->signalPlayerMusic(row);
     });
     connect(this,&Widget::signalLoadList,&Widget::slotLoadList);
@@ -69,54 +69,54 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     connect(&player, &QMediaPlayer::mediaStatusChanged, this, &Widget::playerMediaStatus);
 
     //进度条
-    ui->musicSlider->setRange(0, 0);
-    connect(ui->musicSlider,&QSlider::sliderMoved,[this](int position){
+    this->musicSlider->setRange(0, 0);
+    connect(this->musicSlider,&QSlider::sliderMoved,[this](int position){
         player.setPosition(position);
     });
     connect(&player, &QMediaPlayer::positionChanged, [this](qint64 position){
-        ui->musicSlider->setValue(position);
-        ui->labelCurrentTime->setText(Tool::qint64ToTime(position).toString("mm:ss"));
+        this->musicSlider->setValue(position);
+        this->labelCurrentTime->setText(Tool::qint64ToTime(position).toString("mm:ss"));
     });
     connect(&player,  &QMediaPlayer::durationChanged, [this](qint64 duration){
-        ui->musicSlider->setRange(0, duration);
-        ui->labelTotalTime->setText(Tool::qint64ToTime(duration).toString("mm:ss"));
+        this->musicSlider->setRange(0, duration);
+        this->labelTotalTime->setText(Tool::qint64ToTime(duration).toString("mm:ss"));
     });
 
     //按钮
-    //ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-    connect(ui->buttonPlay,&QPushButton::clicked,this, &Widget::slotPlayButton);
-    connect(ui->buttonPre, &QPushButton::clicked,this, &Widget::slotPreButton);
-    connect(ui->buttonNext,&QPushButton::clicked,this, &Widget::slotNextButton);
+    //this->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    connect(this->buttonPlay,&QPushButton::clicked,this, &Widget::slotPlayButton);
+    connect(this->buttonPre, &QPushButton::clicked,this, &Widget::slotPreButton);
+    connect(this->buttonNext,&QPushButton::clicked,this, &Widget::slotNextButton);
     //download dir
-    ui->pushButtonOpenDir->setText(downloadDir);
-    connect(ui->pushButtonDownloadDir,&QPushButton::clicked,this, &Widget::slotSetDir);
-    connect(ui->pushButtonOpenDir,&QPushButton::clicked,[this](){
+    this->pushButtonOpenDir->setText(downloadDir);
+    connect(this->pushButtonDownloadDir,&QPushButton::clicked,this, &Widget::slotSetDir);
+    connect(this->pushButtonOpenDir,&QPushButton::clicked,[this](){
         QDesktopServices::openUrl(this->downloadDir);
     });
-    connect(ui->buttonPlayMode,&QPushButton::clicked,this,[this](){
+    connect(this->buttonPlayMode,&QPushButton::clicked,this,[this](){
         if(musicOrder==1){
             musicOrder=0;//顺序播放
-            ui->buttonPlayMode->setStyleSheet(UI::pushBotton("playmode_sequence"));
-            ui->buttonPlayMode->setToolTip("顺序播放");
+            this->buttonPlayMode->setStyleSheet(UI::pushBotton("playmode_sequence"));
+            this->buttonPlayMode->setToolTip("顺序播放");
         }else{
             musicOrder=1;//单曲循环
-            ui->buttonPlayMode->setStyleSheet(UI::pushBotton("playmode_repeatone"));
-            ui->buttonPlayMode->setToolTip("单曲循环");
+            this->buttonPlayMode->setStyleSheet(UI::pushBotton("playmode_repeatone"));
+            this->buttonPlayMode->setToolTip("单曲循环");
         }
     });
-    ui->buttonRefresh->setToolTip("刷新列表");
-    connect(ui->buttonRefresh,&QPushButton::clicked,this,[this](){
-        emit slotLoadList(ui->comboMusicType->currentIndex());
+    this->buttonRefresh->setToolTip("刷新列表");
+    connect(this->buttonRefresh,&QPushButton::clicked,this,[this](){
+        emit slotLoadList(this->comboMusicType->currentIndex());
     });
 
     //音量
-    ui->sliderVolume->setRange(0,100);
-    ui->sliderVolume->setValue(0);
-    connect(ui->sliderVolume, &QSlider::valueChanged,[this](int value){
+    this->sliderVolume->setRange(0,100);
+    this->sliderVolume->setValue(0);
+    connect(this->sliderVolume, &QSlider::valueChanged,[this](int value){
         player.setVolume(value);
         this->settings->setValue("Player/volume",value);
     });
-    ui->sliderVolume->setValue(settings->value("Player/volume").toInt());
+    this->sliderVolume->setValue(settings->value("Player/volume").toInt());
     //contentmenu
     this->contentMenu();
     this->showTrayIcon();
@@ -124,9 +124,9 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     createTaskbar();
 #endif
     //list type
-    ui->comboMusicType->insertItems(0,STPage::typeLists());
-    ui->comboMusicType->setCurrentIndex(-1);
-    connect(ui->comboMusicType,static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),[this](int i){
+    this->comboMusicType->insertItems(0,STPage::typeLists());
+    this->comboMusicType->setCurrentIndex(-1);
+    connect(this->comboMusicType,static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),[this](int i){
         settings->setValue("Player/musicType",i);
         slotLoadList(i);
     });//不明白为什么QComboBox要类型转换，其它的都不用，static_cast<void (QComboBox::*)(int)>
@@ -138,30 +138,28 @@ Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     QTimer::singleShot(0,this, SLOT(initional()));
 }
 
-Widget::~Widget(){
-    delete ui;
-}
+Widget::~Widget(){}
 
 void Widget::initional(){
-    ui->comboMusicType->setCurrentIndex(settings->value("Player/musicType").toInt());
+    this->comboMusicType->setCurrentIndex(settings->value("Player/musicType").toInt());
 }
 
 void Widget::slotLoadList(int type){
-    ui->labelMessage->setText(ui->comboMusicType->currentText()+"列表加载中...");
+    this->labelMessage->setText(this->comboMusicType->currentText()+"列表加载中...");
 
     this->musicLists=STPage::musicLists(type);
     this->musicListSize=this->musicLists.size();
     if(musicListSize>0){
-        ui->tablemusiclist->setRowCount(musicListSize);
+        this->tablemusiclist->setRowCount(musicListSize);
         for(int i=0;i<musicListSize;i++){
             STModel song=this->musicLists.at(i);
-            this->ui->tablemusiclist->setItem(i,0,new QTableWidgetItem(song.name));
-            this->ui->tablemusiclist->setItem(i,1,new QTableWidgetItem(song.author));
-            this->ui->tablemusiclist->setRowHeight(i,22);
+            this->tablemusiclist->setItem(i,0,new QTableWidgetItem(song.name));
+            this->tablemusiclist->setItem(i,1,new QTableWidgetItem(song.author));
+            this->tablemusiclist->setRowHeight(i,22);
         }
-        ui->labelMessage->setText(ui->comboMusicType->currentText()+"列表加载完成");
+        this->labelMessage->setText(this->comboMusicType->currentText()+"列表加载完成");
     }else{
-        ui->labelMessage->setText(ui->comboMusicType->currentText()+"列表加载失败");
+        this->labelMessage->setText(this->comboMusicType->currentText()+"列表加载失败");
     }
     this->palyNumber=0;//刷新列表后重新计数为-1，播放完后会加1，重新开始播放
 }
@@ -177,31 +175,31 @@ void Widget::slotPlayMusic(int id){
     player.play();
 
     //设置歌名
-    ui->labelName->setText(song.name);
-    ui->labelAuthor->setText(song.author);
+    this->labelName->setText(song.name);
+    this->labelAuthor->setText(song.author);
 
     //播放时改变列表中的行颜色
-    UI::tableWidgetRowColor(ui->tablemusiclist,palyNumber,QColor("#999"),QColor("#fff"));
+    UI::tableWidgetRowColor(this->tablemusiclist,palyNumber,QColor("#999"),QColor("#fff"));
     this->palyNumber=id;
-    UI::tableWidgetRowColor(ui->tablemusiclist,id,QColor("#fff"),QColor("#0579C7"));
+    UI::tableWidgetRowColor(this->tablemusiclist,id,QColor("#fff"),QColor("#0579C7"));
 
     //设置头像
     pixmap.loadFromData(STPage::userImage(song.image));
-    ui->labelImage->setPixmap(pixmap);
+    this->labelImage->setPixmap(pixmap);
 }
 
 void Widget::playerStateChanged(QMediaPlayer::State state){
     switch(state) {
     case QMediaPlayer::PlayingState:
-        ui->buttonPlay->setStyleSheet(UI::pushBotton("button_pause"));
-        //ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+        this->buttonPlay->setStyleSheet(UI::pushBotton("button_pause"));
+        //this->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
         break;
     case QMediaPlayer::PausedState:
-        ui->buttonPlay->setStyleSheet(UI::pushBotton("button_play"));
-        //ui->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+        this->buttonPlay->setStyleSheet(UI::pushBotton("button_play"));
+        //this->buttonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
         break;
     default:
-        ui->buttonPlay->setStyleSheet(UI::pushBotton("button_stop"));
+        this->buttonPlay->setStyleSheet(UI::pushBotton("button_stop"));
         break;
     }
 }
@@ -243,14 +241,14 @@ void Widget::playerMediaStatus(QMediaPlayer::MediaStatus stats){
             }
             break;
         case QMediaPlayer::LoadingMedia:
-            ui->labelMessage->setText("正在缓冲...");
+            this->labelMessage->setText("正在缓冲...");
             break;
         case QMediaPlayer::InvalidMedia:
             player.stop();
-            ui->labelMessage->setText("无法连接当前音乐");
+            this->labelMessage->setText("无法连接当前音乐");
             break;
         case QMediaPlayer::BufferedMedia:
-            ui->labelMessage->setText("正在播放...");
+            this->labelMessage->setText("正在播放...");
             break;
         default:
 
@@ -260,49 +258,49 @@ void Widget::playerMediaStatus(QMediaPlayer::MediaStatus stats){
 }
 
 void Widget::slotHideList(){
-    if(ui->stackedWidget->isHidden()){
+    if(this->stackedWidget->isHidden()){
         this->setFixedHeight(360);
-        ui->labelBg->setFixedHeight(360);
-        ui->stackedWidget->show();
+        this->labelBg->setFixedHeight(360);
+        this->stackedWidget->show();
     }else{
         this->setFixedHeight(60);
-        ui->labelBg->setFixedHeight(60);
-        ui->stackedWidget->hide();
+        this->labelBg->setFixedHeight(60);
+        this->stackedWidget->hide();
     }
 }
 
 void Widget::titleShow(){
-    ui->labelName->show();
-    ui->labelAuthor->show();
-    ui->buttonNext->hide();
-    ui->buttonPre->hide();
-    ui->buttonPlay->hide();
-    ui->sliderVolume->hide();
-    ui->labelVolumeSmall->hide();
+    this->labelName->show();
+    this->labelAuthor->show();
+    this->buttonNext->hide();
+    this->buttonPre->hide();
+    this->buttonPlay->hide();
+    this->sliderVolume->hide();
+    this->labelVolumeSmall->hide();
 }
 
 void Widget::titleHide(){
-    ui->labelAuthor->hide();
-    ui->labelName->hide();
-    ui->labelAuthor->hide();
-    ui->buttonNext->show();
-    ui->buttonPre->show();
-    ui->buttonPlay->show();
-    ui->sliderVolume->show();
-    ui->labelVolumeSmall->show();
+    this->labelAuthor->hide();
+    this->labelName->hide();
+    this->labelAuthor->hide();
+    this->buttonNext->show();
+    this->buttonPre->show();
+    this->buttonPlay->show();
+    this->sliderVolume->show();
+    this->labelVolumeSmall->show();
 }
 
 void Widget::downloadMusic(int i){
     STModel song=musicLists.at(i);
 
-    int tsize=ui->tableDownloadList->rowCount();
+    int tsize=this->tableDownloadList->rowCount();
 
-    ui->tableDownloadList->setRowCount(tsize+1);
-    ui->tableDownloadList->setItem(tsize,0,new QTableWidgetItem(song.name));
-    ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("等待下载"));
-    ui->tableDownloadList->setItem(tsize,2,new QTableWidgetItem(song.id));
-    ui->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("wait"));
-    ui->tableDownloadList->setRowHeight(tsize,22);
+    this->tableDownloadList->setRowCount(tsize+1);
+    this->tableDownloadList->setItem(tsize,0,new QTableWidgetItem(song.name));
+    this->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("等待下载"));
+    this->tableDownloadList->setItem(tsize,2,new QTableWidgetItem(song.id));
+    this->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("wait"));
+    this->tableDownloadList->setRowHeight(tsize,22);
 
     if(downloadingRow<0){
         this->downloadManager();
@@ -314,19 +312,19 @@ void Widget::downloadManager(){
     Download *download=new Download();
     connect(download,&Download::progress,this,&Widget::downloadProgress);
     while(1){
-        if(tsize>=ui->tableDownloadList->rowCount()){
+        if(tsize>=this->tableDownloadList->rowCount()){
             break;
         }
-        if(ui->tableDownloadList->item(tsize,3)->text()=="wait"){
+        if(this->tableDownloadList->item(tsize,3)->text()=="wait"){
             downloadingRow=tsize;
 
-            QString url=STPage::songUrl(ui->tableDownloadList->item(tsize,2)->text());
-            QString filename=(this->downloadDir)+"/"+ui->tableDownloadList->item(tsize,0)->text().trimmed()+".mp3";
+            QString url=STPage::songUrl(this->tableDownloadList->item(tsize,2)->text());
+            QString filename=(this->downloadDir)+"/"+this->tableDownloadList->item(tsize,0)->text().trimmed()+".mp3";
             qDebug()<<"downloading : "<<filename;
             download->run(url,filename);
-            ui->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("下载完成"));
-            ui->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("downloaded"));
-            UI::tableWidgetRowColor(ui->tableDownloadList,tsize,QColor("#999"),QColor("#fff"));
+            this->tableDownloadList->setItem(tsize,1,new QTableWidgetItem("下载完成"));
+            this->tableDownloadList->setItem(tsize,3,new QTableWidgetItem("downloaded"));
+            UI::tableWidgetRowColor(this->tableDownloadList,tsize,QColor("#999"),QColor("#fff"));
         }
         tsize++;
     }
@@ -336,8 +334,8 @@ void Widget::downloadManager(){
 
 void Widget::downloadProgress(qint64 recieved, qint64 total){
     QString a=Tool::qint64ToStringKb(recieved)+"KB/"+Tool::qint64ToStringKb(total)+"KB";
-    ui->tableDownloadList->setItem(downloadingRow,1,new QTableWidgetItem(a));
-    UI::tableWidgetRowColor(ui->tableDownloadList,downloadingRow,QColor("#fff"),QColor("#0579C7"));
+    this->tableDownloadList->setItem(downloadingRow,1,new QTableWidgetItem(a));
+    UI::tableWidgetRowColor(this->tableDownloadList,downloadingRow,QColor("#fff"),QColor("#0579C7"));
 }
 
 void Widget::slotSetDir(){
@@ -345,7 +343,7 @@ void Widget::slotSetDir(){
     if(dir!=""){
         downloadDir=dir;
         settings->setValue("Player/downloadDir",dir);
-        ui->pushButtonOpenDir->setText(dir);
+        this->pushButtonOpenDir->setText(dir);
     }
 }
 
@@ -413,13 +411,13 @@ void Widget::contentMenu(){
     QAction *menuMusiclist = new QAction("音乐列表", this);
     menuMusiclist->setIcon(UI::icon("music-note"));
     connect(menuMusiclist,&QAction::triggered,[this](){
-        ui->stackedWidget->setCurrentIndex(0);
+        this->stackedWidget->setCurrentIndex(0);
     });
 
     QAction *menuDownload = new QAction("下载列表", this);
     menuDownload->setIcon(UI::icon("download"));
     connect(menuDownload,&QAction::triggered, [this](){
-        ui->stackedWidget->setCurrentIndex(1);
+        this->stackedWidget->setCurrentIndex(1);
     });
 
     trayMenu->addAction(menuWindowsMinimized);
@@ -445,8 +443,8 @@ void Widget::tableContentMenu(const QPoint &pos){
     menu.addAction(downMusic);
     menu.addAction(openUrl);
 
-    int row=ui->tablemusiclist->itemAt(pos)->row();
-    QAction *m=menu.exec(ui->tablemusiclist ->viewport()->mapToGlobal(pos));
+    int row=this->tablemusiclist->itemAt(pos)->row();
+    QAction *m=menu.exec(this->tablemusiclist ->viewport()->mapToGlobal(pos));
     if(m==downMusic){
         downloadMusic(row);
     }else if(m==playMusic){
@@ -478,12 +476,12 @@ void Widget::showTrayIcon(){
 void Widget::createKeys(){
     QShortcut *increaseShortcut = new QShortcut(Qt::Key_Up, this);
     connect(increaseShortcut,&QShortcut::activated, [this](){
-        ui->sliderVolume->triggerAction(QSlider::SliderPageStepAdd);
+        this->sliderVolume->triggerAction(QSlider::SliderPageStepAdd);
     });
 
     QShortcut *decreaseShortcut = new QShortcut(Qt::Key_Down, this);
     connect(decreaseShortcut,&QShortcut::activated, [this](){
-        ui->sliderVolume->triggerAction(QSlider::SliderPageStepSub);
+        this->sliderVolume->triggerAction(QSlider::SliderPageStepSub);
     });
 
     QShortcut *toggleShortcut = new QShortcut(Qt::Key_Space, this);
@@ -497,22 +495,142 @@ void Widget::createKeys(){
 }
 
 void Widget::setUi(){
-    this->setStyleSheet(UI::font());
+    //global style
+    this->setStyleSheet(UI::font()+UI::style());
+
+    labelBg=new QLabel(this);
+    labelBg->setGeometry(0,0,420,360);
+
+    musicSlider=new QSlider(this);
+    musicSlider->setOrientation(Qt::Horizontal);
+    musicSlider->setGeometry(70,40,331,20);
+
+    sliderVolume=new QSlider(this);
+    sliderVolume->setOrientation(Qt::Horizontal);
+    sliderVolume->setGeometry(340,12,61,16);
+
+    labelName=new QLabel(this);
+    labelName->setGeometry(70,10,331,16);
+    labelName->setText("SongTeste Player");
+
+    labelTotalTime=new QLabel(this);
+    labelTotalTime->setGeometry(370,30,40,16);
+    labelTotalTime->setText("00:00");
+
+    labelCurrentTime=new QLabel(this);
+    labelCurrentTime->setGeometry(320,30,40,16);
+    labelCurrentTime->setText("00:00");
+
+    buttonPlay=new QPushButton(this);
+    buttonPlay->setGeometry(150,8,30,30);
+    buttonPlay->setCursor(Qt::PointingHandCursor);
+
+    buttonPre=new QPushButton(this);
+    buttonPre->setGeometry(110,13,18,20);
+    buttonPre->setCursor(Qt::PointingHandCursor);
+
+    buttonNext=new QPushButton(this);
+    buttonNext->setGeometry(200,13,18,20);
+    buttonNext->setCursor(Qt::PointingHandCursor);
+
+    labelVolumeSmall=new QLabel(this);
+    labelVolumeSmall->setGeometry(320,10,17,18);
+
+    labelImage=new QLabel(this);
+    labelImage->setGeometry(0,0,60,60);
+
+    labelMessage=new QLabel(this);
+    labelMessage->setGeometry(4,336,151,20);
+
+    labelVersion=new QLabel(this);
+    labelVersion->setGeometry(203,336,211,20);
+    labelVersion->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+    labelAuthor=new QLabel(this);
+    labelAuthor->setGeometry(70,30,201,16);
+
+    labelTotalTime_2=new QLabel(this);
+    labelTotalTime_2->setGeometry(360,29,16,16);
+    labelTotalTime_2->setText("|");
+
+    stackedWidget=new QStackedWidget(this);
+    stackedWidget->setGeometry(0,60,420,270);
+    stackedWidget->setCurrentIndex(0);
+
+    pageList=new QWidget();
+
+    tablemusiclist=new QTableWidget(pageList);
+    tablemusiclist->setGeometry(0,30,420,240);
+    tablemusiclist->setColumnCount(2);
+
+    comboMusicType=new QComboBox(pageList);
+    comboMusicType->setGeometry(0,0,41,30);
+    comboMusicType->setToolTip("更改音乐列表");
+
+    buttonPlayMode=new QPushButton(pageList);
+    buttonPlayMode->setGeometry(50,5,20,20);
+    buttonPlayMode->setCursor(Qt::PointingHandCursor);
+
+    buttonRefresh=new QPushButton(pageList);
+    buttonRefresh->setGeometry(75,5,20,20);
+    buttonRefresh->setCursor(Qt::PointingHandCursor);
+
+    pageDownload=new QWidget();
+
+    tableDownloadList=new QTableWidget(pageDownload);
+    tableDownloadList->setGeometry(0,30,420,240);
+    tableDownloadList->setColumnCount(4);
+
+    pushButtonDownloadDir=new QPushButton(pageDownload);
+    pushButtonDownloadDir->setGeometry(0,0,75,30);
+    pushButtonDownloadDir->setCursor(Qt::PointingHandCursor);
+    pushButtonDownloadDir->setText("更改下载位置");
+    pushButtonDownloadDir->setToolTip("更改下载位置");
+
+    pushButtonOpenDir=new QPushButton(pageDownload);
+    pushButtonOpenDir->setGeometry(80,0,311,30);
+    pushButtonOpenDir->setCursor(Qt::PointingHandCursor);
+    pushButtonOpenDir->setToolTip("打开下载位置");
+
+    stackedWidget->addWidget(pageList);
+    stackedWidget->addWidget(pageDownload);
+
+    labelBg->setStyleSheet("QLabel{background-color:rgb(0,0,0,210);border-radius:4px;}");
+    labelImage->setStyleSheet("QLabel{background: #0863C5 url(:/image/logo.png);}");
+    labelName->setStyleSheet("QLabel{color: #fff;font-weight:bold;}");
+    labelCurrentTime->setStyleSheet("QLabel{color: #fff;font-weight:bold;}");
+    labelVersion->setStyleSheet("QLabel{color: #fff;font-weight:bold;}");
+    labelAuthor->setStyleSheet("QLabel{color: #999;font-weight:bold;}");
+    labelTotalTime->setStyleSheet("QLabel{color: #999;font-weight:bold;}");
+    labelMessage->setStyleSheet("QLabel{color: #0579C7;font-weight:bold;}");
+    labelTotalTime_2->setStyleSheet("QLabel{color: #666;font-weight:bold;}");
+    labelVolumeSmall->setStyleSheet("QLabel{background-image: url(:/image/volume_small.png);}");
+
+    buttonPre->setStyleSheet("QPushButton{border-image: url(:/image/button_pre.png);}");
+    buttonNext->setStyleSheet("QPushButton{border-image: url(:/image/button_next.png);}");
+    buttonPlay->setStyleSheet("QPushButton{border-image: url(:/image/button_play.png);}");
+    buttonPlayMode->setStyleSheet("QPushButton{border-image: url(:/image/playmode_sequence.png);}");
+    buttonRefresh->setStyleSheet("QPushButton{border-image: url(:/image/refresh.png);}"
+                                 "QPushButton:hover{border-image: url(:/image/refresh_mouseover.png);}");
+
+    pushButtonDownloadDir->setStyleSheet("QPushButton{border: none;color:#fff;background:transparent;font-weight:bold;}");
+    pushButtonOpenDir->setStyleSheet("QPushButton{border: none;color:#fff;background:transparent;text-align:left;font-weight:bold;}");
+
     //center
     int x=(QApplication::desktop()->width()-width())/2;
     int y=(QApplication::desktop()->height()-height())/2;
     move (x,y);
 
-    UI::tableWidgetView(ui->tableDownloadList);
-    UI::tableWidgetView(ui->tablemusiclist);
-    ui->tablemusiclist->setColumnWidth(0,340);
-    ui->tablemusiclist->setColumnWidth(1,70);
-    ui->tableDownloadList->setColumnWidth(0,310);
-    ui->tableDownloadList->setColumnWidth(1,100);
-    ui->tableDownloadList->setColumnWidth(2,60);
-    ui->tableDownloadList->setColumnWidth(3,30);//下载状态 1,等待，2正在下载，3下载完成 ，下载出错
-    ui->tableDownloadList->setColumnHidden(2,true);
-    ui->tableDownloadList->setColumnHidden(3,true);
+    UI::tableWidgetView(this->tableDownloadList);
+    UI::tableWidgetView(this->tablemusiclist);
+    this->tablemusiclist->setColumnWidth(0,340);
+    this->tablemusiclist->setColumnWidth(1,70);
+    this->tableDownloadList->setColumnWidth(0,310);
+    this->tableDownloadList->setColumnWidth(1,100);
+    this->tableDownloadList->setColumnWidth(2,60);
+    this->tableDownloadList->setColumnWidth(3,30);//下载状态 1,等待，2正在下载，3下载完成 ，下载出错
+    this->tableDownloadList->setColumnHidden(2,true);
+    this->tableDownloadList->setColumnHidden(3,true);
 }
 
 //only for windows taskbar
@@ -547,8 +665,8 @@ void Widget::createTaskbar(){
     taskbarButton->setWindow(windowHandle());
 
     taskbarProgress = taskbarButton->progress();
-    connect(ui->musicSlider,&QSlider::valueChanged, taskbarProgress,&QWinTaskbarProgress::setValue);
-    connect(ui->musicSlider,&QSlider::rangeChanged, taskbarProgress,&QWinTaskbarProgress::setRange);
+    connect(this->musicSlider,&QSlider::valueChanged, taskbarProgress,&QWinTaskbarProgress::setValue);
+    connect(this->musicSlider,&QSlider::rangeChanged, taskbarProgress,&QWinTaskbarProgress::setRange);
 
     connect(&player,&QMediaPlayer::stateChanged, this,&Widget::updateTaskbar);
 }

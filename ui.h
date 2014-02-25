@@ -17,6 +17,7 @@ public:
     static void tableWidgetView(QTableWidget *table);
 
     static QIcon icon(QString name);
+    static QString style();
 };
 
 #endif // UI_H

@@ -9,13 +9,13 @@
 #include <QTableWidget>
 #include <QSettings>
 #include "stpage.h"
-#include "ui.h"
+#include <QLabel>
+#include <QStackedWidget>
+#include <QPushButton>
+#include <QComboBox>
 #ifdef Q_OS_WIN
 #include <QtWinExtras>
 #endif
-namespace Ui {
-class Widget;
-}
 
 class Widget : public QWidget
 {
@@ -26,7 +26,36 @@ public:
     ~Widget();
 
 private:
-    Ui::Widget *ui;
+    //
+    QLabel *labelBg;
+    QSlider *musicSlider;
+    QSlider *sliderVolume;
+    QLabel *labelName;
+    QLabel *labelTotalTime;
+    QPushButton *buttonPlay;
+    QPushButton *buttonPre;
+    QPushButton *buttonNext;
+    QLabel *labelCurrentTime;
+    QLabel *labelVolumeSmall;
+    QLabel *labelImage;
+    QLabel *labelMessage;
+    QLabel *labelVersion;
+    QLabel *labelAuthor;
+    QLabel *labelTotalTime_2;
+    QStackedWidget *stackedWidget;
+
+    QWidget *pageList;
+    QTableWidget *tablemusiclist;
+    QComboBox *comboMusicType;
+    QPushButton *buttonPlayMode;
+    QPushButton *buttonRefresh;
+
+    QWidget *pageDownload;
+    QTableWidget *tableDownloadList;
+    QPushButton *pushButtonDownloadDir;
+    QPushButton *pushButtonOpenDir;
+
+    //
     QList<STModel> musicLists;
     int musicListSize;
 

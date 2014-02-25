@@ -22,7 +22,4 @@
         <file>icon/plane-2.png</file>
         <file>icon/power.png</file>
     </qresource>
-    <qresource prefix="/qss">
-        <file>style.css</file>
-    </qresource>
 </RCC>

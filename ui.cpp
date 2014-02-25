@@ -2,9 +2,9 @@
 
 QString UI::font(){
 #ifdef Q_OS_WIN
-    return "font-family:微软雅黑";
+    return "*{font-family:微软雅黑;font-size:12px;}";
 #else
-    return "font-family:sans;font-weight:bold;";//字体怎么弄？
+    return "*{font-family:sans;font-weight:bold;font-size:12px;}";//字体怎么弄？
 #endif
 }
 
@@ -44,8 +44,29 @@ void UI::tableWidgetView(QTableWidget *table){
     table->setContextMenuPolicy(Qt::CustomContextMenu);
     table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    table->setFrameShape(QFrame::NoFrame);
 }
 
 QIcon UI::icon(QString name){
     return QIcon(":/icon/"+name+".png");
+}
+
+QString UI::style(){
+    return
+    "QComboBox{font-weight:bold;color: #fff;background:transparent;border:none;padding:0 5px;}"
+    "QComboBox:on{selection-background-color: #0579C7;}"
+    "QComboBox:!on{selection-background-color:#0579C7; color:#fff;}"
+    "QComboBox::drop-down{border:none;width:0;}"
+    "QComboBox::down-arrow{border-style:none;}"
+    "QListView{background: #000;color:#fff;border:none}"
+    "QScrollBar{background:#fff;width: 10px;}"
+    "QScrollBar::handle{background:#ccc;border:1px solid #bbb;border-radius: 5px;}"
+    "QScrollBar::handle:hover{background:#0579C7;border:none}"
+    "QScrollBar::sub-page{background:#fff;}"
+    "QScrollBar::add-page{background:#fff;}"
+    "QSlider::groove:horizontal{height: 2px;background: #eee;}"
+    "QSlider::handle:horizontal {background: #ddd;width: 8px;margin: -3px 0;border-radius: 4px;}"
+    "QSlider::add-page:horizontal{background: #000;}"
+    "QSlider::sub-page:horizontal{background: #0579C7;}"
+    "QTableWidget{selection-background-color:#9ED3FE;selection-color:#000}";
 }
