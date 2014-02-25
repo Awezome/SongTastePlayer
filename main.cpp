@@ -1,7 +1,7 @@
 #include "widget.h"
 #include <QApplication>
 #include <QTextCodec>
-#include "tool.h"
+#include "util/tool.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

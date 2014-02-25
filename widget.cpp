@@ -9,9 +9,9 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <QShortcut>
-#include "config.h"
-#include "download.h"
-#include "tool.h"
+#include "config/config.h"
+#include "util/download.h"
+#include "util/tool.h"
 
 Widget::Widget(QWidget *parent) :QWidget(parent),ui(new Ui::Widget){
     ui->setupUi(this);

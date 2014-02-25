@@ -9,19 +9,19 @@ TEMPLATE = app
 SOURCES += main.cpp\
         widget.cpp \
     stpage.cpp \
-    http.cpp \
-    tool.cpp \
     ui.cpp \
-    download.cpp
+    util/download.cpp \
+    util/http.cpp \
+    util/tool.cpp
 HEADERS  += widget.h \
     stpage.h \
     stmodel.h \
-    http.h \
-    config.h \
-    download.h \
-    tool.h \
-    ui.h
+    ui.h \
+    util/download.h \
+    util/http.h \
+    util/tool.h \
+    config/config.h
 FORMS    += widget.ui
-RC_FILE = pro.rc
+RC_FILE = config/pro.rc
 RESOURCES += image.qrc
 CONFIG += c++11

@@ -1,6 +1,6 @@
 #include "stpage.h"
 #include <QRegExp>
-#include "config.h"
+#include "config/config.h"
 
 //music lists
 QList<STModel> STPage::musicLists(int type){

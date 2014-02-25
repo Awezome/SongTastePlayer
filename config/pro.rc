@@ -1,7 +1,7 @@
 #include <winver.h>
 #define VER_FILEVERSION             1,9,0,0
 #define VER_FILEVERSION_STR         "1.9.20140219\0"
-IDI_ICON1  ICON   DISCARDABLE   "image/logo.ico"  
+IDI_ICON1  ICON   DISCARDABLE   "../image/logo.ico"  
 
 VS_VERSION_INFO     VERSIONINFO
 FILEVERSION         VER_FILEVERSION
