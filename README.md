@@ -3,16 +3,16 @@ SongTastePlayer
 
 SongTastePlayer by QT -- I AM AWESOMEZ
  
-####ËµÃ÷
-°æ±¾1.6ÒÔºó²ÉÓÃÐÂµÄÅäÖÃ·½Ê½£¬´Ó1.6ÒÔÇ°Éý¼¶Ö®ºóÒªÖØÐÂÉèÖÃÏÂÏÂÔØÄ¿Â¼¡£
+####è¯´æ˜Ž
+ç‰ˆæœ¬1.6ä»¥åŽé‡‡ç”¨æ–°çš„é…ç½®æ–¹å¼ï¼Œä»Ž1.6ä»¥å‰å‡çº§ä¹‹åŽè¦é‡æ–°è®¾ç½®ä¸‹ä¸‹è½½ç›®å½•ã€‚
  
-####¿ì½Ý¼ü
-¿ªÊ¼/ÔÝÍ£-> ¿Õ¸ñ
-ÏÂÒ»Ê×-> CtrlRight
-ÉÏÒ»Ê×-> CtrlLeft
-ÒôÁ¿Ôö-> CtrlUp
-ÒôÁ¿¼õ-> CtrlDown
+####å¿«æ·é”®
+å¼€å§‹/æš‚åœ-> ç©ºæ ¼
+ä¸‹ä¸€é¦–-> CtrlRight
+ä¸Šä¸€é¦–-> CtrlLeft
+éŸ³é‡å¢ž-> CtrlUp
+éŸ³é‡å‡-> CtrlDown
 
 ####Screenshot
-![screenshot](https://raw2.github.com/Awesomez/SongTastePlayer/master/sreenshot.png "Default")
+![screenshot](https://raw.githubusercontent.com/Awesomez/SongTastePlayer/master/sreenshot.png "Default")
 
